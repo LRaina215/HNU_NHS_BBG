@@ -1,0 +1,30 @@
+{
+  "configurations": [
+    {
+      "browse": {
+        "databaseFilename": "${default}",
+        "limitSymbolsToIncludedHeaders": false
+      },
+      "includePath": [
+        "/home/robomaster/zxzzb/install/armor_processor/include/**",
+        "/home/robomaster/zxzzb/install/rmoss_projectile_motion/include/**",
+        "/home/robomaster/zxzzb/install/rmctrl_msgs/include/**",
+        "/home/robomaster/zxzzb/install/game_msgs/include/**",
+        "/home/robomaster/zxzzb/install/bboxes_ex_msgs/include/**",
+        "/home/robomaster/zxzzb/install/armor_detector/include/**",
+        "/home/robomaster/zxzzb/install/auto_aim_interfaces/include/**",
+        "/opt/ros/galactic/include/**",
+        "/home/robomaster/zxzzb/src/armor_detector/include/**",
+        "/home/robomaster/zxzzb/src/armor_processor/include/**",
+        "/home/robomaster/zxzzb/src/rmoss_projectile_motion/include/**",
+        "/usr/include/**"
+      ],
+      "name": "ROS",
+      "intelliSenseMode": "gcc-x64",
+      "compilerPath": "/usr/bin/gcc",
+      "cStandard": "gnu11",
+      "cppStandard": "c++14"
+    }
+  ],
+  "version": 4
+}
