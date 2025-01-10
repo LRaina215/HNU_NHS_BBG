@@ -10,12 +10,13 @@ find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(std_msgs REQUIRED)
 find_package(rmctrl_msgs REQUIRED)
+find_package(rm_interfaces REQUIRED)
 
 # add executable
 add_executable(topic_subscribe_01 src/tp_01.cpp)
 
 # specify dependencies
-ament_target_dependencies(topic_subscribe_01 rclcpp std_msgs rmctrl_msgs)
+ament_target_dependencies(topic_subscribe_01 rclcpp std_msgs rm_interfaces)
 
 # install target
 install(TARGETS

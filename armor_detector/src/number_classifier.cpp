@@ -1,5 +1,20 @@
-// Copyright 2022 Chen Jun
-// Licensed under the MIT License.
+// Copyright Chen Jun 2023. Licensed under the MIT License.
+//
+// Additional modifications and features by Chengfu Zou, Labor. Licensed under Apache License 2.0.
+//
+// Copyright (C) FYT Vision Group. All rights reserved.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
 
 // OpenCV
 #include <opencv2/core.hpp>
@@ -10,27 +25,28 @@
 #include <opencv2/imgcodecs.hpp>
 #include <opencv2/imgproc.hpp>
 #include <opencv2/opencv.hpp>
-
-// STL
+// std
 #include <algorithm>
 #include <cstddef>
+#include <execution>
 #include <fstream>
+#include <future>
 #include <map>
 #include <string>
 #include <vector>
-
-#include "armor_detector/armor.hpp"
+// 3rd party
+#include <fmt/format.h>
+// project
 #include "armor_detector/number_classifier.hpp"
+#include "armor_detector/types.hpp"
 
-namespace rm_auto_aim
-{
-NumberClassifier::NumberClassifier(
-  const std::string & model_path, const std::string & label_path, const double thre,
-  const std::vector<std::string> & ignore_classes)
-: threshold(thre), ignore_classes_(ignore_classes)
-{
+namespace fyt::auto_aim {
+NumberClassifier::NumberClassifier(const std::string &model_path,
+                                   const std::string &label_path,
+                                   const double thre,
+                                   const std::vector<std::string> &ignore_classes)
+: threshold(thre), ignore_classes_(ignore_classes) {
   net_ = cv::dnn::readNetFromONNX(model_path);
-
   std::ifstream label_file(label_path);
   std::string line;
   while (std::getline(label_file, line)) {
@@ -38,132 +54,97 @@ NumberClassifier::NumberClassifier(
   }
 }
 
-void NumberClassifier::extractNumbers(const cv::Mat & src, std::vector<Armor> & armors)
-{
+cv::Mat NumberClassifier::extractNumber(const cv::Mat &src, const Armor &armor) const noexcept {
   // Light length in image
-  const int light_length = 12;
+  static const int light_length = 12;
   // Image size after warp
-  const int warp_height = 28;
-  const int small_armor_width = 32;
-  const int large_armor_width = 54;
+  static const int warp_height = 28;
+  static const int small_armor_width = 32;
+  static const int large_armor_width = 54;
   // Number ROI size
-  const cv::Size roi_size(20, 28);
-  // Number mask  --Hooray
-  const cv::Mat number_mask(cv::Size(roi_size.width, roi_size.height), CV_8UC3, cv::Scalar(255, 0, 255));
+  static const cv::Size roi_size(20, 28);
+  static const cv::Size input_size(28, 28);
 
-  
-  
+  // Warp perspective transform
+  cv::Point2f lights_vertices[4] = {
+    armor.left_light.bottom, armor.left_light.top, armor.right_light.top, armor.right_light.bottom};
 
-  for (auto & armor : armors) {
-    // Warp perspective transform
-    cv::Point2f lights_vertices[4] = {
-      armor.left_light.bottom, armor.left_light.top, armor.right_light.top,
-      armor.right_light.bottom};
+  const int top_light_y = (warp_height - light_length) / 2 - 1;
+  const int bottom_light_y = top_light_y + light_length;
+  const int warp_width = armor.type == ArmorType::SMALL ? small_armor_width : large_armor_width;
+  cv::Point2f target_vertices[4] = {
+    cv::Point(0, bottom_light_y),
+    cv::Point(0, top_light_y),
+    cv::Point(warp_width - 1, top_light_y),
+    cv::Point(warp_width - 1, bottom_light_y),
+  };
+  cv::Mat number_image;
+  auto rotation_matrix = cv::getPerspectiveTransform(lights_vertices, target_vertices);
+  cv::warpPerspective(src, number_image, rotation_matrix, cv::Size(warp_width, warp_height));
 
-    const int top_light_y = (warp_height - light_length) / 2 - 1;
-    const int bottom_light_y = top_light_y + light_length;
-    const int warp_width = armor.armor_type == SMALL ? small_armor_width : large_armor_width;
-    cv::Point2f target_vertices[4] = {
-      cv::Point(0, bottom_light_y),
-      cv::Point(0, top_light_y),
-      cv::Point(warp_width - 1, top_light_y),
-      cv::Point(warp_width - 1, bottom_light_y),
-    };
-    cv::Mat number_image;
-    cv::Mat img_flip;
-    auto rotation_matrix = cv::getPerspectiveTransform(lights_vertices, target_vertices);
-    cv::warpPerspective(src, number_image, rotation_matrix, cv::Size(warp_width, warp_height));
+  // Get ROI
+  number_image = number_image(cv::Rect(cv::Point((warp_width - roi_size.width) / 2, 0), roi_size));
 
-    // Get ROI
-    number_image =
-      number_image(cv::Rect(cv::Point((warp_width - roi_size.width) / 2, 0), roi_size));
-      
-      
-      
-    // flip red channel to avoid the red laser influence --Hooray
-    //cv::Mat number_mask(number_image.size, CV_8UC3, cv::Scalar(0, 0, 0));
-    number_image.setTo(cv::Scalar(0, 0, 0), number_mask);
-      
-      
-
-    // Binarize
-    cv::cvtColor(number_image, number_image, cv::COLOR_RGB2GRAY);
-    cv::threshold(number_image, number_image, 0, 255, cv::THRESH_BINARY | cv::THRESH_OTSU);
-
-    // Flip
-    //cv::flip(number_image, img_flip, -1);
-
-    armor.number_img = number_image;
-  }
+  // Binarize
+  cv::cvtColor(number_image, number_image, cv::COLOR_RGB2GRAY);
+  cv::threshold(number_image, number_image, 0, 255, cv::THRESH_BINARY | cv::THRESH_OTSU);
+  cv::resize(number_image, number_image, input_size);
+  return number_image;
 }
 
-void NumberClassifier::classify(std::vector<Armor> & armors)
-{
-  for (auto & armor : armors) {
-    cv::Mat image = armor.number_img.clone();
+void NumberClassifier::classify(const cv::Mat &src, Armor &armor) noexcept {
+  // Normalize
+  cv::Mat input = armor.number_img / 255.0;
 
-    // Normalize
-    image = image / 255.0;
+  // Create blob from image
+  cv::Mat blob;
+  cv::dnn::blobFromImage(input, blob);
 
-    // Create blob from image
-    cv::Mat blob;
-    cv::dnn::blobFromImage(image, blob, 1., cv::Size(28, 20));
+  // Set the input blob for the neural network
+  mutex_.lock();
+  net_.setInput(blob);
 
-    // Set the input blob for the neural network
-    net_.setInput(blob);
-    // Forward pass the image blob through the model
-    cv::Mat outputs = net_.forward();
+  // Forward pass the image blob through the model
+  cv::Mat outputs = net_.forward().clone();
+  mutex_.unlock();
 
-    // Do softmax
-    float max_prob = *std::max_element(outputs.begin<float>(), outputs.end<float>());
-    cv::Mat softmax_prob;
-    cv::exp(outputs - max_prob, softmax_prob);
-    float sum = static_cast<float>(cv::sum(softmax_prob)[0]);
-    softmax_prob /= sum;
+  // Decode the output
+  double confidence;
+  cv::Point class_id_point;
+  minMaxLoc(outputs.reshape(1, 1), nullptr, &confidence, nullptr, &class_id_point);
+  int label_id = class_id_point.x;
 
-    double confidence;
-    cv::Point class_id_point;
-    minMaxLoc(softmax_prob.reshape(1, 1), nullptr, &confidence, nullptr, &class_id_point);
-    int label_id = class_id_point.x;
+  armor.confidence = confidence;
+  armor.number = class_names_[label_id];
 
-    armor.confidence = confidence;
-    armor.number = class_names_[label_id];
+  armor.classfication_result = fmt::format("{}:{:.1f}%", armor.number, armor.confidence * 100.0);
+}
 
-    std::stringstream result_ss;
-    result_ss << armor.number << ": " << std::fixed << std::setprecision(1)
-              << armor.confidence * 100.0 << "%";
-
-//    std::cout << result_ss.str() << std::endl;
-
-    armor.classfication_result = result_ss.str();
-  }
-
+void NumberClassifier::eraseIgnoreClasses(std::vector<Armor> &armors) noexcept {
   armors.erase(
-    std::remove_if(
-      armors.begin(), armors.end(),
-      [this](const Armor & armor) {
-        if (armor.confidence < threshold || armor.number == "Negative") {
-          return true;
-        }
+    std::remove_if(armors.begin(),
+                   armors.end(),
+                   [this](const Armor &armor) {
+                     if (armor.confidence < threshold) {
+                       return true;
+                     }
 
-        for (const auto & ignore_class : ignore_classes_) {
-          if (armor.number == ignore_class) {
-            return true;
-          }
-        }
+                     for (const auto &ignore_class : ignore_classes_) {
+                       if (armor.number == ignore_class) {
+                         return true;
+                       }
+                     }
 
-        bool mismatch_armor_type = false;
-        if (armor.armor_type == LARGE) {
-          mismatch_armor_type =
-            armor.number == "2" || armor.number == "Outpost";
-//          mismatch_armor_type =
-//                  armor.number == "Outpost" || armor.number == "2" || armor.number == "Guard";
-        } else if (armor.armor_type == SMALL) {
-          mismatch_armor_type = armor.number == "1" || armor.number == "Base";
-        }
-        return mismatch_armor_type;
-      }),
+                     bool mismatch_armor_type = false;
+                     if (armor.type == ArmorType::LARGE) {
+                       mismatch_armor_type = armor.number == "outpost" || armor.number == "2" ||
+                                             armor.number == "sentry";
+                     } else if (armor.type == ArmorType::SMALL) {
+                       mismatch_armor_type = armor.number == "1" || armor.number == "base";
+                     }
+                     return mismatch_armor_type;
+                   }),
     armors.end());
 }
 
-}  // namespace rm_auto_aim
+}  // namespace fyt::auto_aim

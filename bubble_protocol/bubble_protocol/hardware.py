@@ -11,15 +11,18 @@ import struct
 import time
 import threading
 import serial
+import rclpy
+
 
 from bubble_protocol.protocol import *
-
+from rclpy.node import Node
+from std_msgs.msg import Int32
 
 RX_BUFFER_MAX_SIZE = 500
 TX_BUFFER_MAX_SIZE = 500
 
 
-class RobotSerial(serial.Serial):
+class RobotSerial(serial.Serial, Node):
     def __init__(self, name, *, port="", baudrate=115200, timeout_T=0):
         '''UART device initialization
             设备初始化
@@ -37,6 +40,8 @@ class RobotSerial(serial.Serial):
             `serial.Serial`
             Class return a serial port object.
         '''
+        Node.__init__(self, "enemy_color")
+        self.RB_info_pub_ = self.create_publisher(Int32, "red_blue_info", 10)
         self.init_device(port, baudrate, timeout_T)
         self.init_protocol(name)
         self.tx_thread = threading.Thread(target=self.run_tx_thread)
@@ -45,6 +50,8 @@ class RobotSerial(serial.Serial):
         self.status = STATUS
         self.serial_done = False
         self.realtime_pub = dict()
+        self.red_blue_msg = None
+    
     
     def run_tx_thread(self):
         '''threading to cintinuously process the transmit buffer'''
@@ -199,7 +206,7 @@ class RobotSerial(serial.Serial):
                  A format string that needs to be passed to ``struct`` moudle for parsing
             '''
             return "<"+"".join([info_list[key][IDX_BCP_TYPE] for key in info_list])
-
+        
         def getFrameRatio(info_list):
             '''Gets the ratio of frame data
                 获取帧数据的比例
@@ -228,7 +235,15 @@ class RobotSerial(serial.Serial):
                 unpack_info = struct.unpack(getFrameFmt(
                     data_info), current_packet[DATA_POSE: SUM_CHECK_POSE])
                 ratio_list = getFrameRatio(data_info)
-                print(unpack_info)
+                #print(unpack_info)
+                # if (int(unpack_info[4])/1000) == 1:
+                #     self.red_blue_msg = 0
+                # else:
+                self.red_blue_msg = int(int(unpack_info[4])/1000)
+                #print(self.red_blue_msg)
+                #set_param('/armor_detector','detect_color',int(unpack_info[4]/1000))#change 11.24
+                #set_parameter(rclpy.Parameter('detect_color', int(self.unpack_info[4] / 1000)))
+                
                 res = list(
                     map(lambda info, ratio: info/ratio, unpack_info, ratio_list))
                 for idx, detail_key in enumerate(self.status[key]):
@@ -243,6 +258,19 @@ class RobotSerial(serial.Serial):
                 process time:{time.time()}, current packtet id:{current_packet[ID_POSE]}, \
                 packtet detail: {[i for i in current_packet]}")
         return
+
+    def red_blue_info_callback(self):
+        if self.red_blue_msg is not None:
+            msg = Int32()
+            msg.data = self.red_blue_msg
+            self.RB_info_pub_.publish(msg)
+            print(msg.data)
+            #self.get_logger().info(f"enemy_color:{msg.data}")
+        else:
+            self.get_logger().warn("Red-blue message is None. No message published.")
+
+
+
 
     def process(self):
         '''Thread handing functions. 

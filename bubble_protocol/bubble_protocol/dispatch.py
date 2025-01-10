@@ -23,7 +23,8 @@ from rclpy.qos import QoSProfile, QoSReliabilityPolicy, QoSDurabilityPolicy
 from bubble_protocol.hardware import RobotSerial
 from bubble_protocol.robot_status import RobotStatus
 from rmctrl_msgs.msg import Chassis, Gimbal, Shooter
-from auto_aim_interfaces.msg import Target
+from rm_interfaces.msg import GimbalCmd
+
 
 
 class RobotAPI(Node):
@@ -82,13 +83,14 @@ class RobotAPI(Node):
         self.robot_status = RobotStatus(self.robot_serial.status, self)
         self.robot_serial.realtime_pub = self.robot_status.realtime_callback
         self.robot_serial.serial_done = True
-
+        
         # init core api
         self.api_init()
         # init expanded api
         self.init_robot()
         # Init robot tx/rx/heartbeat timer
         period = 150
+        self.red_blue_timer = self.create_timer(1/period, self.robot_serial.red_blue_info_callback)
         self.uart_timer = self.create_timer(1/period, self.robot_serial.process)
         self.uartrx_timer = self.create_timer(
             1/period, self.robot_serial.rx_function)
@@ -130,7 +132,7 @@ class RobotAPI(Node):
             )
             
             self.gimbal_sub = self.create_subscription(
-                Gimbal, '/processor/gimbal', self.gimbal_callback, qos_profile)
+                GimbalCmd, 'armor_solver/cmd_gimbal', self.gimbal_callback, qos_profile)
             self.barrel_sub = self.create_subscription(
                 Shooter, '/core/shooter_api', self.barrel_callback, 10)
             # print("Starting subscriber!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
@@ -157,7 +159,7 @@ class RobotAPI(Node):
         # self.get_logger().info("recived data mode value: {}".format(msg.data))
         self.robot_serial.send_data("mode", [msg.data])
 
-    def gimbal_callback(self, msg: Gimbal) -> None:
+    def gimbal_callback(self, msg: GimbalCmd) -> None:
         """gimbal function, send gimbal infomation to MCU.
             云台功能，发送云台信息给MCU。
         Parameters
@@ -176,7 +178,7 @@ class RobotAPI(Node):
         self.robot_serial.send_data(
             "gimbal",
             #[mode, math.degrees(msg.yaw), math.degrees(msg.pitch), math.degrees(msg.roll),0, 0, 0, 0])  #change by ye add msg.roll
-            [mode, math.degrees(msg.yaw), math.degrees(msg.pitch),0, 0, 0, 0])
+            [mode, msg.yaw *2.5, msg.pitch,0, 0, 0, 0])
         #self.get_logger().info(f"sending: {msg.yaw},{msg.pitch},{msg.roll}") #change by ye     add msg.roll
         self.get_logger().info(f"sending: {msg.yaw},{msg.pitch}")
         

@@ -1,23 +1,25 @@
 #include "rclcpp/rclcpp.hpp"
-#include "rmctrl_msgs/msg/gimbal.hpp"  // 替换为自定义消息的实际头文件路径
+#include "std_msgs/msg/int32.hpp"  // 使用标准消息 Int32
+#include "rm_interfaces/msg/gimbal_cmd.hpp"
 
 class GimbalSubscriber : public rclcpp::Node
 {
 public:
     GimbalSubscriber() : Node("gimbal_subscriber")
     {
-        RCLCPP_INFO(this->get_logger(),"gimbal_msg_monitor node launching...");
-        subscription_ = this->create_subscription<rmctrl_msgs::msg::Gimbal>(
-            "/processor/gimbal", 10, std::bind(&GimbalSubscriber::topic_callback, this, std::placeholders::_1));
+        RCLCPP_INFO(this->get_logger(), "gimbal_msg_monitor node launching...");
+        rclcpp::QoS qos_profile = rclcpp::SensorDataQoS();
+        subscription_ = this->create_subscription<rm_interfaces::msg::GimbalCmd>(
+            "armor_solver/cmd_gimbal", qos_profile, std::bind(&GimbalSubscriber::topic_callback, this, std::placeholders::_1));
     }
 
 private:
-    void topic_callback(const rmctrl_msgs::msg::Gimbal::SharedPtr msg) const
+    void topic_callback(const rm_interfaces::msg::GimbalCmd::SharedPtr msg) const
     {
-        RCLCPP_INFO(this->get_logger(), "Received - Yaw: %f, Pitch: %f", msg->yaw, msg->pitch);
+        RCLCPP_INFO(this->get_logger(), "Received: %f", msg->yaw);
     }
 
-    rclcpp::Subscription<rmctrl_msgs::msg::Gimbal>::SharedPtr subscription_;
+    rclcpp::Subscription<rm_interfaces::msg::GimbalCmd>::SharedPtr subscription_;
 };
 
 int main(int argc, char *argv[])
