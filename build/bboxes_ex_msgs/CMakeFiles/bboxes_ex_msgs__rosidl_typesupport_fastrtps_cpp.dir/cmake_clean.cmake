@@ -1,0 +1,24 @@
+file(REMOVE_RECURSE
+  "CMakeFiles/bboxes_ex_msgs__rosidl_typesupport_fastrtps_cpp.dir/rosidl_typesupport_fastrtps_cpp/bboxes_ex_msgs/msg/detail/dds_fastrtps/bounding_box2_d__type_support.cpp.o"
+  "CMakeFiles/bboxes_ex_msgs__rosidl_typesupport_fastrtps_cpp.dir/rosidl_typesupport_fastrtps_cpp/bboxes_ex_msgs/msg/detail/dds_fastrtps/bounding_boxes2_d__type_support.cpp.o"
+  "CMakeFiles/bboxes_ex_msgs__rosidl_typesupport_fastrtps_cpp.dir/rosidl_typesupport_fastrtps_cpp/bboxes_ex_msgs/msg/detail/dds_fastrtps/bounding_polygon_box2_d__type_support.cpp.o"
+  "CMakeFiles/bboxes_ex_msgs__rosidl_typesupport_fastrtps_cpp.dir/rosidl_typesupport_fastrtps_cpp/bboxes_ex_msgs/msg/detail/dds_fastrtps/bounding_polygon_boxes2_d__type_support.cpp.o"
+  "CMakeFiles/bboxes_ex_msgs__rosidl_typesupport_fastrtps_cpp.dir/rosidl_typesupport_fastrtps_cpp/bboxes_ex_msgs/msg/detail/dds_fastrtps/object_count__type_support.cpp.o"
+  "libbboxes_ex_msgs__rosidl_typesupport_fastrtps_cpp.pdb"
+  "libbboxes_ex_msgs__rosidl_typesupport_fastrtps_cpp.so"
+  "rosidl_typesupport_fastrtps_cpp/bboxes_ex_msgs/msg/detail/bounding_box2_d__rosidl_typesupport_fastrtps_cpp.hpp"
+  "rosidl_typesupport_fastrtps_cpp/bboxes_ex_msgs/msg/detail/bounding_boxes2_d__rosidl_typesupport_fastrtps_cpp.hpp"
+  "rosidl_typesupport_fastrtps_cpp/bboxes_ex_msgs/msg/detail/bounding_polygon_box2_d__rosidl_typesupport_fastrtps_cpp.hpp"
+  "rosidl_typesupport_fastrtps_cpp/bboxes_ex_msgs/msg/detail/bounding_polygon_boxes2_d__rosidl_typesupport_fastrtps_cpp.hpp"
+  "rosidl_typesupport_fastrtps_cpp/bboxes_ex_msgs/msg/detail/dds_fastrtps/bounding_box2_d__type_support.cpp"
+  "rosidl_typesupport_fastrtps_cpp/bboxes_ex_msgs/msg/detail/dds_fastrtps/bounding_boxes2_d__type_support.cpp"
+  "rosidl_typesupport_fastrtps_cpp/bboxes_ex_msgs/msg/detail/dds_fastrtps/bounding_polygon_box2_d__type_support.cpp"
+  "rosidl_typesupport_fastrtps_cpp/bboxes_ex_msgs/msg/detail/dds_fastrtps/bounding_polygon_boxes2_d__type_support.cpp"
+  "rosidl_typesupport_fastrtps_cpp/bboxes_ex_msgs/msg/detail/dds_fastrtps/object_count__type_support.cpp"
+  "rosidl_typesupport_fastrtps_cpp/bboxes_ex_msgs/msg/detail/object_count__rosidl_typesupport_fastrtps_cpp.hpp"
+)
+
+# Per-language clean rules from dependency scanning.
+foreach(lang CXX)
+  include(CMakeFiles/bboxes_ex_msgs__rosidl_typesupport_fastrtps_cpp.dir/cmake_clean_${lang}.cmake OPTIONAL)
+endforeach()

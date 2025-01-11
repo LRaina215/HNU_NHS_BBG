@@ -1,0 +1,45 @@
+running egg_info
+creating ../build/bubble_decision/bubble_decision.egg-info
+writing ../build/bubble_decision/bubble_decision.egg-info/PKG-INFO
+writing dependency_links to ../build/bubble_decision/bubble_decision.egg-info/dependency_links.txt
+writing entry points to ../build/bubble_decision/bubble_decision.egg-info/entry_points.txt
+writing requirements to ../build/bubble_decision/bubble_decision.egg-info/requires.txt
+writing top-level names to ../build/bubble_decision/bubble_decision.egg-info/top_level.txt
+writing manifest file '../build/bubble_decision/bubble_decision.egg-info/SOURCES.txt'
+reading manifest file '../build/bubble_decision/bubble_decision.egg-info/SOURCES.txt'
+writing manifest file '../build/bubble_decision/bubble_decision.egg-info/SOURCES.txt'
+running build
+running build_py
+creating /home/robomaster/zxzzb/src/build/bubble_decision/build
+creating /home/robomaster/zxzzb/src/build/bubble_decision/build/lib
+creating /home/robomaster/zxzzb/src/build/bubble_decision/build/lib/bubble_decision
+copying bubble_decision/gameAction.py -> /home/robomaster/zxzzb/src/build/bubble_decision/build/lib/bubble_decision
+copying bubble_decision/__init__.py -> /home/robomaster/zxzzb/src/build/bubble_decision/build/lib/bubble_decision
+copying bubble_decision/decision.py -> /home/robomaster/zxzzb/src/build/bubble_decision/build/lib/bubble_decision
+copying bubble_decision/gimbalAction.py -> /home/robomaster/zxzzb/src/build/bubble_decision/build/lib/bubble_decision
+running install
+running install_lib
+creating /home/robomaster/zxzzb/src/install/bubble_decision/lib/python3.8/site-packages/bubble_decision
+copying /home/robomaster/zxzzb/src/build/bubble_decision/build/lib/bubble_decision/gameAction.py -> /home/robomaster/zxzzb/src/install/bubble_decision/lib/python3.8/site-packages/bubble_decision
+copying /home/robomaster/zxzzb/src/build/bubble_decision/build/lib/bubble_decision/__init__.py -> /home/robomaster/zxzzb/src/install/bubble_decision/lib/python3.8/site-packages/bubble_decision
+copying /home/robomaster/zxzzb/src/build/bubble_decision/build/lib/bubble_decision/decision.py -> /home/robomaster/zxzzb/src/install/bubble_decision/lib/python3.8/site-packages/bubble_decision
+copying /home/robomaster/zxzzb/src/build/bubble_decision/build/lib/bubble_decision/gimbalAction.py -> /home/robomaster/zxzzb/src/install/bubble_decision/lib/python3.8/site-packages/bubble_decision
+byte-compiling /home/robomaster/zxzzb/src/install/bubble_decision/lib/python3.8/site-packages/bubble_decision/gameAction.py to gameAction.cpython-38.pyc
+byte-compiling /home/robomaster/zxzzb/src/install/bubble_decision/lib/python3.8/site-packages/bubble_decision/__init__.py to __init__.cpython-38.pyc
+byte-compiling /home/robomaster/zxzzb/src/install/bubble_decision/lib/python3.8/site-packages/bubble_decision/decision.py to decision.cpython-38.pyc
+byte-compiling /home/robomaster/zxzzb/src/install/bubble_decision/lib/python3.8/site-packages/bubble_decision/gimbalAction.py to gimbalAction.cpython-38.pyc
+running install_data
+creating /home/robomaster/zxzzb/src/install/bubble_decision/share/ament_index
+creating /home/robomaster/zxzzb/src/install/bubble_decision/share/ament_index/resource_index
+creating /home/robomaster/zxzzb/src/install/bubble_decision/share/ament_index/resource_index/packages
+copying resource/bubble_decision -> /home/robomaster/zxzzb/src/install/bubble_decision/share/ament_index/resource_index/packages
+copying package.xml -> /home/robomaster/zxzzb/src/install/bubble_decision/share/bubble_decision
+creating /home/robomaster/zxzzb/src/install/bubble_decision/share/bubble_decision/launch
+copying launch/decision_launch.py -> /home/robomaster/zxzzb/src/install/bubble_decision/share/bubble_decision/launch
+creating /home/robomaster/zxzzb/src/install/bubble_decision/share/bubble_decision/config
+copying config/config.yaml -> /home/robomaster/zxzzb/src/install/bubble_decision/share/bubble_decision/config
+running install_egg_info
+Copying ../build/bubble_decision/bubble_decision.egg-info to /home/robomaster/zxzzb/src/install/bubble_decision/lib/python3.8/site-packages/bubble_decision-0.0.0-py3.8.egg-info
+running install_scripts
+Installing decision script to /home/robomaster/zxzzb/src/install/bubble_decision/lib/bubble_decision
+writing list of installed files to '/home/robomaster/zxzzb/src/build/bubble_decision/install.log'

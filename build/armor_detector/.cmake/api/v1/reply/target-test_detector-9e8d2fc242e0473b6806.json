@@ -1,0 +1,888 @@
+{
+	"artifacts" : 
+	[
+		{
+			"path" : "test_detector"
+		}
+	],
+	"backtrace" : 4,
+	"backtraceGraph" : 
+	{
+		"commands" : 
+		[
+			"add_executable",
+			"_ament_add_gtest_executable",
+			"ament_add_gtest_executable",
+			"ament_add_gtest",
+			"target_link_libraries",
+			"target_include_directories"
+		],
+		"files" : 
+		[
+			"/opt/ros/galactic/share/ament_cmake_gtest/cmake/ament_add_gtest_executable.cmake",
+			"/opt/ros/galactic/share/ament_cmake_gtest/cmake/ament_add_gtest.cmake",
+			"CMakeLists.txt"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 2
+			},
+			{
+				"command" : 3,
+				"file" : 2,
+				"line" : 83,
+				"parent" : 0
+			},
+			{
+				"command" : 2,
+				"file" : 1,
+				"line" : 68,
+				"parent" : 1
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 37,
+				"parent" : 2
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 50,
+				"parent" : 3
+			},
+			{
+				"command" : 4,
+				"file" : 0,
+				"line" : 53,
+				"parent" : 3
+			},
+			{
+				"command" : 4,
+				"file" : 0,
+				"line" : 55,
+				"parent" : 3
+			},
+			{
+				"command" : 4,
+				"file" : 2,
+				"line" : 84,
+				"parent" : 0
+			},
+			{
+				"command" : 5,
+				"file" : 0,
+				"line" : 51,
+				"parent" : 3
+			}
+		]
+	},
+	"compileGroups" : 
+	[
+		{
+			"compileCommandFragments" : 
+			[
+				{
+					"fragment" : "  -Wall -Werror -O3"
+				},
+				{
+					"fragment" : "-std=gnu++17"
+				}
+			],
+			"defines" : 
+			[
+				{
+					"backtrace" : 7,
+					"define" : "DEFAULT_RMW_IMPLEMENTATION=rmw_cyclonedds_cpp"
+				},
+				{
+					"backtrace" : 7,
+					"define" : "FMT_LOCALE"
+				},
+				{
+					"backtrace" : 7,
+					"define" : "GFLAGS_IS_A_DLL=0"
+				},
+				{
+					"backtrace" : 7,
+					"define" : "RCUTILS_ENABLE_FAULT_INJECTION"
+				}
+			],
+			"includes" : 
+			[
+				{
+					"backtrace" : 8,
+					"path" : "/opt/ros/galactic/src/gtest_vendor/include"
+				},
+				{
+					"backtrace" : 7,
+					"path" : "/home/robomaster/zxzzb/src/armor_detector/include"
+				},
+				{
+					"backtrace" : 7,
+					"isSystem" : true,
+					"path" : "/opt/ros/galactic/include"
+				},
+				{
+					"backtrace" : 7,
+					"isSystem" : true,
+					"path" : "/usr/local/opencv4.5.4/include/opencv4"
+				},
+				{
+					"backtrace" : 7,
+					"isSystem" : true,
+					"path" : "/usr/include/eigen3"
+				},
+				{
+					"backtrace" : 7,
+					"isSystem" : true,
+					"path" : "/home/robomaster/zxzzb/src/install/rm_interfaces/include"
+				},
+				{
+					"backtrace" : 7,
+					"isSystem" : true,
+					"path" : "/home/robomaster/zxzzb/src/install/rm_utils/include"
+				}
+			],
+			"language" : "CXX",
+			"sourceIndexes" : 
+			[
+				0
+			]
+		}
+	],
+	"dependencies" : 
+	[
+		{
+			"backtrace" : 7,
+			"id" : "armor_detector::@6890427a1f51a3e7e1df"
+		},
+		{
+			"backtrace" : 5,
+			"id" : "gtest_main::@0af4add9fe94340e763e"
+		},
+		{
+			"backtrace" : 6,
+			"id" : "gtest::@0af4add9fe94340e763e"
+		}
+	],
+	"id" : "test_detector::@6890427a1f51a3e7e1df",
+	"link" : 
+	{
+		"commandFragments" : 
+		[
+			{
+				"fragment" : "",
+				"role" : "flags"
+			},
+			{
+				"fragment" : "-Wl,-rpath,/home/robomaster/zxzzb/src/build/armor_detector:/opt/ros/galactic/lib:/home/robomaster/zxzzb/src/install/rm_interfaces/lib:/home/robomaster/zxzzb/src/install/rm_utils/lib:/usr/local/opencv4.5.4/lib:/opt/ros/galactic/lib/x86_64-linux-gnu",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 5,
+				"fragment" : "gtest/libgtest_main.a",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 6,
+				"fragment" : "gtest/libgtest.a",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 7,
+				"fragment" : "libarmor_detector.so",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "-pthread",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "/opt/ros/galactic/lib/libsensor_msgs__rosidl_typesupport_introspection_c.so",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "/opt/ros/galactic/lib/libsensor_msgs__rosidl_generator_c.so",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "/opt/ros/galactic/lib/libsensor_msgs__rosidl_typesupport_c.so",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "/opt/ros/galactic/lib/libsensor_msgs__rosidl_typesupport_introspection_cpp.so",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "/opt/ros/galactic/lib/libsensor_msgs__rosidl_typesupport_cpp.so",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "/opt/ros/galactic/lib/libstd_srvs__rosidl_typesupport_introspection_c.so",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "/opt/ros/galactic/lib/libstd_srvs__rosidl_generator_c.so",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "/opt/ros/galactic/lib/libstd_srvs__rosidl_typesupport_c.so",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "/opt/ros/galactic/lib/libstd_srvs__rosidl_typesupport_introspection_cpp.so",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "/opt/ros/galactic/lib/libstd_srvs__rosidl_typesupport_cpp.so",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "/opt/ros/galactic/lib/libvisualization_msgs__rosidl_typesupport_introspection_c.so",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "/opt/ros/galactic/lib/libvisualization_msgs__rosidl_generator_c.so",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "/opt/ros/galactic/lib/libvisualization_msgs__rosidl_typesupport_c.so",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "/opt/ros/galactic/lib/libvisualization_msgs__rosidl_typesupport_introspection_cpp.so",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "/opt/ros/galactic/lib/libvisualization_msgs__rosidl_typesupport_cpp.so",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "/home/robomaster/zxzzb/src/install/rm_interfaces/lib/librm_interfaces__rosidl_typesupport_introspection_c.so",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "/home/robomaster/zxzzb/src/install/rm_interfaces/lib/librm_interfaces__rosidl_generator_c.so",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "/home/robomaster/zxzzb/src/install/rm_interfaces/lib/librm_interfaces__rosidl_typesupport_c.so",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "/home/robomaster/zxzzb/src/install/rm_interfaces/lib/librm_interfaces__rosidl_typesupport_introspection_cpp.so",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "/home/robomaster/zxzzb/src/install/rm_interfaces/lib/librm_interfaces__rosidl_typesupport_cpp.so",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "/opt/ros/galactic/lib/libstatic_transform_broadcaster_node.so",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "/opt/ros/galactic/lib/libcomponent_manager.so",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "/opt/ros/galactic/lib/libcomposition_interfaces__rosidl_typesupport_introspection_c.so",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "/opt/ros/galactic/lib/libcomposition_interfaces__rosidl_generator_c.so",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "/opt/ros/galactic/lib/libcomposition_interfaces__rosidl_typesupport_c.so",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "/opt/ros/galactic/lib/libcomposition_interfaces__rosidl_typesupport_introspection_cpp.so",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "/opt/ros/galactic/lib/libcomposition_interfaces__rosidl_typesupport_cpp.so",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "/opt/ros/galactic/lib/libtf2_ros.so",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "/opt/ros/galactic/lib/libmessage_filters.so",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "/opt/ros/galactic/lib/libtf2.so",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "/opt/ros/galactic/lib/librclcpp_action.so",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "/opt/ros/galactic/lib/librcl_action.so",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "/opt/ros/galactic/lib/libtf2_msgs__rosidl_typesupport_introspection_c.so",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "/opt/ros/galactic/lib/libtf2_msgs__rosidl_generator_c.so",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "/opt/ros/galactic/lib/libtf2_msgs__rosidl_typesupport_c.so",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "/opt/ros/galactic/lib/libtf2_msgs__rosidl_typesupport_introspection_cpp.so",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "/opt/ros/galactic/lib/libtf2_msgs__rosidl_typesupport_cpp.so",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "/opt/ros/galactic/lib/libaction_msgs__rosidl_typesupport_introspection_c.so",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "/opt/ros/galactic/lib/libaction_msgs__rosidl_generator_c.so",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "/opt/ros/galactic/lib/libaction_msgs__rosidl_typesupport_c.so",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "/opt/ros/galactic/lib/libaction_msgs__rosidl_typesupport_introspection_cpp.so",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "/opt/ros/galactic/lib/libaction_msgs__rosidl_typesupport_cpp.so",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "/opt/ros/galactic/lib/libunique_identifier_msgs__rosidl_typesupport_introspection_c.so",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "/opt/ros/galactic/lib/libunique_identifier_msgs__rosidl_generator_c.so",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "/opt/ros/galactic/lib/libunique_identifier_msgs__rosidl_typesupport_c.so",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "/opt/ros/galactic/lib/libunique_identifier_msgs__rosidl_typesupport_introspection_cpp.so",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "/opt/ros/galactic/lib/libunique_identifier_msgs__rosidl_typesupport_cpp.so",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "/opt/ros/galactic/lib/liborocos-kdl.so.1.4.0",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "/home/robomaster/zxzzb/src/install/rm_utils/lib/librm_utils.so",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "/opt/ros/galactic/lib/librclcpp.so",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "/opt/ros/galactic/lib/libgeometry_msgs__rosidl_typesupport_introspection_c.so",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "/opt/ros/galactic/lib/libgeometry_msgs__rosidl_generator_c.so",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "/opt/ros/galactic/lib/libgeometry_msgs__rosidl_typesupport_c.so",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "/opt/ros/galactic/lib/libgeometry_msgs__rosidl_typesupport_introspection_cpp.so",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "/opt/ros/galactic/lib/libgeometry_msgs__rosidl_typesupport_cpp.so",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "/usr/local/lib/libceres.a",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "/usr/lib/x86_64-linux-gnu/libglog.so",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "/usr/lib/x86_64-linux-gnu/libgflags.so.2.2.2",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "/usr/lib/x86_64-linux-gnu/libspqr.so",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "/usr/lib/x86_64-linux-gnu/libcholmod.so",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "/usr/lib/x86_64-linux-gnu/libccolamd.so",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "/usr/lib/x86_64-linux-gnu/libcamd.so",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "/usr/lib/x86_64-linux-gnu/libcolamd.so",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "/usr/lib/x86_64-linux-gnu/libamd.so",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "/usr/lib/x86_64-linux-gnu/liblapack.so",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "/usr/lib/x86_64-linux-gnu/libblas.so",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "/usr/lib/x86_64-linux-gnu/libsuitesparseconfig.so",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "/usr/lib/x86_64-linux-gnu/librt.so",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "/usr/lib/x86_64-linux-gnu/libcxsparse.so",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "/usr/lib/x86_64-linux-gnu/liblapack.so",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "/usr/lib/x86_64-linux-gnu/libblas.so",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "/usr/lib/x86_64-linux-gnu/libsuitesparseconfig.so",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "/usr/lib/x86_64-linux-gnu/librt.so",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "/usr/lib/x86_64-linux-gnu/libcxsparse.so",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "-lgomp",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "/home/robomaster/zxzzb/src/install/rm_utils/lib/libfytlogger.so",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "/usr/local/opencv4.5.4/lib/libopencv_gapi.so.4.5.4",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "/usr/local/opencv4.5.4/lib/libopencv_highgui.so.4.5.4",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "/usr/local/opencv4.5.4/lib/libopencv_ml.so.4.5.4",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "/usr/local/opencv4.5.4/lib/libopencv_objdetect.so.4.5.4",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "/usr/local/opencv4.5.4/lib/libopencv_photo.so.4.5.4",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "/usr/local/opencv4.5.4/lib/libopencv_stitching.so.4.5.4",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "/usr/local/opencv4.5.4/lib/libopencv_video.so.4.5.4",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "/usr/local/opencv4.5.4/lib/libopencv_calib3d.so.4.5.4",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "/usr/local/opencv4.5.4/lib/libopencv_dnn.so.4.5.4",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "/usr/local/opencv4.5.4/lib/libopencv_features2d.so.4.5.4",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "/usr/local/opencv4.5.4/lib/libopencv_flann.so.4.5.4",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "/usr/local/opencv4.5.4/lib/libopencv_videoio.so.4.5.4",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "/usr/local/opencv4.5.4/lib/libopencv_imgcodecs.so.4.5.4",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "/usr/local/opencv4.5.4/lib/libopencv_imgproc.so.4.5.4",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "/usr/local/opencv4.5.4/lib/libopencv_core.so.4.5.4",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "/opt/ros/galactic/lib/libcv_bridge.so",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "/opt/ros/galactic/lib/libimage_transport.so",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "/opt/ros/galactic/lib/libmessage_filters.so",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "/opt/ros/galactic/lib/librclcpp.so",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "/opt/ros/galactic/lib/liblibstatistics_collector.so",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "/opt/ros/galactic/lib/liblibstatistics_collector_test_msgs__rosidl_typesupport_introspection_c.so",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "/opt/ros/galactic/lib/liblibstatistics_collector_test_msgs__rosidl_generator_c.so",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "/opt/ros/galactic/lib/liblibstatistics_collector_test_msgs__rosidl_typesupport_c.so",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "/opt/ros/galactic/lib/liblibstatistics_collector_test_msgs__rosidl_typesupport_introspection_cpp.so",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "/opt/ros/galactic/lib/liblibstatistics_collector_test_msgs__rosidl_typesupport_cpp.so",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "/opt/ros/galactic/lib/librcl.so",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "/opt/ros/galactic/lib/librcl_interfaces__rosidl_typesupport_introspection_c.so",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "/opt/ros/galactic/lib/librcl_interfaces__rosidl_generator_c.so",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "/opt/ros/galactic/lib/librcl_interfaces__rosidl_typesupport_c.so",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "/opt/ros/galactic/lib/librcl_interfaces__rosidl_typesupport_introspection_cpp.so",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "/opt/ros/galactic/lib/librcl_interfaces__rosidl_typesupport_cpp.so",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "/opt/ros/galactic/lib/librmw_implementation.so",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "/opt/ros/galactic/lib/librcl_logging_spdlog.so",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "/opt/ros/galactic/lib/librcl_logging_interface.so",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "-lpthread",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "/opt/ros/galactic/lib/librcl_yaml_param_parser.so",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "/opt/ros/galactic/lib/librmw.so",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "/opt/ros/galactic/lib/libyaml.so",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "/opt/ros/galactic/lib/librosgraph_msgs__rosidl_typesupport_introspection_c.so",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "/opt/ros/galactic/lib/librosgraph_msgs__rosidl_generator_c.so",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "/opt/ros/galactic/lib/librosgraph_msgs__rosidl_typesupport_c.so",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "/opt/ros/galactic/lib/librosgraph_msgs__rosidl_typesupport_introspection_cpp.so",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "/opt/ros/galactic/lib/librosgraph_msgs__rosidl_typesupport_cpp.so",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "/opt/ros/galactic/lib/libstatistics_msgs__rosidl_typesupport_introspection_c.so",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "/opt/ros/galactic/lib/libstatistics_msgs__rosidl_generator_c.so",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "/opt/ros/galactic/lib/libstatistics_msgs__rosidl_typesupport_c.so",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "/opt/ros/galactic/lib/libstatistics_msgs__rosidl_typesupport_introspection_cpp.so",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "/opt/ros/galactic/lib/libstatistics_msgs__rosidl_typesupport_cpp.so",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "/opt/ros/galactic/lib/libtracetools.so",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "/opt/ros/galactic/lib/libsensor_msgs__rosidl_generator_c.so",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "/opt/ros/galactic/lib/libsensor_msgs__rosidl_typesupport_introspection_c.so",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "/opt/ros/galactic/lib/libsensor_msgs__rosidl_typesupport_c.so",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "/opt/ros/galactic/lib/libsensor_msgs__rosidl_typesupport_introspection_cpp.so",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "/opt/ros/galactic/lib/libsensor_msgs__rosidl_typesupport_cpp.so",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "/opt/ros/galactic/lib/libstd_msgs__rosidl_typesupport_introspection_c.so",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "/opt/ros/galactic/lib/libstd_msgs__rosidl_generator_c.so",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "/opt/ros/galactic/lib/libstd_msgs__rosidl_typesupport_c.so",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "/opt/ros/galactic/lib/libstd_msgs__rosidl_typesupport_introspection_cpp.so",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "/opt/ros/galactic/lib/libstd_msgs__rosidl_typesupport_cpp.so",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "/opt/ros/galactic/lib/libbuiltin_interfaces__rosidl_typesupport_introspection_c.so",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "/opt/ros/galactic/lib/libbuiltin_interfaces__rosidl_generator_c.so",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "/opt/ros/galactic/lib/libbuiltin_interfaces__rosidl_typesupport_c.so",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "/opt/ros/galactic/lib/libbuiltin_interfaces__rosidl_typesupport_introspection_cpp.so",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "/opt/ros/galactic/lib/librosidl_typesupport_introspection_cpp.so",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "/opt/ros/galactic/lib/librosidl_typesupport_introspection_c.so",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "/opt/ros/galactic/lib/libbuiltin_interfaces__rosidl_typesupport_cpp.so",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "/opt/ros/galactic/lib/librosidl_typesupport_cpp.so",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "/opt/ros/galactic/lib/librosidl_typesupport_c.so",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "/opt/ros/galactic/lib/librosidl_runtime_c.so",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "/opt/ros/galactic/lib/libament_index_cpp.so",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "/opt/ros/galactic/lib/libclass_loader.so",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "/opt/ros/galactic/lib/librcutils.so",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "/opt/ros/galactic/lib/librcpputils.so",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "/opt/ros/galactic/lib/libament_index_cpp.so",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "/opt/ros/galactic/lib/libclass_loader.so",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "/opt/ros/galactic/lib/x86_64-linux-gnu/libconsole_bridge.so.1.0",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "/opt/ros/galactic/lib/librcpputils.so",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "/opt/ros/galactic/lib/librcutils.so",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "-ldl",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "/usr/lib/x86_64-linux-gnu/libtinyxml2.so",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "-lg2o_core",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "-lg2o_stuff",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "-lg2o_solver_csparse",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "-lg2o_types_sba",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "-lg2o_types_slam3d",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "-lg2o_solver_dense",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "/usr/lib/x86_64-linux-gnu/libfmt.a",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "-ltbb",
+				"role" : "libraries"
+			}
+		],
+		"language" : "CXX"
+	},
+	"name" : "test_detector",
+	"nameOnDisk" : "test_detector",
+	"paths" : 
+	{
+		"build" : ".",
+		"source" : "."
+	},
+	"sourceGroups" : 
+	[
+		{
+			"name" : "Source Files",
+			"sourceIndexes" : 
+			[
+				0
+			]
+		}
+	],
+	"sources" : 
+	[
+		{
+			"backtrace" : 4,
+			"compileGroupIndex" : 0,
+			"path" : "test/test_detector.cpp",
+			"sourceGroupIndex" : 0
+		}
+	],
+	"type" : "EXECUTABLE"
+}

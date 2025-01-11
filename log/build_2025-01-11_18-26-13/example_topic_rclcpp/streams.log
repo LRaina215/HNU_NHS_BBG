@@ -1,0 +1,76 @@
+[0.042s] Invoking command in '/home/robomaster/zxzzb/src/build/example_topic_rclcpp': AMENT_PREFIX_PATH=/home/robomaster/zxzzb/src/install/rmoss_projectile_motion:/home/robomaster/zxzzb/src/install/rmctrl_msgs:/home/robomaster/zxzzb/src/install/rm_interfaces:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/robomaster/zxzzb/src/install/rmoss_projectile_motion:/home/robomaster/zxzzb/src/install/rmctrl_msgs:/home/robomaster/zxzzb/src/install/rm_interfaces:/opt/ros/galactic LD_LIBRARY_PATH=/home/robomaster/zxzzb/src/install/rmoss_projectile_motion/lib:/home/robomaster/zxzzb/src/install/rmctrl_msgs/lib:/home/robomaster/zxzzb/src/install/rm_interfaces/lib:/usr/local/opencv4.5.4/lib:/home/robomaster/zxzzb/install/rmoss_projectile_motion/lib:/home/robomaster/zxzzb/install/rmctrl_msgs/lib:/home/robomaster/zxzzb/install/armor_detector/lib:/home/robomaster/zxzzb/install/rm_utils/lib:/home/robomaster/zxzzb/install/rm_interfaces/lib:/home/robomaster/zxzzb/install/hik_camera/lib:/home/robomaster/zxzzb/install/game_msgs/lib:/home/robomaster/zxzzb/install/bboxes_ex_msgs/lib:/opt/ros/galactic/opt/yaml_cpp_vendor/lib:/opt/ros/galactic/opt/rviz_ogre_vendor/lib:/opt/ros/galactic/lib/x86_64-linux-gnu:/opt/ros/galactic/lib:/opt/MVS/lib/64:/opt/MVS/lib/32 PYTHONPATH=/home/robomaster/zxzzb/src/install/rmctrl_msgs/lib/python3.8/site-packages:/home/robomaster/zxzzb/src/install/rm_interfaces/lib/python3.8/site-packages:${PYTHONPATH} /usr/bin/cmake /home/robomaster/zxzzb/src/example_topic_rclcpp -DCMAKE_INSTALL_PREFIX=/home/robomaster/zxzzb/src/install/example_topic_rclcpp
+[0.121s] -- The C compiler identification is GNU 9.4.0
+[0.200s] -- The CXX compiler identification is GNU 9.4.0
+[0.208s] -- Check for working C compiler: /usr/bin/cc
+[0.331s] -- Check for working C compiler: /usr/bin/cc -- works
+[0.331s] -- Detecting C compiler ABI info
+[0.460s] -- Detecting C compiler ABI info - done
+[0.470s] -- Detecting C compile features
+[0.470s] -- Detecting C compile features - done
+[0.476s] -- Check for working CXX compiler: /usr/bin/c++
+[0.596s] -- Check for working CXX compiler: /usr/bin/c++ -- works
+[0.599s] -- Detecting CXX compiler ABI info
+[0.727s] -- Detecting CXX compiler ABI info - done
+[0.741s] -- Detecting CXX compile features
+[0.742s] -- Detecting CXX compile features - done
+[0.745s] -- Found ament_cmake: 1.1.6 (/opt/ros/galactic/share/ament_cmake/cmake)
+[0.781s] -- Found PythonInterp: /usr/bin/python3 (found suitable version "3.8.10", minimum required is "3") 
+[0.782s] -- Using PYTHON_EXECUTABLE: /usr/bin/python3
+[0.892s] -- Found rclcpp: 9.2.2 (/opt/ros/galactic/share/rclcpp/cmake)
+[0.970s] -- Using all available rosidl_typesupport_c: rosidl_typesupport_fastrtps_c;rosidl_typesupport_introspection_c
+[0.978s] -- Found rosidl_adapter: 2.2.3 (/opt/ros/galactic/share/rosidl_adapter/cmake)
+[1.098s] -- Found OpenSSL: /usr/lib/x86_64-linux-gnu/libcrypto.so (found version "1.1.1f")  
+[1.142s] -- Found FastRTPS: /opt/ros/galactic/include  
+[1.238s] -- Using all available rosidl_typesupport_cpp: rosidl_typesupport_fastrtps_cpp;rosidl_typesupport_introspection_cpp
+[1.294s] -- Found rmw_implementation_cmake: 3.3.1 (/opt/ros/galactic/share/rmw_implementation_cmake/cmake)
+[1.297s] -- Found rmw_cyclonedds_cpp: 0.22.6 (/opt/ros/galactic/share/rmw_cyclonedds_cpp/cmake)
+[1.316s] -- Using RMW implementation 'rmw_cyclonedds_cpp' as default
+[1.316s] -- Looking for pthread.h
+[1.428s] -- Looking for pthread.h - found
+[1.429s] -- Performing Test CMAKE_HAVE_LIBC_PTHREAD
+[1.543s] -- Performing Test CMAKE_HAVE_LIBC_PTHREAD - Failed
+[1.543s] -- Looking for pthread_create in pthreads
+[1.648s] -- Looking for pthread_create in pthreads - not found
+[1.649s] -- Looking for pthread_create in pthread
+[1.755s] -- Looking for pthread_create in pthread - found
+[1.756s] -- Found Threads: TRUE  
+[1.917s] -- Found rmctrl_msgs: 1.0.0 (/home/robomaster/zxzzb/src/install/rmctrl_msgs/share/rmctrl_msgs/cmake)
+[1.946s] -- Found rm_interfaces: 0.0.0 (/home/robomaster/zxzzb/src/install/rm_interfaces/share/rm_interfaces/cmake)
+[2.041s] -- Found ament_lint_auto: 0.10.7 (/opt/ros/galactic/share/ament_lint_auto/cmake)
+[2.142s] -- Added test 'cppcheck' to perform static code analysis on C / C++ code
+[2.142s] -- Configured cppcheck include dirs: 
+[2.142s] -- Configured cppcheck exclude dirs and/or files: 
+[2.142s] -- Added test 'lint_cmake' to check CMake code style
+[2.143s] -- Added test 'uncrustify' to check C / C++ code style
+[2.143s] -- Configured uncrustify additional arguments: 
+[2.143s] -- Added test 'xmllint' to check XML markup files
+[2.146s] -- Configuring done
+[2.153s] -- Generating done
+[2.157s] -- Build files have been written to: /home/robomaster/zxzzb/src/build/example_topic_rclcpp
+[2.176s] Invoked command in '/home/robomaster/zxzzb/src/build/example_topic_rclcpp' returned '0': AMENT_PREFIX_PATH=/home/robomaster/zxzzb/src/install/rmoss_projectile_motion:/home/robomaster/zxzzb/src/install/rmctrl_msgs:/home/robomaster/zxzzb/src/install/rm_interfaces:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/robomaster/zxzzb/src/install/rmoss_projectile_motion:/home/robomaster/zxzzb/src/install/rmctrl_msgs:/home/robomaster/zxzzb/src/install/rm_interfaces:/opt/ros/galactic LD_LIBRARY_PATH=/home/robomaster/zxzzb/src/install/rmoss_projectile_motion/lib:/home/robomaster/zxzzb/src/install/rmctrl_msgs/lib:/home/robomaster/zxzzb/src/install/rm_interfaces/lib:/usr/local/opencv4.5.4/lib:/home/robomaster/zxzzb/install/rmoss_projectile_motion/lib:/home/robomaster/zxzzb/install/rmctrl_msgs/lib:/home/robomaster/zxzzb/install/armor_detector/lib:/home/robomaster/zxzzb/install/rm_utils/lib:/home/robomaster/zxzzb/install/rm_interfaces/lib:/home/robomaster/zxzzb/install/hik_camera/lib:/home/robomaster/zxzzb/install/game_msgs/lib:/home/robomaster/zxzzb/install/bboxes_ex_msgs/lib:/opt/ros/galactic/opt/yaml_cpp_vendor/lib:/opt/ros/galactic/opt/rviz_ogre_vendor/lib:/opt/ros/galactic/lib/x86_64-linux-gnu:/opt/ros/galactic/lib:/opt/MVS/lib/64:/opt/MVS/lib/32 PYTHONPATH=/home/robomaster/zxzzb/src/install/rmctrl_msgs/lib/python3.8/site-packages:/home/robomaster/zxzzb/src/install/rm_interfaces/lib/python3.8/site-packages:${PYTHONPATH} /usr/bin/cmake /home/robomaster/zxzzb/src/example_topic_rclcpp -DCMAKE_INSTALL_PREFIX=/home/robomaster/zxzzb/src/install/example_topic_rclcpp
+[2.182s] Invoking command in '/home/robomaster/zxzzb/src/build/example_topic_rclcpp': AMENT_PREFIX_PATH=/home/robomaster/zxzzb/src/install/rmoss_projectile_motion:/home/robomaster/zxzzb/src/install/rmctrl_msgs:/home/robomaster/zxzzb/src/install/rm_interfaces:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/robomaster/zxzzb/src/install/rmoss_projectile_motion:/home/robomaster/zxzzb/src/install/rmctrl_msgs:/home/robomaster/zxzzb/src/install/rm_interfaces:/opt/ros/galactic LD_LIBRARY_PATH=/home/robomaster/zxzzb/src/install/rmoss_projectile_motion/lib:/home/robomaster/zxzzb/src/install/rmctrl_msgs/lib:/home/robomaster/zxzzb/src/install/rm_interfaces/lib:/usr/local/opencv4.5.4/lib:/home/robomaster/zxzzb/install/rmoss_projectile_motion/lib:/home/robomaster/zxzzb/install/rmctrl_msgs/lib:/home/robomaster/zxzzb/install/armor_detector/lib:/home/robomaster/zxzzb/install/rm_utils/lib:/home/robomaster/zxzzb/install/rm_interfaces/lib:/home/robomaster/zxzzb/install/hik_camera/lib:/home/robomaster/zxzzb/install/game_msgs/lib:/home/robomaster/zxzzb/install/bboxes_ex_msgs/lib:/opt/ros/galactic/opt/yaml_cpp_vendor/lib:/opt/ros/galactic/opt/rviz_ogre_vendor/lib:/opt/ros/galactic/lib/x86_64-linux-gnu:/opt/ros/galactic/lib:/opt/MVS/lib/64:/opt/MVS/lib/32 PYTHONPATH=/home/robomaster/zxzzb/src/install/rmctrl_msgs/lib/python3.8/site-packages:/home/robomaster/zxzzb/src/install/rm_interfaces/lib/python3.8/site-packages:${PYTHONPATH} /usr/bin/cmake --build /home/robomaster/zxzzb/src/build/example_topic_rclcpp -- -j16 -l16
+[2.246s] [35m[1mScanning dependencies of target topic_subscribe_01[0m
+[2.289s] [ 50%] [32mBuilding CXX object CMakeFiles/topic_subscribe_01.dir/src/tp_01.cpp.o[0m
+[15.266s] [100%] [32m[1mLinking CXX executable topic_subscribe_01[0m
+[15.816s] [100%] Built target topic_subscribe_01
+[15.839s] Invoked command in '/home/robomaster/zxzzb/src/build/example_topic_rclcpp' returned '0': AMENT_PREFIX_PATH=/home/robomaster/zxzzb/src/install/rmoss_projectile_motion:/home/robomaster/zxzzb/src/install/rmctrl_msgs:/home/robomaster/zxzzb/src/install/rm_interfaces:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/robomaster/zxzzb/src/install/rmoss_projectile_motion:/home/robomaster/zxzzb/src/install/rmctrl_msgs:/home/robomaster/zxzzb/src/install/rm_interfaces:/opt/ros/galactic LD_LIBRARY_PATH=/home/robomaster/zxzzb/src/install/rmoss_projectile_motion/lib:/home/robomaster/zxzzb/src/install/rmctrl_msgs/lib:/home/robomaster/zxzzb/src/install/rm_interfaces/lib:/usr/local/opencv4.5.4/lib:/home/robomaster/zxzzb/install/rmoss_projectile_motion/lib:/home/robomaster/zxzzb/install/rmctrl_msgs/lib:/home/robomaster/zxzzb/install/armor_detector/lib:/home/robomaster/zxzzb/install/rm_utils/lib:/home/robomaster/zxzzb/install/rm_interfaces/lib:/home/robomaster/zxzzb/install/hik_camera/lib:/home/robomaster/zxzzb/install/game_msgs/lib:/home/robomaster/zxzzb/install/bboxes_ex_msgs/lib:/opt/ros/galactic/opt/yaml_cpp_vendor/lib:/opt/ros/galactic/opt/rviz_ogre_vendor/lib:/opt/ros/galactic/lib/x86_64-linux-gnu:/opt/ros/galactic/lib:/opt/MVS/lib/64:/opt/MVS/lib/32 PYTHONPATH=/home/robomaster/zxzzb/src/install/rmctrl_msgs/lib/python3.8/site-packages:/home/robomaster/zxzzb/src/install/rm_interfaces/lib/python3.8/site-packages:${PYTHONPATH} /usr/bin/cmake --build /home/robomaster/zxzzb/src/build/example_topic_rclcpp -- -j16 -l16
+[15.841s] Invoking command in '/home/robomaster/zxzzb/src/build/example_topic_rclcpp': AMENT_PREFIX_PATH=/home/robomaster/zxzzb/src/install/rmoss_projectile_motion:/home/robomaster/zxzzb/src/install/rmctrl_msgs:/home/robomaster/zxzzb/src/install/rm_interfaces:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/robomaster/zxzzb/src/install/rmoss_projectile_motion:/home/robomaster/zxzzb/src/install/rmctrl_msgs:/home/robomaster/zxzzb/src/install/rm_interfaces:/opt/ros/galactic LD_LIBRARY_PATH=/home/robomaster/zxzzb/src/install/rmoss_projectile_motion/lib:/home/robomaster/zxzzb/src/install/rmctrl_msgs/lib:/home/robomaster/zxzzb/src/install/rm_interfaces/lib:/usr/local/opencv4.5.4/lib:/home/robomaster/zxzzb/install/rmoss_projectile_motion/lib:/home/robomaster/zxzzb/install/rmctrl_msgs/lib:/home/robomaster/zxzzb/install/armor_detector/lib:/home/robomaster/zxzzb/install/rm_utils/lib:/home/robomaster/zxzzb/install/rm_interfaces/lib:/home/robomaster/zxzzb/install/hik_camera/lib:/home/robomaster/zxzzb/install/game_msgs/lib:/home/robomaster/zxzzb/install/bboxes_ex_msgs/lib:/opt/ros/galactic/opt/yaml_cpp_vendor/lib:/opt/ros/galactic/opt/rviz_ogre_vendor/lib:/opt/ros/galactic/lib/x86_64-linux-gnu:/opt/ros/galactic/lib:/opt/MVS/lib/64:/opt/MVS/lib/32 PYTHONPATH=/home/robomaster/zxzzb/src/install/rmctrl_msgs/lib/python3.8/site-packages:/home/robomaster/zxzzb/src/install/rm_interfaces/lib/python3.8/site-packages:${PYTHONPATH} /usr/bin/cmake --install /home/robomaster/zxzzb/src/build/example_topic_rclcpp
+[15.861s] -- Install configuration: ""
+[15.861s] -- Installing: /home/robomaster/zxzzb/src/install/example_topic_rclcpp/lib/example_topic_rclcpp/topic_subscribe_01
+[15.862s] -- Set runtime path of "/home/robomaster/zxzzb/src/install/example_topic_rclcpp/lib/example_topic_rclcpp/topic_subscribe_01" to ""
+[15.863s] -- Installing: /home/robomaster/zxzzb/src/install/example_topic_rclcpp/share/ament_index/resource_index/package_run_dependencies/example_topic_rclcpp
+[15.863s] -- Installing: /home/robomaster/zxzzb/src/install/example_topic_rclcpp/share/ament_index/resource_index/parent_prefix_path/example_topic_rclcpp
+[15.863s] -- Installing: /home/robomaster/zxzzb/src/install/example_topic_rclcpp/share/example_topic_rclcpp/environment/ament_prefix_path.sh
+[15.863s] -- Installing: /home/robomaster/zxzzb/src/install/example_topic_rclcpp/share/example_topic_rclcpp/environment/ament_prefix_path.dsv
+[15.864s] -- Installing: /home/robomaster/zxzzb/src/install/example_topic_rclcpp/share/example_topic_rclcpp/environment/path.sh
+[15.864s] -- Installing: /home/robomaster/zxzzb/src/install/example_topic_rclcpp/share/example_topic_rclcpp/environment/path.dsv
+[15.864s] -- Installing: /home/robomaster/zxzzb/src/install/example_topic_rclcpp/share/example_topic_rclcpp/local_setup.bash
+[15.864s] -- Installing: /home/robomaster/zxzzb/src/install/example_topic_rclcpp/share/example_topic_rclcpp/local_setup.sh
+[15.864s] -- Installing: /home/robomaster/zxzzb/src/install/example_topic_rclcpp/share/example_topic_rclcpp/local_setup.zsh
+[15.865s] -- Installing: /home/robomaster/zxzzb/src/install/example_topic_rclcpp/share/example_topic_rclcpp/local_setup.dsv
+[15.865s] -- Installing: /home/robomaster/zxzzb/src/install/example_topic_rclcpp/share/example_topic_rclcpp/package.dsv
+[15.865s] -- Installing: /home/robomaster/zxzzb/src/install/example_topic_rclcpp/share/ament_index/resource_index/packages/example_topic_rclcpp
+[15.865s] -- Installing: /home/robomaster/zxzzb/src/install/example_topic_rclcpp/share/example_topic_rclcpp/cmake/example_topic_rclcppConfig.cmake
+[15.865s] -- Installing: /home/robomaster/zxzzb/src/install/example_topic_rclcpp/share/example_topic_rclcpp/cmake/example_topic_rclcppConfig-version.cmake
+[15.865s] -- Installing: /home/robomaster/zxzzb/src/install/example_topic_rclcpp/share/example_topic_rclcpp/package.xml
+[15.870s] Invoked command in '/home/robomaster/zxzzb/src/build/example_topic_rclcpp' returned '0': AMENT_PREFIX_PATH=/home/robomaster/zxzzb/src/install/rmoss_projectile_motion:/home/robomaster/zxzzb/src/install/rmctrl_msgs:/home/robomaster/zxzzb/src/install/rm_interfaces:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/robomaster/zxzzb/src/install/rmoss_projectile_motion:/home/robomaster/zxzzb/src/install/rmctrl_msgs:/home/robomaster/zxzzb/src/install/rm_interfaces:/opt/ros/galactic LD_LIBRARY_PATH=/home/robomaster/zxzzb/src/install/rmoss_projectile_motion/lib:/home/robomaster/zxzzb/src/install/rmctrl_msgs/lib:/home/robomaster/zxzzb/src/install/rm_interfaces/lib:/usr/local/opencv4.5.4/lib:/home/robomaster/zxzzb/install/rmoss_projectile_motion/lib:/home/robomaster/zxzzb/install/rmctrl_msgs/lib:/home/robomaster/zxzzb/install/armor_detector/lib:/home/robomaster/zxzzb/install/rm_utils/lib:/home/robomaster/zxzzb/install/rm_interfaces/lib:/home/robomaster/zxzzb/install/hik_camera/lib:/home/robomaster/zxzzb/install/game_msgs/lib:/home/robomaster/zxzzb/install/bboxes_ex_msgs/lib:/opt/ros/galactic/opt/yaml_cpp_vendor/lib:/opt/ros/galactic/opt/rviz_ogre_vendor/lib:/opt/ros/galactic/lib/x86_64-linux-gnu:/opt/ros/galactic/lib:/opt/MVS/lib/64:/opt/MVS/lib/32 PYTHONPATH=/home/robomaster/zxzzb/src/install/rmctrl_msgs/lib/python3.8/site-packages:/home/robomaster/zxzzb/src/install/rm_interfaces/lib/python3.8/site-packages:${PYTHONPATH} /usr/bin/cmake --install /home/robomaster/zxzzb/src/build/example_topic_rclcpp

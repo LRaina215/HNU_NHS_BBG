@@ -1,0 +1,6 @@
+Invoking command in '/home/robomaster/zxzzb/src/build/rmctrl_msgs': CMAKE_PREFIX_PATH=/opt/ros/galactic /usr/bin/cmake /home/robomaster/zxzzb/src/bubble_interface/rmctrl_msgs -DCMAKE_INSTALL_PREFIX=/home/robomaster/zxzzb/src/install/rmctrl_msgs
+Invoked command in '/home/robomaster/zxzzb/src/build/rmctrl_msgs' returned '0': CMAKE_PREFIX_PATH=/opt/ros/galactic /usr/bin/cmake /home/robomaster/zxzzb/src/bubble_interface/rmctrl_msgs -DCMAKE_INSTALL_PREFIX=/home/robomaster/zxzzb/src/install/rmctrl_msgs
+Invoking command in '/home/robomaster/zxzzb/src/build/rmctrl_msgs': CMAKE_PREFIX_PATH=/opt/ros/galactic /usr/bin/cmake --build /home/robomaster/zxzzb/src/build/rmctrl_msgs -- -j16 -l16
+Invoked command in '/home/robomaster/zxzzb/src/build/rmctrl_msgs' returned '0': CMAKE_PREFIX_PATH=/opt/ros/galactic /usr/bin/cmake --build /home/robomaster/zxzzb/src/build/rmctrl_msgs -- -j16 -l16
+Invoking command in '/home/robomaster/zxzzb/src/build/rmctrl_msgs': CMAKE_PREFIX_PATH=/opt/ros/galactic /usr/bin/cmake --install /home/robomaster/zxzzb/src/build/rmctrl_msgs
+Invoked command in '/home/robomaster/zxzzb/src/build/rmctrl_msgs' returned '0': CMAKE_PREFIX_PATH=/opt/ros/galactic /usr/bin/cmake --install /home/robomaster/zxzzb/src/build/rmctrl_msgs

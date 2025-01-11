@@ -1,0 +1,6 @@
+Invoking command in '/home/robomaster/zxzzb/src/build/bboxes_ex_msgs': CMAKE_PREFIX_PATH=/opt/ros/galactic /usr/bin/cmake /home/robomaster/zxzzb/src/bubble_interface/bboxes_ex_msgs -DCMAKE_INSTALL_PREFIX=/home/robomaster/zxzzb/src/install/bboxes_ex_msgs
+Invoked command in '/home/robomaster/zxzzb/src/build/bboxes_ex_msgs' returned '0': CMAKE_PREFIX_PATH=/opt/ros/galactic /usr/bin/cmake /home/robomaster/zxzzb/src/bubble_interface/bboxes_ex_msgs -DCMAKE_INSTALL_PREFIX=/home/robomaster/zxzzb/src/install/bboxes_ex_msgs
+Invoking command in '/home/robomaster/zxzzb/src/build/bboxes_ex_msgs': CMAKE_PREFIX_PATH=/opt/ros/galactic /usr/bin/cmake --build /home/robomaster/zxzzb/src/build/bboxes_ex_msgs -- -j16 -l16
+Invoked command in '/home/robomaster/zxzzb/src/build/bboxes_ex_msgs' returned '0': CMAKE_PREFIX_PATH=/opt/ros/galactic /usr/bin/cmake --build /home/robomaster/zxzzb/src/build/bboxes_ex_msgs -- -j16 -l16
+Invoking command in '/home/robomaster/zxzzb/src/build/bboxes_ex_msgs': CMAKE_PREFIX_PATH=/opt/ros/galactic /usr/bin/cmake --install /home/robomaster/zxzzb/src/build/bboxes_ex_msgs
+Invoked command in '/home/robomaster/zxzzb/src/build/bboxes_ex_msgs' returned '0': CMAKE_PREFIX_PATH=/opt/ros/galactic /usr/bin/cmake --install /home/robomaster/zxzzb/src/build/bboxes_ex_msgs

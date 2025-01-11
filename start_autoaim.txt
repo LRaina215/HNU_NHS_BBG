@@ -1,7 +1,0 @@
-cd ~/zxzzb
-colcon build
-source install/setup.bash
-ros2 launch hik_camera hik_camera.launch.py 
-ros2 launch rm_description model.launch.py 
-ros2 run armor_detector armor_detector_node 
-ros2 run armor_solver armor_solver_node 

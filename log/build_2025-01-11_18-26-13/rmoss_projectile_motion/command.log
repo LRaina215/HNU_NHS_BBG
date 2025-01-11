@@ -1,0 +1,6 @@
+Invoking command in '/home/robomaster/zxzzb/src/build/rmoss_projectile_motion': CMAKE_PREFIX_PATH=/opt/ros/galactic /usr/bin/cmake /home/robomaster/zxzzb/src/rmoss_projectile_motion -DCMAKE_INSTALL_PREFIX=/home/robomaster/zxzzb/src/install/rmoss_projectile_motion
+Invoked command in '/home/robomaster/zxzzb/src/build/rmoss_projectile_motion' returned '0': CMAKE_PREFIX_PATH=/opt/ros/galactic /usr/bin/cmake /home/robomaster/zxzzb/src/rmoss_projectile_motion -DCMAKE_INSTALL_PREFIX=/home/robomaster/zxzzb/src/install/rmoss_projectile_motion
+Invoking command in '/home/robomaster/zxzzb/src/build/rmoss_projectile_motion': CMAKE_PREFIX_PATH=/opt/ros/galactic /usr/bin/cmake --build /home/robomaster/zxzzb/src/build/rmoss_projectile_motion -- -j16 -l16
+Invoked command in '/home/robomaster/zxzzb/src/build/rmoss_projectile_motion' returned '0': CMAKE_PREFIX_PATH=/opt/ros/galactic /usr/bin/cmake --build /home/robomaster/zxzzb/src/build/rmoss_projectile_motion -- -j16 -l16
+Invoking command in '/home/robomaster/zxzzb/src/build/rmoss_projectile_motion': CMAKE_PREFIX_PATH=/opt/ros/galactic /usr/bin/cmake --install /home/robomaster/zxzzb/src/build/rmoss_projectile_motion
+Invoked command in '/home/robomaster/zxzzb/src/build/rmoss_projectile_motion' returned '0': CMAKE_PREFIX_PATH=/opt/ros/galactic /usr/bin/cmake --install /home/robomaster/zxzzb/src/build/rmoss_projectile_motion

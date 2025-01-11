@@ -1,0 +1,87 @@
+{
+	"configurations" : 
+	[
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"hasInstallRule" : true,
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.10"
+					},
+					"projectIndex" : 0,
+					"source" : ".",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2,
+						3
+					]
+				}
+			],
+			"name" : "",
+			"projects" : 
+			[
+				{
+					"directoryIndexes" : 
+					[
+						0
+					],
+					"name" : "armor_solver",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2,
+						3
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 0,
+					"id" : "armor_solver::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-armor_solver-a6b2e8b40925af7a6a89.json",
+					"name" : "armor_solver",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "armor_solver_node::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-armor_solver_node-75db0edfc50367696215.json",
+					"name" : "armor_solver_node",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "armor_solver_uninstall::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-armor_solver_uninstall-7ea55d3f998d34f2e84a.json",
+					"name" : "armor_solver_uninstall",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "uninstall::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-uninstall-e438946cacfcbc6f6352.json",
+					"name" : "uninstall",
+					"projectIndex" : 0
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "/home/robomaster/zxzzb/src/build/armor_solver",
+		"source" : "/home/robomaster/zxzzb/src/armor_solver"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 0
+	}
+}

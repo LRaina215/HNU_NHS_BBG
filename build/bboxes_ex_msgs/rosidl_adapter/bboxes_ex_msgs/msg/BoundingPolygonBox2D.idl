@@ -1,0 +1,37 @@
+// generated from rosidl_adapter/resource/msg.idl.em
+// with input from bboxes_ex_msgs/msg/BoundingPolygonBox2D.msg
+// generated code does not contain a copyright notice
+
+#include "geometry_msgs/msg/Polygon.idl"
+
+module bboxes_ex_msgs {
+  module msg {
+    @verbatim (language="comment", text=
+      " Robomaster target name" "\n"
+      " [options:] [Armour|lightstrip|Rune|Mineral]")
+    struct BoundingPolygonBox2D {
+      string class_id;
+
+      geometry_msgs::msg::Polygon pose;
+
+      uint16 img_width;
+
+      uint16 img_height;
+
+      int32 center_dist;
+
+      @verbatim (language="comment", text=
+        " Robomaster target type" "\n"
+        " [options:]" "\n"
+        " 0-7                                , if target is armour" "\n"
+        " armour | center                    , if target is Rune" "\n"
+        " gold   | silver                    , if target is Mineral")
+      @unit (value="options:")
+      string type;
+
+      @verbatim (language="comment", text=
+        " traking id")
+      string id;
+    };
+  };
+};

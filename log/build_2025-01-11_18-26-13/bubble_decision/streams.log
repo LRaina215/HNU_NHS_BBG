@@ -1,0 +1,47 @@
+[1.077s] Invoking command in '/home/robomaster/zxzzb/src/bubble_decision': PYTHONPATH=/home/robomaster/zxzzb/src/build/bubble_decision/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/robomaster/zxzzb/src/install/bubble_decision/lib/python3.8/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../build/bubble_decision build --build-base /home/robomaster/zxzzb/src/build/bubble_decision/build install --record /home/robomaster/zxzzb/src/build/bubble_decision/install.log --single-version-externally-managed install_data
+[1.405s] running egg_info
+[1.405s] creating ../build/bubble_decision/bubble_decision.egg-info
+[1.406s] writing ../build/bubble_decision/bubble_decision.egg-info/PKG-INFO
+[1.406s] writing dependency_links to ../build/bubble_decision/bubble_decision.egg-info/dependency_links.txt
+[1.406s] writing entry points to ../build/bubble_decision/bubble_decision.egg-info/entry_points.txt
+[1.407s] writing requirements to ../build/bubble_decision/bubble_decision.egg-info/requires.txt
+[1.407s] writing top-level names to ../build/bubble_decision/bubble_decision.egg-info/top_level.txt
+[1.409s] writing manifest file '../build/bubble_decision/bubble_decision.egg-info/SOURCES.txt'
+[1.453s] reading manifest file '../build/bubble_decision/bubble_decision.egg-info/SOURCES.txt'
+[1.455s] writing manifest file '../build/bubble_decision/bubble_decision.egg-info/SOURCES.txt'
+[1.455s] running build
+[1.455s] running build_py
+[1.455s] creating /home/robomaster/zxzzb/src/build/bubble_decision/build
+[1.456s] creating /home/robomaster/zxzzb/src/build/bubble_decision/build/lib
+[1.456s] creating /home/robomaster/zxzzb/src/build/bubble_decision/build/lib/bubble_decision
+[1.456s] copying bubble_decision/gameAction.py -> /home/robomaster/zxzzb/src/build/bubble_decision/build/lib/bubble_decision
+[1.456s] copying bubble_decision/__init__.py -> /home/robomaster/zxzzb/src/build/bubble_decision/build/lib/bubble_decision
+[1.456s] copying bubble_decision/decision.py -> /home/robomaster/zxzzb/src/build/bubble_decision/build/lib/bubble_decision
+[1.456s] copying bubble_decision/gimbalAction.py -> /home/robomaster/zxzzb/src/build/bubble_decision/build/lib/bubble_decision
+[1.456s] running install
+[1.457s] running install_lib
+[1.458s] creating /home/robomaster/zxzzb/src/install/bubble_decision/lib/python3.8/site-packages/bubble_decision
+[1.458s] copying /home/robomaster/zxzzb/src/build/bubble_decision/build/lib/bubble_decision/gameAction.py -> /home/robomaster/zxzzb/src/install/bubble_decision/lib/python3.8/site-packages/bubble_decision
+[1.458s] copying /home/robomaster/zxzzb/src/build/bubble_decision/build/lib/bubble_decision/__init__.py -> /home/robomaster/zxzzb/src/install/bubble_decision/lib/python3.8/site-packages/bubble_decision
+[1.459s] copying /home/robomaster/zxzzb/src/build/bubble_decision/build/lib/bubble_decision/decision.py -> /home/robomaster/zxzzb/src/install/bubble_decision/lib/python3.8/site-packages/bubble_decision
+[1.459s] copying /home/robomaster/zxzzb/src/build/bubble_decision/build/lib/bubble_decision/gimbalAction.py -> /home/robomaster/zxzzb/src/install/bubble_decision/lib/python3.8/site-packages/bubble_decision
+[1.459s] byte-compiling /home/robomaster/zxzzb/src/install/bubble_decision/lib/python3.8/site-packages/bubble_decision/gameAction.py to gameAction.cpython-38.pyc
+[1.461s] byte-compiling /home/robomaster/zxzzb/src/install/bubble_decision/lib/python3.8/site-packages/bubble_decision/__init__.py to __init__.cpython-38.pyc
+[1.462s] byte-compiling /home/robomaster/zxzzb/src/install/bubble_decision/lib/python3.8/site-packages/bubble_decision/decision.py to decision.cpython-38.pyc
+[1.462s] byte-compiling /home/robomaster/zxzzb/src/install/bubble_decision/lib/python3.8/site-packages/bubble_decision/gimbalAction.py to gimbalAction.cpython-38.pyc
+[1.463s] running install_data
+[1.463s] creating /home/robomaster/zxzzb/src/install/bubble_decision/share/ament_index
+[1.463s] creating /home/robomaster/zxzzb/src/install/bubble_decision/share/ament_index/resource_index
+[1.463s] creating /home/robomaster/zxzzb/src/install/bubble_decision/share/ament_index/resource_index/packages
+[1.463s] copying resource/bubble_decision -> /home/robomaster/zxzzb/src/install/bubble_decision/share/ament_index/resource_index/packages
+[1.463s] copying package.xml -> /home/robomaster/zxzzb/src/install/bubble_decision/share/bubble_decision
+[1.464s] creating /home/robomaster/zxzzb/src/install/bubble_decision/share/bubble_decision/launch
+[1.465s] copying launch/decision_launch.py -> /home/robomaster/zxzzb/src/install/bubble_decision/share/bubble_decision/launch
+[1.465s] creating /home/robomaster/zxzzb/src/install/bubble_decision/share/bubble_decision/config
+[1.465s] copying config/config.yaml -> /home/robomaster/zxzzb/src/install/bubble_decision/share/bubble_decision/config
+[1.465s] running install_egg_info
+[1.467s] Copying ../build/bubble_decision/bubble_decision.egg-info to /home/robomaster/zxzzb/src/install/bubble_decision/lib/python3.8/site-packages/bubble_decision-0.0.0-py3.8.egg-info
+[1.468s] running install_scripts
+[1.492s] Installing decision script to /home/robomaster/zxzzb/src/install/bubble_decision/lib/bubble_decision
+[1.492s] writing list of installed files to '/home/robomaster/zxzzb/src/build/bubble_decision/install.log'
+[1.538s] Invoked command in '/home/robomaster/zxzzb/src/bubble_decision' returned '0': PYTHONPATH=/home/robomaster/zxzzb/src/build/bubble_decision/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/robomaster/zxzzb/src/install/bubble_decision/lib/python3.8/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../build/bubble_decision build --build-base /home/robomaster/zxzzb/src/build/bubble_decision/build install --record /home/robomaster/zxzzb/src/build/bubble_decision/install.log --single-version-externally-managed install_data

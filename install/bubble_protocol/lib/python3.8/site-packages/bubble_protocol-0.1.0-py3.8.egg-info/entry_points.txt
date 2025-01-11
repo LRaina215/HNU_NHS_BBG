@@ -1,0 +1,3 @@
+[console_scripts]
+bcp_core = bubble_protocol.bcp_core:main
+

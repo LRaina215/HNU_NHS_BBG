@@ -1,0 +1,6 @@
+msg/GameStatus.idl
+msg/GameStatus.msg
+msg/RobotHP.idl
+msg/RobotHP.msg
+msg/Zone.idl
+msg/Zone.msg

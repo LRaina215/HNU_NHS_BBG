@@ -1,0 +1,16 @@
+// generated from rosidl_adapter/resource/msg.idl.em
+// with input from rmctrl_msgs/msg/Shooter.msg
+// generated code does not contain a copyright notice
+
+
+module rmctrl_msgs {
+  module msg {
+    struct Shooter {
+      int8 is_shoot;
+
+      int32 bullet_vel;
+
+      int16 remain_bullet;
+    };
+  };
+};

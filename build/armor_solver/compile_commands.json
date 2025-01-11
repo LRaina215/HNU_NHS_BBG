@@ -1,0 +1,22 @@
+[
+{
+  "directory": "/home/robomaster/zxzzb/src/build/armor_solver",
+  "command": "/usr/bin/c++  -DDEFAULT_RMW_IMPLEMENTATION=rmw_cyclonedds_cpp -DRCUTILS_ENABLE_FAULT_INJECTION -isystem /opt/ros/galactic/include    -Wall -Werror -O3 -std=gnu++17 -o CMakeFiles/armor_solver_node.dir/rclcpp_components/node_main_armor_solver_node.cpp.o -c /home/robomaster/zxzzb/src/build/armor_solver/rclcpp_components/node_main_armor_solver_node.cpp",
+  "file": "/home/robomaster/zxzzb/src/build/armor_solver/rclcpp_components/node_main_armor_solver_node.cpp"
+},
+{
+  "directory": "/home/robomaster/zxzzb/src/build/armor_solver",
+  "command": "/usr/bin/c++  -DDEFAULT_RMW_IMPLEMENTATION=rmw_cyclonedds_cpp -DFMT_LOCALE -DGFLAGS_IS_A_DLL=0 -DRCUTILS_ENABLE_FAULT_INJECTION -Darmor_solver_EXPORTS -I/home/robomaster/zxzzb/src/armor_solver/include -isystem /home/robomaster/zxzzb/src/install/rm_utils/include -isystem /home/robomaster/zxzzb/src/install/rm_interfaces/include -isystem /opt/ros/galactic/include -isystem /usr/include/eigen3 -isystem /usr/local/opencv4.5.4/include/opencv4  -fPIC   -Wall -Werror -O3 -std=gnu++17 -o CMakeFiles/armor_solver.dir/src/armor_solver.cpp.o -c /home/robomaster/zxzzb/src/armor_solver/src/armor_solver.cpp",
+  "file": "/home/robomaster/zxzzb/src/armor_solver/src/armor_solver.cpp"
+},
+{
+  "directory": "/home/robomaster/zxzzb/src/build/armor_solver",
+  "command": "/usr/bin/c++  -DDEFAULT_RMW_IMPLEMENTATION=rmw_cyclonedds_cpp -DFMT_LOCALE -DGFLAGS_IS_A_DLL=0 -DRCUTILS_ENABLE_FAULT_INJECTION -Darmor_solver_EXPORTS -I/home/robomaster/zxzzb/src/armor_solver/include -isystem /home/robomaster/zxzzb/src/install/rm_utils/include -isystem /home/robomaster/zxzzb/src/install/rm_interfaces/include -isystem /opt/ros/galactic/include -isystem /usr/include/eigen3 -isystem /usr/local/opencv4.5.4/include/opencv4  -fPIC   -Wall -Werror -O3 -std=gnu++17 -o CMakeFiles/armor_solver.dir/src/armor_solver_node.cpp.o -c /home/robomaster/zxzzb/src/armor_solver/src/armor_solver_node.cpp",
+  "file": "/home/robomaster/zxzzb/src/armor_solver/src/armor_solver_node.cpp"
+},
+{
+  "directory": "/home/robomaster/zxzzb/src/build/armor_solver",
+  "command": "/usr/bin/c++  -DDEFAULT_RMW_IMPLEMENTATION=rmw_cyclonedds_cpp -DFMT_LOCALE -DGFLAGS_IS_A_DLL=0 -DRCUTILS_ENABLE_FAULT_INJECTION -Darmor_solver_EXPORTS -I/home/robomaster/zxzzb/src/armor_solver/include -isystem /home/robomaster/zxzzb/src/install/rm_utils/include -isystem /home/robomaster/zxzzb/src/install/rm_interfaces/include -isystem /opt/ros/galactic/include -isystem /usr/include/eigen3 -isystem /usr/local/opencv4.5.4/include/opencv4  -fPIC   -Wall -Werror -O3 -std=gnu++17 -o CMakeFiles/armor_solver.dir/src/armor_tracker.cpp.o -c /home/robomaster/zxzzb/src/armor_solver/src/armor_tracker.cpp",
+  "file": "/home/robomaster/zxzzb/src/armor_solver/src/armor_tracker.cpp"
+}
+]

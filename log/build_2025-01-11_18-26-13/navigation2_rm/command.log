@@ -1,0 +1,6 @@
+Invoking command in '/home/robomaster/zxzzb/src/build/navigation2_rm': CMAKE_PREFIX_PATH=/opt/ros/galactic /usr/bin/cmake /home/robomaster/zxzzb/src/navigation2_rm -DCMAKE_INSTALL_PREFIX=/home/robomaster/zxzzb/src/install/navigation2_rm
+Invoked command in '/home/robomaster/zxzzb/src/build/navigation2_rm' returned '0': CMAKE_PREFIX_PATH=/opt/ros/galactic /usr/bin/cmake /home/robomaster/zxzzb/src/navigation2_rm -DCMAKE_INSTALL_PREFIX=/home/robomaster/zxzzb/src/install/navigation2_rm
+Invoking command in '/home/robomaster/zxzzb/src/build/navigation2_rm': CMAKE_PREFIX_PATH=/opt/ros/galactic /usr/bin/cmake --build /home/robomaster/zxzzb/src/build/navigation2_rm -- -j16 -l16
+Invoked command in '/home/robomaster/zxzzb/src/build/navigation2_rm' returned '0': CMAKE_PREFIX_PATH=/opt/ros/galactic /usr/bin/cmake --build /home/robomaster/zxzzb/src/build/navigation2_rm -- -j16 -l16
+Invoking command in '/home/robomaster/zxzzb/src/build/navigation2_rm': CMAKE_PREFIX_PATH=/opt/ros/galactic /usr/bin/cmake --install /home/robomaster/zxzzb/src/build/navigation2_rm
+Invoked command in '/home/robomaster/zxzzb/src/build/navigation2_rm' returned '0': CMAKE_PREFIX_PATH=/opt/ros/galactic /usr/bin/cmake --install /home/robomaster/zxzzb/src/build/navigation2_rm

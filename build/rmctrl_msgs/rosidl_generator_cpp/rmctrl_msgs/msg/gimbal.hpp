@@ -1,0 +1,11 @@
+// generated from rosidl_generator_cpp/resource/idl.hpp.em
+// generated code does not contain a copyright notice
+
+#ifndef RMCTRL_MSGS__MSG__GIMBAL_HPP_
+#define RMCTRL_MSGS__MSG__GIMBAL_HPP_
+
+#include "rmctrl_msgs/msg/detail/gimbal__struct.hpp"
+#include "rmctrl_msgs/msg/detail/gimbal__builder.hpp"
+#include "rmctrl_msgs/msg/detail/gimbal__traits.hpp"
+
+#endif  // RMCTRL_MSGS__MSG__GIMBAL_HPP_

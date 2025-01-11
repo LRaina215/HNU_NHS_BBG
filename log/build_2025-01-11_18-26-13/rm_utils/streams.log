@@ -1,0 +1,127 @@
+[0.048s] Invoking command in '/home/robomaster/zxzzb/src/build/rm_utils': CMAKE_PREFIX_PATH=/opt/ros/galactic /usr/bin/cmake /home/robomaster/zxzzb/src/rm_utils -DCMAKE_INSTALL_PREFIX=/home/robomaster/zxzzb/src/install/rm_utils
+[0.422s] -- The C compiler identification is GNU 9.4.0
+[0.423s] -- The CXX compiler identification is GNU 9.4.0
+[0.423s] -- Check for working C compiler: /usr/bin/cc
+[0.423s] -- Check for working C compiler: /usr/bin/cc -- works
+[0.423s] -- Detecting C compiler ABI info
+[0.423s] -- Detecting C compiler ABI info - done
+[0.423s] -- Detecting C compile features
+[0.424s] -- Detecting C compile features - done
+[0.424s] -- Check for working CXX compiler: /usr/bin/c++
+[0.434s] -- Check for working CXX compiler: /usr/bin/c++ -- works
+[0.437s] -- Detecting CXX compiler ABI info
+[0.540s] -- Detecting CXX compiler ABI info - done
+[0.552s] -- Detecting CXX compile features
+[0.552s] -- Detecting CXX compile features - done
+[0.555s] -- Found ament_cmake: 1.1.6 (/opt/ros/galactic/share/ament_cmake/cmake)
+[0.588s] -- Found PythonInterp: /usr/bin/python3 (found suitable version "3.8.10", minimum required is "3") 
+[0.588s] -- Using PYTHON_EXECUTABLE: /usr/bin/python3
+[0.671s] -- Found rclcpp: 9.2.2 (/opt/ros/galactic/share/rclcpp/cmake)
+[0.711s] -- Using all available rosidl_typesupport_c: rosidl_typesupport_fastrtps_c;rosidl_typesupport_introspection_c
+[0.717s] -- Found rosidl_adapter: 2.2.3 (/opt/ros/galactic/share/rosidl_adapter/cmake)
+[0.807s] -- Found OpenSSL: /usr/lib/x86_64-linux-gnu/libcrypto.so (found version "1.1.1f")  
+[0.836s] -- Found FastRTPS: /opt/ros/galactic/include  
+[0.935s] -- Using all available rosidl_typesupport_cpp: rosidl_typesupport_fastrtps_cpp;rosidl_typesupport_introspection_cpp
+[1.017s] -- Found rmw_implementation_cmake: 3.3.1 (/opt/ros/galactic/share/rmw_implementation_cmake/cmake)
+[1.020s] -- Found rmw_cyclonedds_cpp: 0.22.6 (/opt/ros/galactic/share/rmw_cyclonedds_cpp/cmake)
+[1.049s] -- Using RMW implementation 'rmw_cyclonedds_cpp' as default
+[1.050s] -- Looking for pthread.h
+[1.158s] -- Looking for pthread.h - found
+[1.158s] -- Performing Test CMAKE_HAVE_LIBC_PTHREAD
+[1.242s] -- Performing Test CMAKE_HAVE_LIBC_PTHREAD - Failed
+[1.243s] -- Looking for pthread_create in pthreads
+[1.315s] -- Looking for pthread_create in pthreads - not found
+[1.316s] -- Looking for pthread_create in pthread
+[1.410s] -- Looking for pthread_create in pthread - found
+[1.411s] -- Found Threads: TRUE  
+[1.542s] -- Found eigen3_cmake_module: 0.1.1 (/opt/ros/galactic/share/eigen3_cmake_module/cmake)
+[1.548s] -- Found Eigen3: TRUE (found version "3.3.7") 
+[1.550s] -- Found geometry_msgs: 2.2.4 (/opt/ros/galactic/share/geometry_msgs/cmake)
+[1.584s] -- Found OpenCV: /usr/local/opencv4.5.4 (found suitable version "4.5.4", minimum required is "4.5.4") 
+[1.586s] -- Found installed version of Eigen: /usr/lib/cmake/eigen3
+[1.588s] -- Found required Ceres dependency: Eigen version 3.3.7 in /usr/include/eigen3
+[1.589s] -- Found required Ceres dependency: glog
+[1.592s] -- Found installed version of gflags: /usr/lib/x86_64-linux-gnu/cmake/gflags
+[1.592s] -- Detected gflags version: 2.2.2
+[1.593s] -- Found required Ceres dependency: gflags
+[1.593s] -- Found Ceres version: 1.14.0 installed in: /usr/local with components: [EigenSparse, SparseLinearAlgebraLibrary, LAPACK, SuiteSparse, CXSparse, SchurSpecializations, OpenMP, Multithreading]
+[1.602s] -- Found ament_lint_auto: 0.10.7 (/opt/ros/galactic/share/ament_lint_auto/cmake)
+[1.665s] -- Added test 'cppcheck' to perform static code analysis on C / C++ code
+[1.665s] -- Configured cppcheck include dirs: /home/robomaster/zxzzb/src/rm_utils/include
+[1.665s] -- Configured cppcheck exclude dirs and/or files: 
+[1.666s] -- Added test 'lint_cmake' to check CMake code style
+[1.667s] -- Added test 'xmllint' to check XML markup files
+[1.671s] -- Configuring done
+[1.692s] -- Generating done
+[1.699s] -- Build files have been written to: /home/robomaster/zxzzb/src/build/rm_utils
+[1.709s] Invoked command in '/home/robomaster/zxzzb/src/build/rm_utils' returned '0': CMAKE_PREFIX_PATH=/opt/ros/galactic /usr/bin/cmake /home/robomaster/zxzzb/src/rm_utils -DCMAKE_INSTALL_PREFIX=/home/robomaster/zxzzb/src/install/rm_utils
+[1.713s] Invoking command in '/home/robomaster/zxzzb/src/build/rm_utils': CMAKE_PREFIX_PATH=/opt/ros/galactic /usr/bin/cmake --build /home/robomaster/zxzzb/src/build/rm_utils -- -j16 -l16
+[1.745s] [35m[1mScanning dependencies of target rm_utils[0m
+[1.748s] [35m[1mScanning dependencies of target fytlogger[0m
+[1.761s] [ 25%] [32mBuilding CXX object CMakeFiles/fytlogger.dir/src/logger/writer.cpp.o[0m
+[1.761s] [ 25%] [32mBuilding CXX object CMakeFiles/fytlogger.dir/src/logger/logger_impl.cpp.o[0m
+[1.762s] [ 25%] [32mBuilding CXX object CMakeFiles/fytlogger.dir/src/logger/logger_pool.cpp.o[0m
+[1.892s] [ 33%] [32mBuilding CXX object CMakeFiles/rm_utils.dir/src/math/utils.cpp.o[0m
+[1.896s] [ 41%] [32mBuilding CXX object CMakeFiles/rm_utils.dir/src/math/pnp_solver.cpp.o[0m
+[1.904s] [ 50%] [32mBuilding CXX object CMakeFiles/rm_utils.dir/src/math/trajectory_compensator.cpp.o[0m
+[1.913s] [ 58%] [32mBuilding CXX object CMakeFiles/rm_utils.dir/src/math/manual_compensator.cpp.o[0m
+[1.950s] [ 66%] [32mBuilding CXX object CMakeFiles/rm_utils.dir/src/math/extended_kalman_filter.cpp.o[0m
+[1.967s] [ 75%] [32mBuilding CXX object CMakeFiles/rm_utils.dir/src/url_resolver.cpp.o[0m
+[1.975s] [ 83%] [32mBuilding CXX object CMakeFiles/rm_utils.dir/src/heartbeat.cpp.o[0m
+[9.934s] [ 91%] [32m[1mLinking CXX shared library libfytlogger.so[0m
+[10.417s] [ 91%] Built target fytlogger
+[12.895s] [100%] [32m[1mLinking CXX shared library librm_utils.so[0m
+[13.420s] [100%] Built target rm_utils
+[13.448s] Invoked command in '/home/robomaster/zxzzb/src/build/rm_utils' returned '0': CMAKE_PREFIX_PATH=/opt/ros/galactic /usr/bin/cmake --build /home/robomaster/zxzzb/src/build/rm_utils -- -j16 -l16
+[13.456s] Invoking command in '/home/robomaster/zxzzb/src/build/rm_utils': CMAKE_PREFIX_PATH=/opt/ros/galactic /usr/bin/cmake --install /home/robomaster/zxzzb/src/build/rm_utils
+[13.478s] -- Install configuration: ""
+[13.479s] -- Installing: /home/robomaster/zxzzb/src/install/rm_utils/include
+[13.479s] -- Installing: /home/robomaster/zxzzb/src/install/rm_utils/include/rm_utils
+[13.479s] -- Installing: /home/robomaster/zxzzb/src/install/rm_utils/include/rm_utils/heartbeat.hpp
+[13.479s] -- Installing: /home/robomaster/zxzzb/src/install/rm_utils/include/rm_utils/assert.hpp
+[13.479s] -- Installing: /home/robomaster/zxzzb/src/install/rm_utils/include/rm_utils/common.hpp
+[13.479s] -- Installing: /home/robomaster/zxzzb/src/install/rm_utils/include/rm_utils/url_resolver.hpp
+[13.480s] -- Installing: /home/robomaster/zxzzb/src/install/rm_utils/include/rm_utils/logger
+[13.481s] -- Installing: /home/robomaster/zxzzb/src/install/rm_utils/include/rm_utils/logger/impl
+[13.481s] -- Installing: /home/robomaster/zxzzb/src/install/rm_utils/include/rm_utils/logger/impl/writer.hpp
+[13.481s] -- Installing: /home/robomaster/zxzzb/src/install/rm_utils/include/rm_utils/logger/impl/logger_impl.hpp
+[13.481s] -- Installing: /home/robomaster/zxzzb/src/install/rm_utils/include/rm_utils/logger/impl/global_mutex.hpp
+[13.481s] -- Installing: /home/robomaster/zxzzb/src/install/rm_utils/include/rm_utils/logger/types.hpp
+[13.481s] -- Installing: /home/robomaster/zxzzb/src/install/rm_utils/include/rm_utils/logger/exception.hpp
+[13.481s] -- Installing: /home/robomaster/zxzzb/src/install/rm_utils/include/rm_utils/logger/logger_pool.hpp
+[13.481s] -- Installing: /home/robomaster/zxzzb/src/install/rm_utils/include/rm_utils/logger/log.hpp
+[13.481s] -- Installing: /home/robomaster/zxzzb/src/install/rm_utils/include/rm_utils/logger/README.md
+[13.481s] -- Installing: /home/robomaster/zxzzb/src/install/rm_utils/include/rm_utils/math
+[13.483s] -- Installing: /home/robomaster/zxzzb/src/install/rm_utils/include/rm_utils/math/particle_filter.hpp
+[13.484s] -- Installing: /home/robomaster/zxzzb/src/install/rm_utils/include/rm_utils/math/manual_compensator.hpp
+[13.484s] -- Installing: /home/robomaster/zxzzb/src/install/rm_utils/include/rm_utils/math/trajectory_compensator.hpp
+[13.484s] -- Installing: /home/robomaster/zxzzb/src/install/rm_utils/include/rm_utils/math/extended_kalman_filter.hpp
+[13.484s] -- Installing: /home/robomaster/zxzzb/src/install/rm_utils/include/rm_utils/math/pnp_solver.hpp
+[13.484s] -- Installing: /home/robomaster/zxzzb/src/install/rm_utils/include/rm_utils/math/utils.hpp
+[13.484s] -- Installing: /home/robomaster/zxzzb/src/install/rm_utils/lib/librm_utils.so
+[13.484s] -- Set runtime path of "/home/robomaster/zxzzb/src/install/rm_utils/lib/librm_utils.so" to ""
+[13.484s] -- Installing: /home/robomaster/zxzzb/src/install/rm_utils/lib/libfytlogger.so
+[13.485s] -- Installing: /home/robomaster/zxzzb/src/install/rm_utils/share/rm_utils/environment/library_path.sh
+[13.485s] -- Installing: /home/robomaster/zxzzb/src/install/rm_utils/share/rm_utils/environment/library_path.dsv
+[13.485s] -- Installing: /home/robomaster/zxzzb/src/install/rm_utils/share/ament_index/resource_index/package_run_dependencies/rm_utils
+[13.485s] -- Installing: /home/robomaster/zxzzb/src/install/rm_utils/share/ament_index/resource_index/parent_prefix_path/rm_utils
+[13.485s] -- Installing: /home/robomaster/zxzzb/src/install/rm_utils/share/rm_utils/environment/ament_prefix_path.sh
+[13.485s] -- Installing: /home/robomaster/zxzzb/src/install/rm_utils/share/rm_utils/environment/ament_prefix_path.dsv
+[13.486s] -- Installing: /home/robomaster/zxzzb/src/install/rm_utils/share/rm_utils/environment/path.sh
+[13.486s] -- Installing: /home/robomaster/zxzzb/src/install/rm_utils/share/rm_utils/environment/path.dsv
+[13.486s] -- Installing: /home/robomaster/zxzzb/src/install/rm_utils/share/rm_utils/local_setup.bash
+[13.486s] -- Installing: /home/robomaster/zxzzb/src/install/rm_utils/share/rm_utils/local_setup.sh
+[13.486s] -- Installing: /home/robomaster/zxzzb/src/install/rm_utils/share/rm_utils/local_setup.zsh
+[13.486s] -- Installing: /home/robomaster/zxzzb/src/install/rm_utils/share/rm_utils/local_setup.dsv
+[13.486s] -- Installing: /home/robomaster/zxzzb/src/install/rm_utils/share/rm_utils/package.dsv
+[13.486s] -- Installing: /home/robomaster/zxzzb/src/install/rm_utils/share/ament_index/resource_index/packages/rm_utils
+[13.486s] -- Installing: /home/robomaster/zxzzb/src/install/rm_utils/share/rm_utils/cmake/rm_utilsExport.cmake
+[13.487s] -- Installing: /home/robomaster/zxzzb/src/install/rm_utils/share/rm_utils/cmake/rm_utilsExport-noconfig.cmake
+[13.487s] -- Installing: /home/robomaster/zxzzb/src/install/rm_utils/share/rm_utils/cmake/fytloggerExport.cmake
+[13.487s] -- Installing: /home/robomaster/zxzzb/src/install/rm_utils/share/rm_utils/cmake/fytloggerExport-noconfig.cmake
+[13.487s] -- Installing: /home/robomaster/zxzzb/src/install/rm_utils/share/rm_utils/cmake/ament_cmake_export_targets-extras.cmake
+[13.487s] -- Installing: /home/robomaster/zxzzb/src/install/rm_utils/share/rm_utils/cmake/ament_cmake_export_dependencies-extras.cmake
+[13.487s] -- Installing: /home/robomaster/zxzzb/src/install/rm_utils/share/rm_utils/cmake/rm_utilsConfig.cmake
+[13.487s] -- Installing: /home/robomaster/zxzzb/src/install/rm_utils/share/rm_utils/cmake/rm_utilsConfig-version.cmake
+[13.487s] -- Installing: /home/robomaster/zxzzb/src/install/rm_utils/share/rm_utils/package.xml
+[13.492s] Invoked command in '/home/robomaster/zxzzb/src/build/rm_utils' returned '0': CMAKE_PREFIX_PATH=/opt/ros/galactic /usr/bin/cmake --install /home/robomaster/zxzzb/src/build/rm_utils

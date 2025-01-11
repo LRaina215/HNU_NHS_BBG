@@ -1,0 +1,8 @@
+{
+  "package_name": "game_msgs",
+  "non_idl_tuples": [
+    "/home/robomaster/zxzzb/src/bubble_interface/game_msgs:msg/GameStatus.msg",
+    "/home/robomaster/zxzzb/src/bubble_interface/game_msgs:msg/RobotHP.msg",
+    "/home/robomaster/zxzzb/src/bubble_interface/game_msgs:msg/Zone.msg"
+  ]
+}

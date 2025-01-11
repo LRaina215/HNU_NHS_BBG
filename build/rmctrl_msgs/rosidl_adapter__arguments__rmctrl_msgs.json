@@ -1,0 +1,9 @@
+{
+  "package_name": "rmctrl_msgs",
+  "non_idl_tuples": [
+    "/home/robomaster/zxzzb/src/bubble_interface/rmctrl_msgs:msg/Chassis.msg",
+    "/home/robomaster/zxzzb/src/bubble_interface/rmctrl_msgs:msg/Gimbal.msg",
+    "/home/robomaster/zxzzb/src/bubble_interface/rmctrl_msgs:msg/Odom.msg",
+    "/home/robomaster/zxzzb/src/bubble_interface/rmctrl_msgs:msg/Shooter.msg"
+  ]
+}

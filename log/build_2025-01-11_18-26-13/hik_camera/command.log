@@ -1,0 +1,6 @@
+Invoking command in '/home/robomaster/zxzzb/src/build/hik_camera': CMAKE_PREFIX_PATH=/opt/ros/galactic /usr/bin/cmake /home/robomaster/zxzzb/src/rm_vision_ros2_hik_camera -DCMAKE_INSTALL_PREFIX=/home/robomaster/zxzzb/src/install/hik_camera
+Invoked command in '/home/robomaster/zxzzb/src/build/hik_camera' returned '0': CMAKE_PREFIX_PATH=/opt/ros/galactic /usr/bin/cmake /home/robomaster/zxzzb/src/rm_vision_ros2_hik_camera -DCMAKE_INSTALL_PREFIX=/home/robomaster/zxzzb/src/install/hik_camera
+Invoking command in '/home/robomaster/zxzzb/src/build/hik_camera': CMAKE_PREFIX_PATH=/opt/ros/galactic /usr/bin/cmake --build /home/robomaster/zxzzb/src/build/hik_camera -- -j16 -l16
+Invoked command in '/home/robomaster/zxzzb/src/build/hik_camera' returned '0': CMAKE_PREFIX_PATH=/opt/ros/galactic /usr/bin/cmake --build /home/robomaster/zxzzb/src/build/hik_camera -- -j16 -l16
+Invoking command in '/home/robomaster/zxzzb/src/build/hik_camera': CMAKE_PREFIX_PATH=/opt/ros/galactic /usr/bin/cmake --install /home/robomaster/zxzzb/src/build/hik_camera
+Invoked command in '/home/robomaster/zxzzb/src/build/hik_camera' returned '0': CMAKE_PREFIX_PATH=/opt/ros/galactic /usr/bin/cmake --install /home/robomaster/zxzzb/src/build/hik_camera

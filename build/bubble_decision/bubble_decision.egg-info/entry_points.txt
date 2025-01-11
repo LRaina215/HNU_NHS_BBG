@@ -1,0 +1,3 @@
+[console_scripts]
+decision = bubble_decision.decision:main
+

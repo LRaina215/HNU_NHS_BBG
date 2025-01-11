@@ -1,0 +1,101 @@
+[0.046s] Invoking command in '/home/robomaster/zxzzb/src/build/armor_solver': AMENT_PREFIX_PATH=/home/robomaster/zxzzb/src/install/rm_utils:/home/robomaster/zxzzb/src/install/rm_interfaces:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/robomaster/zxzzb/src/install/rm_utils:/home/robomaster/zxzzb/src/install/rm_interfaces:/opt/ros/galactic LD_LIBRARY_PATH=/home/robomaster/zxzzb/src/install/rm_utils/lib:/home/robomaster/zxzzb/src/install/rm_interfaces/lib:/usr/local/opencv4.5.4/lib:/home/robomaster/zxzzb/install/rmoss_projectile_motion/lib:/home/robomaster/zxzzb/install/rmctrl_msgs/lib:/home/robomaster/zxzzb/install/armor_detector/lib:/home/robomaster/zxzzb/install/rm_utils/lib:/home/robomaster/zxzzb/install/rm_interfaces/lib:/home/robomaster/zxzzb/install/hik_camera/lib:/home/robomaster/zxzzb/install/game_msgs/lib:/home/robomaster/zxzzb/install/bboxes_ex_msgs/lib:/opt/ros/galactic/opt/yaml_cpp_vendor/lib:/opt/ros/galactic/opt/rviz_ogre_vendor/lib:/opt/ros/galactic/lib/x86_64-linux-gnu:/opt/ros/galactic/lib:/opt/MVS/lib/64:/opt/MVS/lib/32 PYTHONPATH=/home/robomaster/zxzzb/src/install/rm_interfaces/lib/python3.8/site-packages:${PYTHONPATH} /usr/bin/cmake /home/robomaster/zxzzb/src/armor_solver -DCMAKE_INSTALL_PREFIX=/home/robomaster/zxzzb/src/install/armor_solver
+[0.121s] -- The C compiler identification is GNU 9.4.0
+[0.204s] -- The CXX compiler identification is GNU 9.4.0
+[0.210s] -- Check for working C compiler: /usr/bin/cc
+[0.335s] -- Check for working C compiler: /usr/bin/cc -- works
+[0.337s] -- Detecting C compiler ABI info
+[0.452s] -- Detecting C compiler ABI info - done
+[0.468s] -- Detecting C compile features
+[0.469s] -- Detecting C compile features - done
+[0.472s] -- Check for working CXX compiler: /usr/bin/c++
+[0.588s] -- Check for working CXX compiler: /usr/bin/c++ -- works
+[0.589s] -- Detecting CXX compiler ABI info
+[0.714s] -- Detecting CXX compiler ABI info - done
+[0.729s] -- Detecting CXX compile features
+[0.730s] -- Detecting CXX compile features - done
+[0.733s] -- Found ament_cmake_auto: 1.1.6 (/opt/ros/galactic/share/ament_cmake_auto/cmake)
+[0.761s] -- Found PythonInterp: /usr/bin/python3 (found suitable version "3.8.10", minimum required is "3") 
+[0.761s] -- Using PYTHON_EXECUTABLE: /usr/bin/python3
+[1.020s] -- Using all available rosidl_typesupport_c: rosidl_typesupport_fastrtps_c;rosidl_typesupport_introspection_c
+[1.027s] -- Found rosidl_adapter: 2.2.3 (/opt/ros/galactic/share/rosidl_adapter/cmake)
+[1.118s] -- Found OpenSSL: /usr/lib/x86_64-linux-gnu/libcrypto.so (found version "1.1.1f")  
+[1.163s] -- Found FastRTPS: /opt/ros/galactic/include  
+[1.258s] -- Using all available rosidl_typesupport_cpp: rosidl_typesupport_fastrtps_cpp;rosidl_typesupport_introspection_cpp
+[1.312s] -- Found rmw_implementation_cmake: 3.3.1 (/opt/ros/galactic/share/rmw_implementation_cmake/cmake)
+[1.314s] -- Found rmw_cyclonedds_cpp: 0.22.6 (/opt/ros/galactic/share/rmw_cyclonedds_cpp/cmake)
+[1.332s] -- Using RMW implementation 'rmw_cyclonedds_cpp' as default
+[1.333s] -- Looking for pthread.h
+[1.438s] -- Looking for pthread.h - found
+[1.438s] -- Performing Test CMAKE_HAVE_LIBC_PTHREAD
+[1.555s] -- Performing Test CMAKE_HAVE_LIBC_PTHREAD - Failed
+[1.556s] -- Looking for pthread_create in pthreads
+[1.661s] -- Looking for pthread_create in pthreads - not found
+[1.661s] -- Looking for pthread_create in pthread
+[1.767s] -- Looking for pthread_create in pthread - found
+[1.769s] -- Found Threads: TRUE  
+[2.200s] -- Found eigen3_cmake_module: 0.1.1 (/opt/ros/galactic/share/eigen3_cmake_module/cmake)
+[2.205s] -- Found Eigen3: TRUE (found version "3.3.7") 
+[2.697s] -- Found installed version of Eigen: /usr/lib/cmake/eigen3
+[2.697s] -- Found required Ceres dependency: Eigen version 3.3.7 in /usr/include/eigen3
+[2.702s] -- Found required Ceres dependency: glog
+[2.704s] -- Found installed version of gflags: /usr/lib/x86_64-linux-gnu/cmake/gflags
+[2.704s] -- Detected gflags version: 2.2.2
+[2.705s] -- Found required Ceres dependency: gflags
+[2.707s] -- Found Ceres version: 1.14.0 installed in: /usr/local with components: [EigenSparse, SparseLinearAlgebraLibrary, LAPACK, SuiteSparse, CXSparse, SchurSpecializations, OpenMP, Multithreading]
+[2.738s] -- Found ament_lint_auto: 0.10.7 (/opt/ros/galactic/share/ament_lint_auto/cmake)
+[2.772s] -- Found ament_cmake_gtest: 1.1.6 (/opt/ros/galactic/share/ament_cmake_gtest/cmake)
+[2.779s] -- Added test 'cppcheck' to perform static code analysis on C / C++ code
+[2.780s] -- Configured cppcheck include dirs: /home/robomaster/zxzzb/src/armor_solver/include
+[2.780s] -- Configured cppcheck exclude dirs and/or files: 
+[2.781s] -- Added test 'lint_cmake' to check CMake code style
+[2.781s] -- Added test 'xmllint' to check XML markup files
+[2.785s] -- Configuring done
+[2.811s] -- Generating done
+[2.824s] -- Build files have been written to: /home/robomaster/zxzzb/src/build/armor_solver
+[2.848s] Invoked command in '/home/robomaster/zxzzb/src/build/armor_solver' returned '0': AMENT_PREFIX_PATH=/home/robomaster/zxzzb/src/install/rm_utils:/home/robomaster/zxzzb/src/install/rm_interfaces:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/robomaster/zxzzb/src/install/rm_utils:/home/robomaster/zxzzb/src/install/rm_interfaces:/opt/ros/galactic LD_LIBRARY_PATH=/home/robomaster/zxzzb/src/install/rm_utils/lib:/home/robomaster/zxzzb/src/install/rm_interfaces/lib:/usr/local/opencv4.5.4/lib:/home/robomaster/zxzzb/install/rmoss_projectile_motion/lib:/home/robomaster/zxzzb/install/rmctrl_msgs/lib:/home/robomaster/zxzzb/install/armor_detector/lib:/home/robomaster/zxzzb/install/rm_utils/lib:/home/robomaster/zxzzb/install/rm_interfaces/lib:/home/robomaster/zxzzb/install/hik_camera/lib:/home/robomaster/zxzzb/install/game_msgs/lib:/home/robomaster/zxzzb/install/bboxes_ex_msgs/lib:/opt/ros/galactic/opt/yaml_cpp_vendor/lib:/opt/ros/galactic/opt/rviz_ogre_vendor/lib:/opt/ros/galactic/lib/x86_64-linux-gnu:/opt/ros/galactic/lib:/opt/MVS/lib/64:/opt/MVS/lib/32 PYTHONPATH=/home/robomaster/zxzzb/src/install/rm_interfaces/lib/python3.8/site-packages:${PYTHONPATH} /usr/bin/cmake /home/robomaster/zxzzb/src/armor_solver -DCMAKE_INSTALL_PREFIX=/home/robomaster/zxzzb/src/install/armor_solver
+[2.852s] Invoking command in '/home/robomaster/zxzzb/src/build/armor_solver': AMENT_PREFIX_PATH=/home/robomaster/zxzzb/src/install/rm_utils:/home/robomaster/zxzzb/src/install/rm_interfaces:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/robomaster/zxzzb/src/install/rm_utils:/home/robomaster/zxzzb/src/install/rm_interfaces:/opt/ros/galactic LD_LIBRARY_PATH=/home/robomaster/zxzzb/src/install/rm_utils/lib:/home/robomaster/zxzzb/src/install/rm_interfaces/lib:/usr/local/opencv4.5.4/lib:/home/robomaster/zxzzb/install/rmoss_projectile_motion/lib:/home/robomaster/zxzzb/install/rmctrl_msgs/lib:/home/robomaster/zxzzb/install/armor_detector/lib:/home/robomaster/zxzzb/install/rm_utils/lib:/home/robomaster/zxzzb/install/rm_interfaces/lib:/home/robomaster/zxzzb/install/hik_camera/lib:/home/robomaster/zxzzb/install/game_msgs/lib:/home/robomaster/zxzzb/install/bboxes_ex_msgs/lib:/opt/ros/galactic/opt/yaml_cpp_vendor/lib:/opt/ros/galactic/opt/rviz_ogre_vendor/lib:/opt/ros/galactic/lib/x86_64-linux-gnu:/opt/ros/galactic/lib:/opt/MVS/lib/64:/opt/MVS/lib/32 PYTHONPATH=/home/robomaster/zxzzb/src/install/rm_interfaces/lib/python3.8/site-packages:${PYTHONPATH} /usr/bin/cmake --build /home/robomaster/zxzzb/src/build/armor_solver -- -j16 -l16
+[2.937s] [35m[1mScanning dependencies of target armor_solver[0m
+[2.940s] [35m[1mScanning dependencies of target armor_solver_node[0m
+[2.999s] [ 16%] [32mBuilding CXX object CMakeFiles/armor_solver_node.dir/rclcpp_components/node_main_armor_solver_node.cpp.o[0m
+[3.089s] [ 50%] [32mBuilding CXX object CMakeFiles/armor_solver.dir/src/armor_tracker.cpp.o[0m
+[3.090s] [ 50%] [32mBuilding CXX object CMakeFiles/armor_solver.dir/src/armor_solver.cpp.o[0m
+[3.096s] [ 66%] [32mBuilding CXX object CMakeFiles/armor_solver.dir/src/armor_solver_node.cpp.o[0m
+[10.169s] [ 83%] [32m[1mLinking CXX executable armor_solver_node[0m
+[10.412s] [ 83%] Built target armor_solver_node
+[29.949s] [100%] [32m[1mLinking CXX shared library libarmor_solver.so[0m
+[30.130s] [100%] Built target armor_solver
+[30.140s] Invoked command in '/home/robomaster/zxzzb/src/build/armor_solver' returned '0': AMENT_PREFIX_PATH=/home/robomaster/zxzzb/src/install/rm_utils:/home/robomaster/zxzzb/src/install/rm_interfaces:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/robomaster/zxzzb/src/install/rm_utils:/home/robomaster/zxzzb/src/install/rm_interfaces:/opt/ros/galactic LD_LIBRARY_PATH=/home/robomaster/zxzzb/src/install/rm_utils/lib:/home/robomaster/zxzzb/src/install/rm_interfaces/lib:/usr/local/opencv4.5.4/lib:/home/robomaster/zxzzb/install/rmoss_projectile_motion/lib:/home/robomaster/zxzzb/install/rmctrl_msgs/lib:/home/robomaster/zxzzb/install/armor_detector/lib:/home/robomaster/zxzzb/install/rm_utils/lib:/home/robomaster/zxzzb/install/rm_interfaces/lib:/home/robomaster/zxzzb/install/hik_camera/lib:/home/robomaster/zxzzb/install/game_msgs/lib:/home/robomaster/zxzzb/install/bboxes_ex_msgs/lib:/opt/ros/galactic/opt/yaml_cpp_vendor/lib:/opt/ros/galactic/opt/rviz_ogre_vendor/lib:/opt/ros/galactic/lib/x86_64-linux-gnu:/opt/ros/galactic/lib:/opt/MVS/lib/64:/opt/MVS/lib/32 PYTHONPATH=/home/robomaster/zxzzb/src/install/rm_interfaces/lib/python3.8/site-packages:${PYTHONPATH} /usr/bin/cmake --build /home/robomaster/zxzzb/src/build/armor_solver -- -j16 -l16
+[30.143s] Invoking command in '/home/robomaster/zxzzb/src/build/armor_solver': AMENT_PREFIX_PATH=/home/robomaster/zxzzb/src/install/rm_utils:/home/robomaster/zxzzb/src/install/rm_interfaces:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/robomaster/zxzzb/src/install/rm_utils:/home/robomaster/zxzzb/src/install/rm_interfaces:/opt/ros/galactic LD_LIBRARY_PATH=/home/robomaster/zxzzb/src/install/rm_utils/lib:/home/robomaster/zxzzb/src/install/rm_interfaces/lib:/usr/local/opencv4.5.4/lib:/home/robomaster/zxzzb/install/rmoss_projectile_motion/lib:/home/robomaster/zxzzb/install/rmctrl_msgs/lib:/home/robomaster/zxzzb/install/armor_detector/lib:/home/robomaster/zxzzb/install/rm_utils/lib:/home/robomaster/zxzzb/install/rm_interfaces/lib:/home/robomaster/zxzzb/install/hik_camera/lib:/home/robomaster/zxzzb/install/game_msgs/lib:/home/robomaster/zxzzb/install/bboxes_ex_msgs/lib:/opt/ros/galactic/opt/yaml_cpp_vendor/lib:/opt/ros/galactic/opt/rviz_ogre_vendor/lib:/opt/ros/galactic/lib/x86_64-linux-gnu:/opt/ros/galactic/lib:/opt/MVS/lib/64:/opt/MVS/lib/32 PYTHONPATH=/home/robomaster/zxzzb/src/install/rm_interfaces/lib/python3.8/site-packages:${PYTHONPATH} /usr/bin/cmake --install /home/robomaster/zxzzb/src/build/armor_solver
+[30.151s] -- Install configuration: ""
+[30.151s] -- Installing: /home/robomaster/zxzzb/src/install/armor_solver/lib/armor_solver/armor_solver_node
+[30.151s] -- Set runtime path of "/home/robomaster/zxzzb/src/install/armor_solver/lib/armor_solver/armor_solver_node" to ""
+[30.151s] -- Installing: /home/robomaster/zxzzb/src/install/armor_solver/include
+[30.151s] -- Installing: /home/robomaster/zxzzb/src/install/armor_solver/include/armor_solver
+[30.151s] -- Installing: /home/robomaster/zxzzb/src/install/armor_solver/include/armor_solver/armor_tracker.hpp
+[30.151s] -- Installing: /home/robomaster/zxzzb/src/install/armor_solver/include/armor_solver/armor_solver.hpp
+[30.151s] -- Installing: /home/robomaster/zxzzb/src/install/armor_solver/include/armor_solver/armor_solver_node.hpp
+[30.151s] -- Installing: /home/robomaster/zxzzb/src/install/armor_solver/include/armor_solver/motion_model.hpp
+[30.151s] -- Installing: /home/robomaster/zxzzb/src/install/armor_solver/share/armor_solver/environment/library_path.sh
+[30.151s] -- Installing: /home/robomaster/zxzzb/src/install/armor_solver/share/armor_solver/environment/library_path.dsv
+[30.152s] -- Installing: /home/robomaster/zxzzb/src/install/armor_solver/lib/libarmor_solver.so
+[30.152s] -- Set runtime path of "/home/robomaster/zxzzb/src/install/armor_solver/lib/libarmor_solver.so" to ""
+[30.152s] -- Installing: /home/robomaster/zxzzb/src/install/armor_solver/share/ament_index/resource_index/package_run_dependencies/armor_solver
+[30.152s] -- Installing: /home/robomaster/zxzzb/src/install/armor_solver/share/ament_index/resource_index/parent_prefix_path/armor_solver
+[30.152s] -- Installing: /home/robomaster/zxzzb/src/install/armor_solver/share/armor_solver/environment/ament_prefix_path.sh
+[30.153s] -- Installing: /home/robomaster/zxzzb/src/install/armor_solver/share/armor_solver/environment/ament_prefix_path.dsv
+[30.153s] -- Installing: /home/robomaster/zxzzb/src/install/armor_solver/share/armor_solver/environment/path.sh
+[30.153s] -- Installing: /home/robomaster/zxzzb/src/install/armor_solver/share/armor_solver/environment/path.dsv
+[30.153s] -- Installing: /home/robomaster/zxzzb/src/install/armor_solver/share/armor_solver/local_setup.bash
+[30.153s] -- Installing: /home/robomaster/zxzzb/src/install/armor_solver/share/armor_solver/local_setup.sh
+[30.153s] -- Installing: /home/robomaster/zxzzb/src/install/armor_solver/share/armor_solver/local_setup.zsh
+[30.153s] -- Installing: /home/robomaster/zxzzb/src/install/armor_solver/share/armor_solver/local_setup.dsv
+[30.153s] -- Installing: /home/robomaster/zxzzb/src/install/armor_solver/share/armor_solver/package.dsv
+[30.153s] -- Installing: /home/robomaster/zxzzb/src/install/armor_solver/share/ament_index/resource_index/packages/armor_solver
+[30.153s] -- Installing: /home/robomaster/zxzzb/src/install/armor_solver/share/ament_index/resource_index/rclcpp_components/armor_solver
+[30.153s] -- Installing: /home/robomaster/zxzzb/src/install/armor_solver/share/armor_solver/cmake/ament_cmake_export_dependencies-extras.cmake
+[30.153s] -- Installing: /home/robomaster/zxzzb/src/install/armor_solver/share/armor_solver/cmake/ament_cmake_export_include_directories-extras.cmake
+[30.153s] -- Installing: /home/robomaster/zxzzb/src/install/armor_solver/share/armor_solver/cmake/ament_cmake_export_libraries-extras.cmake
+[30.154s] -- Installing: /home/robomaster/zxzzb/src/install/armor_solver/share/armor_solver/cmake/armor_solverConfig.cmake
+[30.154s] -- Installing: /home/robomaster/zxzzb/src/install/armor_solver/share/armor_solver/cmake/armor_solverConfig-version.cmake
+[30.154s] -- Installing: /home/robomaster/zxzzb/src/install/armor_solver/share/armor_solver/package.xml
+[30.155s] Invoked command in '/home/robomaster/zxzzb/src/build/armor_solver' returned '0': AMENT_PREFIX_PATH=/home/robomaster/zxzzb/src/install/rm_utils:/home/robomaster/zxzzb/src/install/rm_interfaces:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/robomaster/zxzzb/src/install/rm_utils:/home/robomaster/zxzzb/src/install/rm_interfaces:/opt/ros/galactic LD_LIBRARY_PATH=/home/robomaster/zxzzb/src/install/rm_utils/lib:/home/robomaster/zxzzb/src/install/rm_interfaces/lib:/usr/local/opencv4.5.4/lib:/home/robomaster/zxzzb/install/rmoss_projectile_motion/lib:/home/robomaster/zxzzb/install/rmctrl_msgs/lib:/home/robomaster/zxzzb/install/armor_detector/lib:/home/robomaster/zxzzb/install/rm_utils/lib:/home/robomaster/zxzzb/install/rm_interfaces/lib:/home/robomaster/zxzzb/install/hik_camera/lib:/home/robomaster/zxzzb/install/game_msgs/lib:/home/robomaster/zxzzb/install/bboxes_ex_msgs/lib:/opt/ros/galactic/opt/yaml_cpp_vendor/lib:/opt/ros/galactic/opt/rviz_ogre_vendor/lib:/opt/ros/galactic/lib/x86_64-linux-gnu:/opt/ros/galactic/lib:/opt/MVS/lib/64:/opt/MVS/lib/32 PYTHONPATH=/home/robomaster/zxzzb/src/install/rm_interfaces/lib/python3.8/site-packages:${PYTHONPATH} /usr/bin/cmake --install /home/robomaster/zxzzb/src/build/armor_solver
