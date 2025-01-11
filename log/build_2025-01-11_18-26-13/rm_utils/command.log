@@ -1,6 +1,0 @@
-Invoking command in '/home/robomaster/zxzzb/src/build/rm_utils': CMAKE_PREFIX_PATH=/opt/ros/galactic /usr/bin/cmake /home/robomaster/zxzzb/src/rm_utils -DCMAKE_INSTALL_PREFIX=/home/robomaster/zxzzb/src/install/rm_utils
-Invoked command in '/home/robomaster/zxzzb/src/build/rm_utils' returned '0': CMAKE_PREFIX_PATH=/opt/ros/galactic /usr/bin/cmake /home/robomaster/zxzzb/src/rm_utils -DCMAKE_INSTALL_PREFIX=/home/robomaster/zxzzb/src/install/rm_utils
-Invoking command in '/home/robomaster/zxzzb/src/build/rm_utils': CMAKE_PREFIX_PATH=/opt/ros/galactic /usr/bin/cmake --build /home/robomaster/zxzzb/src/build/rm_utils -- -j16 -l16
-Invoked command in '/home/robomaster/zxzzb/src/build/rm_utils' returned '0': CMAKE_PREFIX_PATH=/opt/ros/galactic /usr/bin/cmake --build /home/robomaster/zxzzb/src/build/rm_utils -- -j16 -l16
-Invoking command in '/home/robomaster/zxzzb/src/build/rm_utils': CMAKE_PREFIX_PATH=/opt/ros/galactic /usr/bin/cmake --install /home/robomaster/zxzzb/src/build/rm_utils
-Invoked command in '/home/robomaster/zxzzb/src/build/rm_utils' returned '0': CMAKE_PREFIX_PATH=/opt/ros/galactic /usr/bin/cmake --install /home/robomaster/zxzzb/src/build/rm_utils

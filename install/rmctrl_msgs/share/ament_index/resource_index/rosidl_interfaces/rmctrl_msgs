@@ -1,8 +1,0 @@
-msg/Chassis.idl
-msg/Chassis.msg
-msg/Gimbal.idl
-msg/Gimbal.msg
-msg/Odom.idl
-msg/Odom.msg
-msg/Shooter.idl
-msg/Shooter.msg

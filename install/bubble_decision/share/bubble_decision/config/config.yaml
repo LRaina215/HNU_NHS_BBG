@@ -1,6 +1,0 @@
-decision:
-  ros__parameters:
-    orin_exposure_time: 100
-    rune_exposure_time: 100
-    armour_exposure_time: 10000
-    robot_type: "hero"
