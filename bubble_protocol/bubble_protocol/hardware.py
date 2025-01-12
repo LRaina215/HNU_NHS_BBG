@@ -17,6 +17,7 @@ import rclpy
 from bubble_protocol.protocol import *
 from rclpy.node import Node
 from std_msgs.msg import Int32
+from rm_interfaces.msg import SerialReceiveData
 
 RX_BUFFER_MAX_SIZE = 500
 TX_BUFFER_MAX_SIZE = 500
@@ -42,6 +43,7 @@ class RobotSerial(serial.Serial, Node):
         '''
         Node.__init__(self, "enemy_color")
         self.RB_info_pub_ = self.create_publisher(Int32, "red_blue_info", 10)
+        self.Imu_gimbal_pub_ = self.create_publisher(SerialReceiveData, "serial/receive", 10)
         self.init_device(port, baudrate, timeout_T)
         self.init_protocol(name)
         self.tx_thread = threading.Thread(target=self.run_tx_thread)
@@ -51,6 +53,9 @@ class RobotSerial(serial.Serial, Node):
         self.serial_done = False
         self.realtime_pub = dict()
         self.red_blue_msg = None
+        self.imu_yaw = 0.0
+        self.imu_pitch = 0.0
+        self.imu_roll = 0.0
     
     
     def run_tx_thread(self):
@@ -240,6 +245,9 @@ class RobotSerial(serial.Serial, Node):
                 #     self.red_blue_msg = 0
                 # else:
                 self.red_blue_msg = int(int(unpack_info[4])/1000)
+                self.imu_yaw = int(int(unpack_info[1])/1000)
+                self.imu_pitch = int(int(unpack_info[2])/1000)
+                self.imu_roll = int(int(unpack_info[3])/1000)
                 #print(self.red_blue_msg)
                 #set_param('/armor_detector','detect_color',int(unpack_info[4]/1000))#change 11.24
                 #set_parameter(rclpy.Parameter('detect_color', int(self.unpack_info[4] / 1000)))
@@ -269,7 +277,12 @@ class RobotSerial(serial.Serial, Node):
         else:
             self.get_logger().warn("Red-blue message is None. No message published.")
 
-
+    def imu_gimbal_callback(self):
+        msg = SerialReceiveData()
+        msg.yaw = float(self.imu_yaw)
+        msg.pitch = float(self.imu_pitch)
+        msg.roll = float(self.imu_roll)
+        self.Imu_gimbal_pub_.publish(msg)
 
 
     def process(self):

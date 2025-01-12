@@ -135,7 +135,7 @@ ArmorSolverNode::ArmorSolverNode(const rclcpp::NodeOptions &options)
   target_pub_ = this->create_publisher<rm_interfaces::msg::Target>("armor_solver/target",
                                                                    rclcpp::SensorDataQoS());
   gimbal_pub_ = this->create_publisher<rm_interfaces::msg::GimbalCmd>("armor_solver/cmd_gimbal",
-                                                                      10);
+                                                                      20);
   // Timer 250 Hz
   pub_timer_ = this->create_wall_timer(std::chrono::milliseconds(4),
                                        std::bind(&ArmorSolverNode::timerCallback, this));

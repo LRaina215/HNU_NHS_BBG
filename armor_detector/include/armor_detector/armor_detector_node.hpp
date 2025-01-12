@@ -49,6 +49,8 @@
 #include "rm_interfaces/srv/set_mode.hpp"
 #include "rm_utils/heartbeat.hpp"
 #include "rm_utils/logger/log.hpp"
+#include "std_msgs/msg/int32.hpp"
+#include <rm_utils/common.hpp>
 
 namespace fyt::auto_aim {
 
@@ -77,6 +79,8 @@ private:
   void setModeCallback(
       const std::shared_ptr<rm_interfaces::srv::SetMode::Request> request,
       std::shared_ptr<rm_interfaces::srv::SetMode::Response> response);
+  void enemy_color_callback(const std_msgs::msg::Int32::SharedPtr msg);
+  void setEnemyColor(EnemyColor &detect_color, const std_msgs::msg::Int32::SharedPtr &msg);
 
   // Dynamic Parameter
   rcl_interfaces::msg::SetParametersResult
@@ -89,6 +93,9 @@ private:
 
   // Armor Detector
   std::unique_ptr<Detector> detector_;
+
+  //Init enemy color
+  EnemyColor detect_color_;
 
   // Pose Solver
   bool use_ba_;
@@ -112,6 +119,8 @@ private:
 
   // Image subscription
   rclcpp::Subscription<sensor_msgs::msg::Image>::SharedPtr img_sub_;
+
+  rclcpp::Subscription<std_msgs::msg::Int32>::SharedPtr enemy_color_sub;
 
   // Target subscription
   // rclcpp::Subscription<rm_interfaces::msg::Target>::SharedPtr target_sub_;

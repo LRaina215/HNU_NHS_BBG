@@ -128,6 +128,9 @@ ArmorDetectorNode::ArmorDetectorNode(const rclcpp::NodeOptions &options)
       std::bind(&ArmorDetectorNode::imageCallback, this,
                 std::placeholders::_1));
 
+  enemy_color_sub = this->create_subscription<std_msgs::msg::Int32>(
+          "red_blue_info", 10, std::bind(&ArmorDetectorNode::enemy_color_callback, this, std::placeholders::_1));
+
   // target_sub_ = this->create_subscription<rm_interfaces::msg::Target>(
   //   "armor_solver/target",
   //   rclcpp::SensorDataQoS(),
@@ -146,6 +149,27 @@ ArmorDetectorNode::ArmorDetectorNode(const rclcpp::NodeOptions &options)
                 std::placeholders::_1, std::placeholders::_2));
 
   heartbeat_ = HeartBeatPublisher::create(this);
+}
+
+// getting imu_gimbal_msg --- lgl
+void ArmorDetectorNode::enemy_color_callback(const std_msgs::msg::Int32::SharedPtr msg)
+{
+  //RCLCPP_INFO(this->get_logger(), "Received: %d", msg->data);
+  //this->set_parameter(rclcpp::Parameter("detect_color", msg->data));
+  setEnemyColor(detect_color_, msg);
+    // 打印更新后的参数值
+  //RCLCPP_INFO(this->get_logger(), "Updated detect_color: %d", msg->data);
+}
+
+void ArmorDetectorNode::setEnemyColor(EnemyColor &detect_color, const std_msgs::msg::Int32::SharedPtr &msg)
+{
+  if(msg->data == 1)
+  {
+    detect_color = EnemyColor::RED;
+  }else
+  {
+    detect_color = EnemyColor::BLUE;
+  }
 }
 
 void ArmorDetectorNode::imageCallback(
@@ -241,8 +265,11 @@ std::unique_ptr<Detector> ArmorDetectorNode::initDetector() {
           declare_parameter("armor.max_large_center_distance", 5.0),
       .max_angle = declare_parameter("armor.max_angle", 35.0)};
 
-  auto detector = std::make_unique<Detector>(binary_thres, EnemyColor::RED,
+  auto detector = std::make_unique<Detector>(binary_thres, detect_color_,
                                              l_params, a_params);
+
+
+  
 
   // Init classifier
   namespace fs = std::filesystem;

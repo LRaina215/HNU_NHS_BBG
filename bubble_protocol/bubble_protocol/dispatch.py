@@ -91,6 +91,7 @@ class RobotAPI(Node):
         # Init robot tx/rx/heartbeat timer
         period = 150
         self.red_blue_timer = self.create_timer(1/period, self.robot_serial.red_blue_info_callback)
+        self.imu_gimbal_timer = self.create_timer(1/period, self.robot_serial.imu_gimbal_callback)
         self.uart_timer = self.create_timer(1/period, self.robot_serial.process)
         self.uartrx_timer = self.create_timer(
             1/period, self.robot_serial.rx_function)
@@ -128,7 +129,7 @@ class RobotAPI(Node):
             qos_profile = QoSProfile(
                 reliability=QoSReliabilityPolicy.RELIABLE,
                 durability=QoSDurabilityPolicy.VOLATILE,
-                depth=10
+                depth=20
             )
             
             self.gimbal_sub = self.create_subscription(

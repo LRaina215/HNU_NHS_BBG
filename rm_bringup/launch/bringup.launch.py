@@ -87,8 +87,7 @@ def generate_launch_description():
         package='armor_detector', 
         plugin='fyt::auto_aim::ArmorDetectorNode',
         name='armor_detector',
-        parameters=[get_params('armor_detector')],
-        extra_arguments=[{'use_intra_process_comms': True}]
+        parameters=[get_params('armor_detector'),{'use_intra_process_comms': True}],
     )
     
     # 装甲板解算
