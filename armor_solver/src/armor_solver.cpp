@@ -28,8 +28,8 @@ namespace fyt::auto_aim {
 Solver::Solver(std::weak_ptr<rclcpp::Node> n) : node_(n) {
   auto node = node_.lock();
 
-  shooting_range_w_ = node->declare_parameter("solver.shooting_range_width", 0.135);
-  shooting_range_h_ = node->declare_parameter("solver.shooting_range_height", 0.135);
+  shooting_range_w_ = node->declare_parameter("solver.shooting_range_width", 0.185);
+  shooting_range_h_ = node->declare_parameter("solver.shooting_range_height", 0.185);
   max_tracking_v_yaw_ = node->declare_parameter("solver.max_tracking_v_yaw", 6.0);
   prediction_delay_ = node->declare_parameter("solver.prediction_delay", 0.0);
   controller_delay_ = node->declare_parameter("solver.controller_delay", 0.0);
@@ -39,7 +39,7 @@ Solver::Solver(std::weak_ptr<rclcpp::Node> n) : node_(n) {
   std::string compenstator_type = node->declare_parameter("solver.compensator_type", "ideal");
   trajectory_compensator_ = CompensatorFactory::createCompensator(compenstator_type);
   trajectory_compensator_->iteration_times = node->declare_parameter("solver.iteration_times", 20);
-  trajectory_compensator_->velocity = node->declare_parameter("solver.bullet_speed", 20.0);
+  trajectory_compensator_->velocity = node->declare_parameter("solver.bullet_speed", 25.0);
   trajectory_compensator_->gravity = node->declare_parameter("solver.gravity", 9.8);
   trajectory_compensator_->resistance = node->declare_parameter("solver.resistance", 0.001);
 
@@ -283,7 +283,20 @@ void Solver::calcYawAndPitch(const Eigen::Vector3d &p,
                              double &pitch) const noexcept {
   // Calculate yaw and pitch
   yaw = atan2(p.y(), p.x());
+  //pitch = atan2(p.z(), p.head(2).norm());
   pitch = atan2(p.z(), p.head(2).norm());
+  // double g = 9.8;
+  // double h = p.z();
+  // double d = sqrt(p.x() * p.x() + p.y() * p.y());
+  // double t = sqrt(d * d + h * h) / 18.0;
+  // for(int i = 0; i < 5; i++) {
+        
+  //   pitch = asin((h + 0.5 * g * t * t) / (18.0 * t));
+        
+  //   if (std::isnan(pitch)) {
+  //       pitch = 0.0;
+  //   }
+  // }
 
   if (double temp_pitch = pitch; trajectory_compensator_->compensate(p, temp_pitch)) {
     pitch = temp_pitch;

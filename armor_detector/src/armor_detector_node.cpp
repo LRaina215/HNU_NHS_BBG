@@ -265,7 +265,7 @@ std::unique_ptr<Detector> ArmorDetectorNode::initDetector() {
           declare_parameter("armor.max_large_center_distance", 5.0),
       .max_angle = declare_parameter("armor.max_angle", 35.0)};
 
-  auto detector = std::make_unique<Detector>(binary_thres, detect_color_,
+  auto detector = std::make_unique<Detector>(binary_thres, EnemyColor::RED,
                                              l_params, a_params);
 
 

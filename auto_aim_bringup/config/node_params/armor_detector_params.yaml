@@ -1,4 +1,4 @@
-/**:
+/armor_detector:
   ros__parameters:
     debug: true
     target_frame: odom

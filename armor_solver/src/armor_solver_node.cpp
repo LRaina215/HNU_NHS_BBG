@@ -51,12 +51,12 @@ ArmorSolverNode::ArmorSolverNode(const rclcpp::NodeOptions &options)
   // h - Observation function
   auto h = Measure();
   // update_Q - process noise covariance matrix
-  s2qx_ = declare_parameter("ekf.sigma2_q_x", 20.0);
-  s2qy_ = declare_parameter("ekf.sigma2_q_y", 20.0);
-  s2qz_ = declare_parameter("ekf.sigma2_q_z", 20.0);
-  s2qyaw_ = declare_parameter("ekf.sigma2_q_yaw", 100.0);
-  s2qr_ = declare_parameter("ekf.sigma2_q_r", 800.0);
-  s2qd_zc_ = declare_parameter("ekf.sigma2_q_d_zc", 800.0);
+  s2qx_ = declare_parameter("ekf.sigma2_q_x", 2000.0);
+  s2qy_ = declare_parameter("ekf.sigma2_q_y", 2000.0);
+  s2qz_ = declare_parameter("ekf.sigma2_q_z", 2000.0);
+  s2qyaw_ = declare_parameter("ekf.sigma2_q_yaw", 10000.0);
+  s2qr_ = declare_parameter("ekf.sigma2_q_r", 32000.0);
+  s2qd_zc_ = declare_parameter("ekf.sigma2_q_d_zc", 32000.0);
 
   auto u_q = [this]() {
     Eigen::Matrix<double, X_N, X_N> q;
@@ -85,10 +85,10 @@ ArmorSolverNode::ArmorSolverNode(const rclcpp::NodeOptions &options)
     return q;
   };
   // update_R - measurement noise covariance matrix
-  r_x_ = declare_parameter("ekf.r_x", 0.05);
-  r_y_ = declare_parameter("ekf.r_y", 0.05);
-  r_z_ = declare_parameter("ekf.r_z", 0.05);
-  r_yaw_ = declare_parameter("ekf.r_yaw", 0.02);
+  r_x_ = declare_parameter("ekf.r_x", 0.5);
+  r_y_ = declare_parameter("ekf.r_y", 0.5);
+  r_z_ = declare_parameter("ekf.r_z", 0.5);
+  r_yaw_ = declare_parameter("ekf.r_yaw", 0.2);
   auto u_r = [this](const Eigen::Matrix<double, Z_N, 1> &z) {
     Eigen::Matrix<double, Z_N, Z_N> r;
     // clang-format off

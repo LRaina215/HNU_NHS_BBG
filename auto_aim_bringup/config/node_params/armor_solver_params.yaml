@@ -5,11 +5,11 @@
     max_armor_distance: 10.0
 
     ekf:
-      sigma2_q_x: 0.05
-      sigma2_q_y: 0.05
-      sigma2_q_z: 0.05
-      sigma2_q_yaw: 1.0
-      sigma2_q_r: 80.0
+      sigma2_q_x: 0.5
+      sigma2_q_y: 0.5
+      sigma2_q_z: 0.5
+      sigma2_q_yaw: 100.0
+      sigma2_q_r: 800.0
 
       r_x: 4e-4
       r_y: 4e-4
@@ -33,7 +33,7 @@
       gravity: 10.0
       resistance: 0.092
       iteration_times: 20 # 补偿的迭代次数
-      # ["距离下限, 距离上限, 高度下限, 高度下限, pitch轴补偿值"]
+      # ["距离下限, 距离上限, 高度下限, 高度上限, pitch轴补偿值"]
       pitch_offset: [
         "5.0 6.0 -1.0 0.4 0.0",
         "5.0 6.0  0.4 0.8 0.0",

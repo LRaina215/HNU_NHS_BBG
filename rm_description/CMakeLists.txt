@@ -3,7 +3,7 @@ project(rm_description)
 
 # find dependencies
 find_package(ament_cmake REQUIRED)
-
+find_package(ament_cmake_auto REQUIRED)
 # Install files
 install(DIRECTORY
         launch
@@ -18,4 +18,9 @@ if(BUILD_TESTING)
   ament_lint_auto_find_test_dependencies()
 endif()
 
-ament_package()
+ament_auto_package(
+  INSTALL_TO_SHARE
+  config
+  launch
+)
+

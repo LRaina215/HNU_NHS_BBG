@@ -12,11 +12,13 @@ to be received by other subscribers.
 同时，车载电脑接收到的数据也会通过该模块传输到DDS，由其他订户接收。
 '''
 import math
+from math import pi
 import time
 
+import geometry_msgs
 from rclpy.node import Node
 from rclpy import qos
-from geometry_msgs.msg import PoseWithCovariance, Twist
+from geometry_msgs.msg import PoseWithCovariance, Twist, Quaternion
 from std_msgs.msg import Int8
 from rclpy.qos import QoSProfile, QoSReliabilityPolicy, QoSDurabilityPolicy
 
@@ -24,6 +26,10 @@ from bubble_protocol.hardware import RobotSerial
 from bubble_protocol.robot_status import RobotStatus
 from rmctrl_msgs.msg import Chassis, Gimbal, Shooter
 from rm_interfaces.msg import GimbalCmd
+from rm_interfaces.msg import SerialReceiveData
+import tf2_ros
+from tf2_ros import TransformBroadcaster
+from rclpy.time import Time
 
 
 
@@ -79,11 +85,19 @@ class RobotAPI(Node):
                     f'Open serial port error, try to reopen port:{self.serial_port}, info: {e}')
                 time.sleep(3)
 
+
+        #初始化imu数据
+        self.get_yaw = 0.0
+        self.get_pitch = 0.0
+        self.get_roll = 0.0
+        self.fire_advice = 0.0
         # 发布机器人状态模块
         self.robot_status = RobotStatus(self.robot_serial.status, self)
         self.robot_serial.realtime_pub = self.robot_status.realtime_callback
         self.robot_serial.serial_done = True
-        
+        #创建tf广播器
+        self.tf_broadcaster = tf2_ros.TransformBroadcaster(self)
+        self.tf_timer = self.create_timer(0.01, self.broadcast_transform)
         # init core api
         self.api_init()
         # init expanded api
@@ -95,6 +109,8 @@ class RobotAPI(Node):
         self.uart_timer = self.create_timer(1/period, self.robot_serial.process)
         self.uartrx_timer = self.create_timer(
             1/period, self.robot_serial.rx_function)
+        
+
         # 心跳模块
         # self.heartbeat_timer = self.create_timer(0.5, self.heartbeat)
         #
@@ -136,6 +152,7 @@ class RobotAPI(Node):
                 GimbalCmd, 'armor_solver/cmd_gimbal', self.gimbal_callback, qos_profile)
             self.barrel_sub = self.create_subscription(
                 Shooter, '/core/shooter_api', self.barrel_callback, 10)
+            self.imu_tf_sub = self.create_subscription(SerialReceiveData, 'serial/receive', self.getImu_callback, 10)
             # print("Starting subscriber!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
         elif self.name == "sentry_down":
             self.chassis_sub = self.create_subscription(
@@ -175,15 +192,75 @@ class RobotAPI(Node):
         mode = 1
         #self.get_logger().info("recived data gimbal change, position.x: {}, position.y: {}, position.z: {}".format(
          #   msg.position.x, msg.position.y, msg.position.z))
+        if msg.fire_advice == False:
+            self.fire_advice = 0.0
+        else:
+            self.fire_advice = 1.0
 
         self.robot_serial.send_data(
             "gimbal",
             #[mode, math.degrees(msg.yaw), math.degrees(msg.pitch), math.degrees(msg.roll),0, 0, 0, 0])  #change by ye add msg.roll
-            [mode, msg.yaw *2.5, msg.pitch,0, 0, 0, 0])
+            [mode, msg.yaw, msg.pitch, self.fire_advice, 0, 0, 0])
         #self.get_logger().info(f"sending: {msg.yaw},{msg.pitch},{msg.roll}") #change by ye     add msg.roll
-        self.get_logger().info(f"sending: {msg.yaw},{msg.pitch}")
-        
-        
+        self.get_logger().info(f"sending: {msg.yaw},{msg.pitch},{self.fire_advice}")
+
+    #transform odom info
+    def getImu_callback(self, msg:SerialReceiveData) -> None:
+        self.get_yaw = msg.yaw
+        self.get_pitch = msg.pitch
+        self.get_roll = msg.roll
+        #print(f"received pub info {self.get_yaw}")
+
+
+    def broadcast_transform(self):
+        def euler_to_quaternion(roll, pitch, yaw):
+            qw = math.cos(roll / 2) * math.cos(pitch / 2) * math.cos(yaw / 2) + math.sin(roll / 2) * math.sin(pitch / 2) * math.sin(yaw / 2)
+            qx = math.sin(roll / 2) * math.cos(pitch / 2) * math.cos(yaw / 2) - math.cos(roll / 2) * math.sin(pitch / 2) * math.sin(yaw / 2)
+            qy = math.cos(roll / 2) * math.sin(pitch / 2) * math.cos(yaw / 2) + math.sin(roll / 2) * math.cos(pitch / 2) * math.sin(yaw / 2)
+            qz = math.cos(roll / 2) * math.cos(pitch / 2) * math.sin(yaw / 2) - math.sin(roll / 2) * math.sin(pitch / 2) * math.cos(yaw / 2)
+            return Quaternion(x=qx, y=qy, z=qz, w=qw)
+        # 将角度转换为弧度
+        roll_rad = self.get_roll * pi / 180.0
+        pitch_rad = -self.get_pitch * pi / 180.0
+        yaw_rad = self.get_yaw * pi / 180.0
+
+        # 使用自定义的函数生成四元数
+        q = euler_to_quaternion(roll_rad, pitch_rad, yaw_rad)
+
+        # 创建 TransformStamped 消息
+        transform_stamped = geometry_msgs.msg.TransformStamped()
+        transform_stamped.header.stamp = self.get_clock().now().to_msg()
+        transform_stamped.header.frame_id = "odom"  # 父坐标系
+        transform_stamped.child_frame_id = "gimbal_link"  # 子坐标系
+
+        # 填充变换数据
+        transform_stamped.transform.translation.x = 0.0
+        transform_stamped.transform.translation.y = 0.0
+        transform_stamped.transform.translation.z = 0.0
+        transform_stamped.transform.rotation.x = q.x
+        transform_stamped.transform.rotation.y = q.y
+        transform_stamped.transform.rotation.z = q.z
+        transform_stamped.transform.rotation.w = q.w
+
+        # 发布第一个变换
+        self.tf_broadcaster.sendTransform(transform_stamped)
+
+        # 修正四元数：保留 roll，忽略 pitch 和 yaw
+        q_fixed = euler_to_quaternion(roll_rad, 0.0, 0.0)
+
+        # # 设置第二个变换：odom -> odom_rectify
+        # transform_stamped.header.stamp = self.get_clock().now().to_msg()
+        # transform_stamped.header.frame_id = "odom"  # 父坐标系
+        # transform_stamped.child_frame_id = "odom_rectify"  # 子坐标系
+
+        # # 填充修正后的变换数据
+        # transform_stamped.transform.rotation.x = q_fixed.x
+        # transform_stamped.transform.rotation.y = q_fixed.y
+        # transform_stamped.transform.rotation.z = q_fixed.z
+        # transform_stamped.transform.rotation.w = q_fixed.w
+
+        # # 发布第二个变换
+        # self.tf_broadcaster.sendTransform(transform_stamped)
 
     def barrel_callback(self, msg: Shooter) -> None:
         """Shooter function, send enable shooter infomation to MCU.

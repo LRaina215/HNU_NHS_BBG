@@ -27,8 +27,8 @@ def generate_launch_description():
         output='screen',
         name='armor_detector',
         parameters=[
-            '/home/zxzzb/src/auto_aim_bringup/config/node_params/armor_detector_params.yaml'
-        ]
+            get_params('armor_detector')
+        ],
     )
 
     armor_solver_node = Node(
