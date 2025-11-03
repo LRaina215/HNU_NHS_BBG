@@ -14,6 +14,11 @@ to be received by other subscribers.
 import math
 from math import pi
 import time
+import serial
+
+import os
+import sys
+import subprocess
 
 import geometry_msgs
 from rclpy.node import Node
@@ -85,7 +90,10 @@ class RobotAPI(Node):
                     f'Open serial port error, try to reopen port:{self.serial_port}, info: {e}')
                 time.sleep(3)
 
-
+        #init port check param
+        self.last_yaw = 0.0
+        self.last_pitch = 0.0
+        self.last_timestamp = 0.0
         #初始化imu数据
         self.get_yaw = 0.0
         self.get_pitch = 0.0
@@ -103,8 +111,8 @@ class RobotAPI(Node):
         # init expanded api
         self.init_robot()
         # Init robot tx/rx/heartbeat timer
-        period = 150
-        self.red_blue_timer = self.create_timer(1/period, self.robot_serial.red_blue_info_callback)
+        period = 90
+        # self.red_blue_timer = self.create_timer(1/period, self.robot_serial.red_blue_info_callback)
         self.imu_gimbal_timer = self.create_timer(1/period, self.robot_serial.imu_gimbal_callback)
         self.uart_timer = self.create_timer(1/period, self.robot_serial.process)
         self.uartrx_timer = self.create_timer(
@@ -114,7 +122,7 @@ class RobotAPI(Node):
         # 心跳模块
         # self.heartbeat_timer = self.create_timer(0.5, self.heartbeat)
         #
-        #self.test_timer = self.create_timer(1,self.test_callback)
+        # self.test_timer = self.create_timer(1,self.test_callback)
         
         
     def test_callback(self):
@@ -199,18 +207,56 @@ class RobotAPI(Node):
 
         self.robot_serial.send_data(
             "gimbal",
-            #[mode, math.degrees(msg.yaw), math.degrees(msg.pitch), math.degrees(msg.roll),0, 0, 0, 0])  #change by ye add msg.roll
-            [mode, msg.yaw, msg.pitch, self.fire_advice, 0, 0, 0])
-        #self.get_logger().info(f"sending: {msg.yaw},{msg.pitch},{msg.roll}") #change by ye     add msg.roll
-        self.get_logger().info(f"sending: {msg.yaw},{msg.pitch},{self.fire_advice}")
+            [mode, msg.yaw-10, msg.pitch, self.fire_advice, 0, 0, 0])
+        # self.get_logger().info(f"sending: {msg.yaw},{msg.pitch},{self.fire_advice}")
 
     #transform odom info
-    def getImu_callback(self, msg:SerialReceiveData) -> None:
+    def getImu_callback(self, msg: SerialReceiveData) -> None:
         self.get_yaw = msg.yaw
         self.get_pitch = msg.pitch
         self.get_roll = msg.roll
-        #print(f"received pub info {self.get_yaw}")
 
+        # # 判断是否需要重启串口
+        # current_time = time.time()
+        # current_yaw = self.get_yaw
+        # current_pitch = self.get_pitch
+
+        # if current_yaw == self.last_yaw and current_pitch == self.last_pitch:
+        #     time_diff = current_time - self.last_timestamp
+        #     if time_diff >= 1.0:
+        #         self.get_logger().warn("IMU data unchanged for 1s. Restarting serial port...")
+        #         # try:
+        #         #     # 使用系统命令安全重启串口（需配置免密 sudo）
+        #         #     subprocess.run(
+        #         #         ["sudo", "sh", "-c", "echo 0 > /sys/bus/usb/devices/usb3/3-1/authorized"],  # 示例：禁用设备
+        #         #         check=True
+        #         #     )
+        #         #     time.sleep(2)  # 等待设备重新枚举
+        #         #     subprocess.run(
+        #         #         ["sudo", "sh", "-c", "echo 1 > /sys/bus/usb/devices/usb3/3-1/authorized"],  # 示例：启用设备
+        #         #         check=True
+        #         #     )
+        #         #     time.sleep(2)
+        #         #     # 重新初始化串口（无需手动 open，依赖硬件自动连接）
+        #         #     self.robot_serial.init_device(
+        #         #         port="/dev/ttyrobomaster",
+        #         #         baudrate=self.robot_serial.baudrate,
+        #         #         timeout_T=0
+        #         #     )
+                    
+        #         #     self.last_timestamp = time.time()
+        #         #     self.get_logger().info("Serial port restarted via hardware reset.")
+                    
+        #         # except subprocess.CalledProcessError as e:
+        #         #     self.get_logger().error(f"Hardware reset failed: {e}")
+        #         # except Exception as e:
+        #         #     self.get_logger().error(f"Serial init error: {e}")
+        # else:
+        #     # 更新最新数据和时间戳
+        #     self.last_yaw = current_yaw
+        #     self.last_pitch = current_pitch
+        #     self.last_timestamp = current_time
+        # #print(f"received pub info {self.get_yaw}")
 
     def broadcast_transform(self):
         def euler_to_quaternion(roll, pitch, yaw):

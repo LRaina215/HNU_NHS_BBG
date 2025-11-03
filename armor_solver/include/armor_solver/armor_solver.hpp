@@ -22,6 +22,7 @@
 // ros2
 #include <tf2_ros/buffer.h>
 #include <angles/angles.h>
+#include <tf2_eigen/tf2_eigen.h>
 
 #include <rclcpp/time.hpp>
 #include <tf2_geometry_msgs/tf2_geometry_msgs.h>
@@ -50,6 +51,9 @@ public:
   enum State { TRACKING_ARMOR = 0, TRACKING_CENTER = 1 } state;
 
   std::vector<std::pair<double, double>> getTrajectory() const noexcept; 
+  geometry_msgs::msg::Point getPredictedPosition() const noexcept;
+
+
 
 private:
   // Get the armor positions from the target robot
@@ -99,6 +103,8 @@ private:
   double min_switching_v_yaw_;
 
   std::weak_ptr<rclcpp::Node> node_;
+  geometry_msgs::msg::Point predicted_position_;
+
 };
 }  // namespace fyt::auto_aim
 #endif  // ARMOR_SOLVER_SOLVER_HPP_

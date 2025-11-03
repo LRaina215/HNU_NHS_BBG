@@ -11,7 +11,7 @@
     light.min_ratio: 0.0001
     light.max_ratio: 1.0
     light.max_angle: 40.0
-    light.color_diff_thresh: 20
+    light.color_diff_thresh: 25
     armor.min_light_ratio: 0.8
     armor.min_small_center_distance: 0.8
     armor.max_small_center_distance: 3.5

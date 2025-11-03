@@ -75,6 +75,8 @@ public:
   // Parameters
   int binary_thres;
   EnemyColor detect_color;
+
+  
   LightParams light_params;
   ArmorParams armor_params;
 

@@ -21,7 +21,7 @@ args_list = [
 
     DeclareLaunchArgument(
         'serial_port',
-        default_value='/dev/ttyACM0',
+        default_value='/dev/ttyrobomaster',
         description='Onboard serial port name'
     ),
 ]

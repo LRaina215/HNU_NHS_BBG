@@ -14,8 +14,7 @@ export LD_LIBRARY_PATH=/usr/local/opencv4.5.4/lib:$LD_LIBRARY_PATH
 declare -A NODES=(
     ["hik_camera"]="ros2 launch hik_camera hik_camera.launch.py"
     ["rm_description"]="ros2 launch rm_description model.launch.py"
-    ["armor_detector"]="ros2 run armor_detector armor_detector_node"
-    ["armor_solver"]="ros2 run armor_solver armor_solver_node"
+    ["armor_detector"]="ros2 launch auto_aim_bringup auto_aim.launch.py"
     ["sentry_up_serial"]="ros2 launch bubble_protocol sentry_up_serial_launch.py"
 )
 
@@ -44,7 +43,9 @@ while [ -f "$FLAG_FILE" ]; do
             gnome-terminal -- bash -c "echo 'Starting $NODE_NAME...'; ${NODES[$NODE_NAME]}; exec bash"
         fi
     done
+    clear
     sleep 5
+
 done
 
 echo "Autostart script stopped."

@@ -24,12 +24,14 @@
 #include "rm_utils/logger/log.hpp"
 #include "rm_utils/math/utils.hpp"
 
+const double MANUAL_Z_CONST = std::tan((1.0/45.0) * M_PI); // 约 0.06992
+
 namespace fyt::auto_aim {
 Solver::Solver(std::weak_ptr<rclcpp::Node> n) : node_(n) {
   auto node = node_.lock();
 
-  shooting_range_w_ = node->declare_parameter("solver.shooting_range_width", 0.185);
-  shooting_range_h_ = node->declare_parameter("solver.shooting_range_height", 0.185);
+  shooting_range_w_ = node->declare_parameter("solver.shooting_range_width", 0.235);
+  shooting_range_h_ = node->declare_parameter("solver.shooting_range_height", 0.335);
   max_tracking_v_yaw_ = node->declare_parameter("solver.max_tracking_v_yaw", 6.0);
   prediction_delay_ = node->declare_parameter("solver.prediction_delay", 0.0);
   controller_delay_ = node->declare_parameter("solver.controller_delay", 0.0);
@@ -97,6 +99,10 @@ rm_interfaces::msg::GimbalCmd Solver::solve(const rm_interfaces::msg::Target &ta
   target_position.y() += dt * target.velocity.y;
   target_position.z() += dt * target.velocity.z;
   target_yaw += dt * target.v_yaw;
+  /////////////////////////////////////
+  predicted_position_.x = target_position.x();
+  predicted_position_.y = target_position.y();
+  predicted_position_.z = target_position.z();
 
   // Choose the best armor to shoot
   std::vector<Eigen::Vector3d> armor_positions = getArmorPositions(
@@ -146,6 +152,9 @@ rm_interfaces::msg::GimbalCmd Solver::solve(const rm_interfaces::msg::Target &ta
                                             target.armors_num);
         chosen_armor_position = armor_positions.at(idx);
         gimbal_cmd.distance = chosen_armor_position.norm();
+        predicted_position_.x = target_position.x();
+        predicted_position_.y = target_position.y();
+        predicted_position_.z = target_position.z();
         if (chosen_armor_position.norm() < 0.1) {
           throw std::runtime_error("No valid armor to shoot");
         }
@@ -177,6 +186,13 @@ rm_interfaces::msg::GimbalCmd Solver::solve(const rm_interfaces::msg::Target &ta
   double cmd_pitch = pitch + pitch_offset;
   double cmd_yaw = angles::normalize_angle(yaw + yaw_offset);
 
+  // 0820
+  // 预先计算 norm()，避免重复调用
+  const double armor_norm = chosen_armor_position.head(2).norm();
+  predicted_position_.x = target_position.x();
+  predicted_position_.y += -std::tan(yaw_offset) * predicted_position_.x;
+  // 将两个 tan() 相关的计算合并，并使用预计算的常量
+  predicted_position_.z -= (std::tan(pitch_offset) + MANUAL_Z_CONST) * armor_norm;
 
   gimbal_cmd.yaw = cmd_yaw * 180 / M_PI;
   gimbal_cmd.pitch = cmd_pitch * 180 / M_PI;  
@@ -283,20 +299,9 @@ void Solver::calcYawAndPitch(const Eigen::Vector3d &p,
                              double &pitch) const noexcept {
   // Calculate yaw and pitch
   yaw = atan2(p.y(), p.x());
-  //pitch = atan2(p.z(), p.head(2).norm());
   pitch = atan2(p.z(), p.head(2).norm());
-  // double g = 9.8;
-  // double h = p.z();
-  // double d = sqrt(p.x() * p.x() + p.y() * p.y());
-  // double t = sqrt(d * d + h * h) / 18.0;
-  // for(int i = 0; i < 5; i++) {
-        
-  //   pitch = asin((h + 0.5 * g * t * t) / (18.0 * t));
-        
-  //   if (std::isnan(pitch)) {
-  //       pitch = 0.0;
-  //   }
-  // }
+  // //pitch = atan2(p.z(), p.head(2).norm());
+  
 
   if (double temp_pitch = pitch; trajectory_compensator_->compensate(p, temp_pitch)) {
     pitch = temp_pitch;
@@ -314,5 +319,9 @@ std::vector<std::pair<double, double>> Solver::getTrajectory() const noexcept {
   }
   return trajectory;
 }
+
+  geometry_msgs::msg::Point fyt::auto_aim::Solver::getPredictedPosition() const noexcept {
+  return predicted_position_;
+  }
 
 }  // namespace fyt::auto_aim

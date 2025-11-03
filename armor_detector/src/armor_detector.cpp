@@ -172,7 +172,7 @@ bool Detector::containLight(const int i, const int j, const std::vector<Light> &
     const Light &test_light = lights.at(k);
 
     // 防止数字干扰
-    if (test_light.width > 2 * avg_width) {
+    if (test_light.width > 1.7 * avg_width) {
       continue;
     }
     // 防止红点准星或弹丸干扰

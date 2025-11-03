@@ -59,9 +59,8 @@ ArmorDetectorNode::ArmorDetectorNode(const rclcpp::NodeOptions &options)
     : Node("armor_detector", options) {
   FYT_REGISTER_LOGGER("armor_detector", "~/fyt2024-log", INFO);
   FYT_INFO("armor_detector", "Starting ArmorDetectorNode!");
-  // Detector
-  detector_ = initDetector();
-
+  //colorStruct enemy_color_ ={EnemyColor::RED};
+  
   // Tricks to make pose more accurate
   use_ba_ = this->declare_parameter("use_ba", true);
 
@@ -130,6 +129,8 @@ ArmorDetectorNode::ArmorDetectorNode(const rclcpp::NodeOptions &options)
 
   enemy_color_sub = this->create_subscription<std_msgs::msg::Int32>(
           "red_blue_info", 10, std::bind(&ArmorDetectorNode::enemy_color_callback, this, std::placeholders::_1));
+  // Detector
+  detector_ = initDetector(ArmorDetectorNode::enemy_color_.detect_color);
 
   // target_sub_ = this->create_subscription<rm_interfaces::msg::Target>(
   //   "armor_solver/target",
@@ -154,23 +155,18 @@ ArmorDetectorNode::ArmorDetectorNode(const rclcpp::NodeOptions &options)
 // getting imu_gimbal_msg --- lgl
 void ArmorDetectorNode::enemy_color_callback(const std_msgs::msg::Int32::SharedPtr msg)
 {
+  if(msg->data == 0){
+    ArmorDetectorNode::enemy_color_.detect_color = EnemyColor::RED;
+  }else{
+    ArmorDetectorNode::enemy_color_.detect_color = EnemyColor::BLUE;
+  }
   //RCLCPP_INFO(this->get_logger(), "Received: %d", msg->data);
   //this->set_parameter(rclcpp::Parameter("detect_color", msg->data));
-  setEnemyColor(detect_color_, msg);
+  //setEnemyColor(detect_color_, msg);
     // 打印更新后的参数值
   //RCLCPP_INFO(this->get_logger(), "Updated detect_color: %d", msg->data);
 }
 
-void ArmorDetectorNode::setEnemyColor(EnemyColor &detect_color, const std_msgs::msg::Int32::SharedPtr &msg)
-{
-  if(msg->data == 1)
-  {
-    detect_color = EnemyColor::RED;
-  }else
-  {
-    detect_color = EnemyColor::BLUE;
-  }
-}
 
 void ArmorDetectorNode::imageCallback(
     const sensor_msgs::msg::Image::ConstSharedPtr img_msg) {
@@ -238,7 +234,7 @@ void ArmorDetectorNode::imageCallback(
   armors_pub_->publish(armors_msg_);
 }
 
-std::unique_ptr<Detector> ArmorDetectorNode::initDetector() {
+std::unique_ptr<Detector> ArmorDetectorNode::initDetector(EnemyColor color) {
   rcl_interfaces::msg::ParameterDescriptor param_desc;
   param_desc.integer_range.resize(1);
   param_desc.integer_range[0].step = 1;
@@ -264,8 +260,7 @@ std::unique_ptr<Detector> ArmorDetectorNode::initDetector() {
       .max_large_center_distance =
           declare_parameter("armor.max_large_center_distance", 5.0),
       .max_angle = declare_parameter("armor.max_angle", 35.0)};
-
-  auto detector = std::make_unique<Detector>(binary_thres, EnemyColor::RED,
+  auto detector = std::make_unique<Detector>(binary_thres, EnemyColor::BLUE,
                                              l_params, a_params);
 
 
@@ -309,6 +304,8 @@ std::vector<Armor> ArmorDetectorNode::detectArmors(
 
   auto final_time = this->now();
   auto latency = (final_time - img_msg->header.stamp).seconds() * 1000;
+
+  RCLCPP_INFO(this->get_logger(), "Latency: %d ms", int(latency));
 
   // Publish debug info
   if (debug_) {

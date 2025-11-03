@@ -42,7 +42,10 @@ class RobotSerial(serial.Serial, Node):
             Class return a serial port object.
         '''
         Node.__init__(self, "enemy_color")
-        self.RB_info_pub_ = self.create_publisher(Int32, "red_blue_info", 10)
+
+        self.init_device(port, baudrate, timeout_T)  # 初始化时保存参数
+
+        # self.RB_info_pub_ = self.create_publisher(Int32, "red_blue_info", 10)
         self.Imu_gimbal_pub_ = self.create_publisher(SerialReceiveData, "serial/receive", 10)
         self.init_device(port, baudrate, timeout_T)
         self.init_protocol(name)
@@ -56,19 +59,51 @@ class RobotSerial(serial.Serial, Node):
         self.imu_yaw = 0.0
         self.imu_pitch = 0.0
         self.imu_roll = 0.0
+        
+        
+        # 定时检测串口状态
+        self.check_serial_timer = threading.Thread(target=self.check_serial_status)
+        self.check_serial_timer.daemon = True
+        self.check_serial_timer.start()
     
+    def init_device(self, port: str, baudrate: int, timeout_T: int) -> None:
+        super().__init__(port=port, baudrate=baudrate, timeout=timeout_T)
+        # 保存参数到成员变量
+        self.port_name = port
+        self.baudrate = baudrate
+        self.timeout_T = timeout_T
+        self.rx_count = 0
+        self.tx_count = 0
+        self.reset_rx_buffer()
     
     def run_tx_thread(self):
-        '''threading to cintinuously process the transmit buffer'''
+        '''threading to continuously process the transmit buffer'''
         while True:
-            self.process_tx_buffer()
-            time.sleep(0.01) #避免占用过多cpu
-    
+            try:
+                self.process_tx_buffer()
+            except Exception as e:
+                self.get_logger().error(f"TX Thread error: {e}")
+            time.sleep(0.01)
+
     def process_tx_buffer(self) -> None:
         '''process the transmit buffer and send data'''
         while not self.tx_buffer.empty():
-            data_to_send = self.tx_buffer.get()
-            self.send(data_to_send)
+            try:
+                data_to_send = self.tx_buffer.get()
+                self.send(data_to_send)
+            except Exception as e:
+                self.get_logger().error(f"Error sending data: {e}")
+                
+    def check_serial_status(self):
+        '''Periodically check and recover the serial connection'''
+        while True:
+            try:
+                if not self.is_open:
+                    self.get_logger().warn("Serial port disconnected. Attempting to reconnect...")
+                    self.init_device(self.port_name, self.baudrate, self.timeout_T)
+            except Exception as e:
+                self.get_logger().error(f"Error reconnecting serial port: {e}")
+            time.sleep(3)
 
     def init_device(self, port: str, baudrate: int, timeout_T: int) -> None:
         '''UART device initialization parameters setting
@@ -177,10 +212,8 @@ class RobotSerial(serial.Serial, Node):
                     self.rx_status = 6
                 else:  # check fail
                     #print("check fail")
-                    #debug
                     self.rx_status = 6
-                    # 由于debug故注释
-                    #self.reset_rx_buffer()
+                    self.reset_rx_buffer()
             elif self.rx_status == 6:  # wait ADD_CHECK
                 if rx_byte == self.current_packet.info[ADD_CHECK_POSE]:
                     self.rx_buffer.put(copy.deepcopy(self.current_packet.info))
@@ -227,6 +260,8 @@ class RobotSerial(serial.Serial, Node):
             '''
             return [info_list[key][IDX_BCPID_RATIO] for key in info_list]
 
+
+        
         for key in STATUS:
             # print([hex(i) for i in current_packet])
             # unpack packet id
@@ -237,17 +272,26 @@ class RobotSerial(serial.Serial, Node):
                 #-------------------------------------------------------------------
                 #print("===POSE====", DATA_POSE, SUM_CHECK_POSE)
                 #print("===data_info====", getFrameFmt(data_info))
-                unpack_info = struct.unpack(getFrameFmt(
-                    data_info), current_packet[DATA_POSE: SUM_CHECK_POSE])
+                try:
+                    unpack_info = struct.unpack(
+                        getFrameFmt(data_info),
+                        current_packet[DATA_POSE: SUM_CHECK_POSE]
+                    )
+                except struct.error as e:
+                    self.get_logger().error(
+                        f"Failed to unpack data: {e}. Current packet: {current_packet}")
+                    return
                 ratio_list = getFrameRatio(data_info)
                 #print(unpack_info)
                 # if (int(unpack_info[4])/1000) == 1:
                 #     self.red_blue_msg = 0
                 # else:
                 self.red_blue_msg = int(int(unpack_info[4])/1000)
-                self.imu_yaw = int(int(unpack_info[1])/1000)
-                self.imu_pitch = int(int(unpack_info[2])/1000)
-                self.imu_roll = int(int(unpack_info[3])/1000)
+                self.imu_yaw = int(unpack_info[1])/1000.0
+                self.imu_pitch = int(unpack_info[2])/1000.0
+                self.imu_roll = int(unpack_info[3])/1000.0
+
+
                 #print(self.red_blue_msg)
                 #set_param('/armor_detector','detect_color',int(unpack_info[4]/1000))#change 11.24
                 #set_parameter(rclpy.Parameter('detect_color', int(self.unpack_info[4] / 1000)))
@@ -272,10 +316,10 @@ class RobotSerial(serial.Serial, Node):
             msg = Int32()
             msg.data = self.red_blue_msg
             self.RB_info_pub_.publish(msg)
-            print(msg.data)
+            #print(msg.data)
             #self.get_logger().info(f"enemy_color:{msg.data}")
-        else:
-            self.get_logger().warn("Red-blue message is None. No message published.")
+        #else:
+            #self.get_logger().warn("Red-blue message is None. No message published.")
 
     def imu_gimbal_callback(self):
         msg = SerialReceiveData()
