@@ -92,8 +92,8 @@ cv::Mat NumberClassifier::extractNumber(const cv::Mat &src, const Armor &armor) 
   return number_image;
 }
 
-// 11.16 LJH : 改为对装甲板图像的批处理，提高装甲板检测效率
-void NumberClassifier::classify(std::vector<Armor> &armors) noexcept 
+
+void NumberClassifier::classify(const cv::Mat &src, Armor &armor) noexcept 
 {
   cv::Mat input = armor.number_img / 255.0;
 
@@ -102,7 +102,7 @@ void NumberClassifier::classify(std::vector<Armor> &armors) noexcept
   cv::dnn::blobFromImage(input, blob); // 将待识别图像转换成标准的Blob格式
   // Set the input blob for the neural network
   mutex_.lock();
-  net_.setInput(batch_blob);
+  net_.setInput(blob);
 
   // Forward pass the image blob through the model
   cv::Mat outputs = net_.forward().clone(); // 运行模型 + 将输出结果深拷贝一份
@@ -119,7 +119,7 @@ void NumberClassifier::classify(std::vector<Armor> &armors) noexcept
 
   armor.classfication_result = fmt::format("{}:{:.1f}%", armor.number, armor.confidence * 100.0);
 }
-
+// 11.16 LJH : 改为对装甲板图像的批处理，提高装甲板检测效率
 void NumberClassifier::classify_batch(std::vector<Armor> &armors) noexcept {
   // 如果没有装甲板，直接返回
   if (armors.empty()) {

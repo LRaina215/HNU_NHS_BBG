@@ -23,7 +23,7 @@ set(EXTERNAL_INCLUDE_DIRS ${G2O_INCLUDE_DIR})
 set(EXTERNAL_LIBS ${G2O_LIBRARIES})
 set(OpenCV_DIR "/usr/local/opencv4.5.4/lib/cmake/opencv4")
 find_package(ament_cmake_auto REQUIRED)
-find_package(OpenCV 4.5.4 REQUIRED)
+find_package(OpenCV REQUIRED)
 
 find_package(TBB REQUIRED COMPONENTS tbb)
 find_package(G2O REQUIRED)
