@@ -65,10 +65,10 @@ private:
 
   void publishMarkers(const rm_interfaces::msg::Target &target_msg,
                       const rm_interfaces::msg::GimbalCmd &gimbal_cmd) noexcept;
-                      
+
+
   void setModeCallback(const std::shared_ptr<rm_interfaces::srv::SetMode::Request> request,
                        std::shared_ptr<rm_interfaces::srv::SetMode::Response> response);
-
   void processImage(const cv::Mat &image, const std_msgs::msg::Header &header);
 
   cv::Point2f project3DTo2D(const Eigen::Vector3d& point3d);
@@ -76,7 +76,8 @@ private:
   cv::Point2f PointConvert (geometry_msgs::msg::Point odom_pre_point);
 
   void PreImageCallback(const sensor_msgs::msg::Image::ConstSharedPtr &image);
-  
+
+
   bool debug_mode_;
 
   // Heartbeat
@@ -95,8 +96,8 @@ private:
   cv::Mat dist_coeffs_;
   cv::Point2f camera_plane_point_;
   std::mutex point_mutex_;
-
   // Armor Solver
+  image_transport::ImageTransport it_;
   std::unique_ptr<Solver> solver_;
   std::vector<cv::Point3d> object_points;
   std::vector<cv::Point2d> image_points;
@@ -135,6 +136,9 @@ private:
 
   image_transport::Publisher vis_predict_image_pub_;
   image_transport::Subscriber result_image_sub_;
+
+
+
 };
 
 }  // namespace fyt::auto_aim

@@ -59,8 +59,20 @@ limitations under the License.
   2. 所有计算（弹道、选甲、Yaw/Pitch）全部修正为使用**相对向量** (`target_vec = future_pos - gimbal_pos_odom`)。
 - **收益：** 解决了“机器人移动后自瞄不准”的根本问题。现在所有计算都是基于云台的**真实**相对位置，数学上完全鲁棒。
 
+#### 4.算法验证模拟器
+
+​	进入at_vision_simulator-master文件后输入cargo run --release -j4运行模拟器
+
+​	此外只需要打开auto_aim_bringup节点
+
+​	此外还需打开auto_aim_bringup sim[TAB]节点对自瞄发布信息进行桥接，否则模拟器无法读取自瞄转动角度
 
 
-**[已完成代码修改，具体效果待实际运行验证]**
+
+#### 5.FoxGlove可视化调试工具
+
+​	常用命令一览.md中有介绍。
+
+
 
 **代码仓库:** git@github.com:LRaina215/HNU_NHS_BBG.git

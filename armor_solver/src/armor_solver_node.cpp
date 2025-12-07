@@ -21,6 +21,8 @@
 // std
 #include <memory>
 #include <vector>
+#include <mutex>
+
 // project
 #include "armor_solver/motion_model.hpp"
 #include "rm_utils/common.hpp"
@@ -28,7 +30,9 @@
 
 namespace fyt::auto_aim {
 ArmorSolverNode::ArmorSolverNode(const rclcpp::NodeOptions &options)
-: Node("armor_solver", options), solver_(nullptr) {
+: Node("armor_solver", options),
+  it_(std::shared_ptr<rclcpp::Node>(this, [](rclcpp::Node*){})),
+  solver_(nullptr){ 
   // Register logger
   FYT_REGISTER_LOGGER("armor_solver", "~/fyt2024-log", INFO);
   FYT_INFO("armor_solver", "Starting ArmorSolverNode!");
@@ -37,23 +41,21 @@ ArmorSolverNode::ArmorSolverNode(const rclcpp::NodeOptions &options)
 
   // Tracker
   double max_match_distance = this->declare_parameter("tracker.max_match_distance", 0.2);
-  double max_match_yaw_diff = this->declare_parameter("tracker.max_match_yaw_diff", 3.0);
+  double max_match_yaw_diff = this->declare_parameter("tracker.max_match_yaw_diff", 1.0);
   tracker_ = std::make_unique<Tracker>(max_match_distance, max_match_yaw_diff);
   tracker_->tracking_thres = this->declare_parameter("tracker.tracking_thres", 5);
   lost_time_thres_ = this->declare_parameter("tracker.lost_time_thres", 0.3);
   predicted_position_pub_ = this->create_publisher<geometry_msgs::msg::Point>("armor_solver/predicted_position", 10);
 
   //7.16---
-  result_image_sub_ = image_transport::create_subscription(this, "armor_detector/result_img",
-                       std::bind(&ArmorSolverNode::PreImageCallback, this, std::placeholders::_1),
-                       "raw");
+  result_image_sub_ = it_.subscribe("armor_detector/result_img",1,std::bind(&ArmorSolverNode::PreImageCallback, this, std::placeholders::_1));
   vis_predict_image_pub_ =  
                 image_transport::create_publisher(this, "armor_solver/pre_aim_img");
 
   camera_matrix_ = (cv::Mat_<double>(3, 3) <<
-                      1829.35338302932, 0.000000, 360, 
-                      0.000000, 1829.77877605685, 320, 
-                      0.000000, 0.000000, 1.000000);
+                      1826.13648271031,0,742.320921588837,
+                      0,1826.07366735623,361.122778006025,
+                      0,0,1);
   dist_coeffs_ = (cv::Mat_<double>(1, 5) << -0.0602940050417836,0.0436806755829738, 0, 0, 0);
   //Use for debugging
   pre_target_point_pub_ = this->create_publisher<geometry_msgs::msg::Point>("armor_solver/pre_target_debug_point", 10);
@@ -68,12 +70,12 @@ ArmorSolverNode::ArmorSolverNode(const rclcpp::NodeOptions &options)
   // h - Observation function
   auto h = Measure();
   // update_Q - process noise covariance matrix
-  s2qx_ = declare_parameter("ekf.sigma2_q_x", 2000.0);
-  s2qy_ = declare_parameter("ekf.sigma2_q_y", 2000.0);
-  s2qz_ = declare_parameter("ekf.sigma2_q_z", 2000.0);
-  s2qyaw_ = declare_parameter("ekf.sigma2_q_yaw", 10000.0);
-  s2qr_ = declare_parameter("ekf.sigma2_q_r", 32000.0);
-  s2qd_zc_ = declare_parameter("ekf.sigma2_q_d_zc", 32000.0);
+  s2qx_ = declare_parameter("ekf.sigma2_q_x", 20.0);
+  s2qy_ = declare_parameter("ekf.sigma2_q_y", 20.0);
+  s2qz_ = declare_parameter("ekf.sigma2_q_z", 20.0);
+  s2qyaw_ = declare_parameter("ekf.sigma2_q_yaw", 150.0);
+  s2qr_ = declare_parameter("ekf.sigma2_q_r", 800.0);
+  s2qd_zc_ = declare_parameter("ekf.sigma2_q_d_zc", 800.0);
 
   auto u_q = [this]() {
     Eigen::Matrix<double, X_N, X_N> q;
@@ -102,10 +104,10 @@ ArmorSolverNode::ArmorSolverNode(const rclcpp::NodeOptions &options)
     return q;
   };
   // update_R - measurement noise covariance matrix
-  r_x_ = declare_parameter("ekf.r_x", 0.5);
-  r_y_ = declare_parameter("ekf.r_y", 0.5);
-  r_z_ = declare_parameter("ekf.r_z", 0.5);
-  r_yaw_ = declare_parameter("ekf.r_yaw", 0.2);
+  r_x_ = declare_parameter("ekf.r_x", 0.05);
+  r_y_ = declare_parameter("ekf.r_y", 0.05);
+  r_z_ = declare_parameter("ekf.r_z", 0.05);
+  r_yaw_ = declare_parameter("ekf.r_yaw", 0.02);
   auto u_r = [this](const Eigen::Matrix<double, Z_N, 1> &z) {
     Eigen::Matrix<double, Z_N, Z_N> r;
     // clang-format off
@@ -182,7 +184,7 @@ void ArmorSolverNode::timerCallback() {
     return;
   }
 
-  // Init message
+  // Init messagepredicted_position_
   rm_interfaces::msg::GimbalCmd control_msg;
 
   // If target never detected
@@ -212,12 +214,15 @@ void ArmorSolverNode::timerCallback() {
       //7.16---
 
     } catch (...) {
+        
+      
       FYT_ERROR("armor_solver", "Something went wrong in solver!");
       control_msg.yaw_diff = 0;
       control_msg.pitch_diff = 0;
       control_msg.distance = -1;
       control_msg.fire_advice = false;
     }
+    
   } else {
     control_msg.yaw_diff = 0;
     control_msg.pitch_diff = 0;
@@ -227,7 +232,7 @@ void ArmorSolverNode::timerCallback() {
     std::lock_guard<std::mutex> lock(point_mutex_);
     camera_plane_point_ = cv::Point2f(-1, -1);
   }
-  std::cout << "yaw: " << control_msg.yaw << "pitch: " << control_msg.pitch << std::endl;
+  std::cout << "yaw: " << control_msg.yaw << std::endl;
   gimbal_pub_->publish(control_msg);
 
   if (debug_mode_) {
@@ -296,7 +301,7 @@ void ArmorSolverNode::armorsCallback(const rm_interfaces::msg::Armors::SharedPtr
     try {
       armor.pose = tf2_buffer_->transform(ps, target_frame_).pose;
     } catch (const tf2::TransformException &ex) {
-      FYT_ERROR("armor_solver", "Transform err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or: {}", ex.what());
+      FYT_ERROR("armor_solver", "Transform error: {}", ex.what());
       return;
     }
   }
@@ -607,7 +612,7 @@ void ArmorSolverNode::PreImageCallback(const sensor_msgs::msg::Image::ConstShare
   }  
 }
 //7.16---
-}  // namespace fyt::auto_aim
+}// namespace fyt::auto_aim
 
 #include "rclcpp_components/register_node_macro.hpp"
 
