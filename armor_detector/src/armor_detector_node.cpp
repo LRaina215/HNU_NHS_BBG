@@ -251,7 +251,7 @@ std::unique_ptr<Detector> ArmorDetectorNode::initDetector(EnemyColor color) {
 
   Detector::ArmorParams a_params = {
       .min_light_ratio = declare_parameter("armor.min_light_ratio", 0.6),
-      .min_small_center_distance =
+      .min_small_center_distance =e
           declare_parameter("armor.min_small_center_distance", 0.8),
       .max_small_center_distance =
           declare_parameter("armor.max_small_center_distance", 3.2),

@@ -3,11 +3,7 @@
     debug: true
     target_frame: odom
     detect_color: 1
-<<<<<<< HEAD
-    binary_thres: 160
-=======
     binary_thres: 90
->>>>>>> a8048d3a0e31d3c689d4b46f5ca9b869874a26fc
 
     use_pca: true # 使用PCA算法矫正灯条的角点
     use_ba: true # 使用BA优化算法求解装甲板的Yaw角 

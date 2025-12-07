@@ -196,11 +196,7 @@ class RobotStatus():
 
             return q
 
-<<<<<<< HEAD
         # real-time publisher api  -- 0911猜測此處將發送最終IMU信息(先設置為步兵狀態 -- 接受C版發送的IMU等數據 -- 最後再傳給C版)
-=======
-        # real-time publisher api
->>>>>>> a8048d3a0e31d3c689d4b46f5ca9b869874a26fc
         if self.name == "infantry":
             self.joint_pub = self.node.create_publisher(
                 sensor_msgs.msg.JointState, '/joint_states', 10)

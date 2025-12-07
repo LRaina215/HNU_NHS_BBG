@@ -19,10 +19,6 @@ Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
-<<<<<<< HEAD
-limitations under the License.
-```
-=======
 limitations under the License. 
 ```
 
@@ -68,4 +64,3 @@ limitations under the License.
 **[已完成代码修改，具体效果待实际运行验证]**
 
 **代码仓库:** git@github.com:LRaina215/HNU_NHS_BBG.git
->>>>>>> a8048d3a0e31d3c689d4b46f5ca9b869874a26fc

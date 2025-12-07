@@ -14,14 +14,11 @@ to be received by other subscribers.
 import math
 from math import pi
 import time
-<<<<<<< HEAD
-=======
 import serial
 
 import os
 import sys
 import subprocess
->>>>>>> a8048d3a0e31d3c689d4b46f5ca9b869874a26fc
 
 import geometry_msgs
 from rclpy.node import Node
@@ -93,16 +90,11 @@ class RobotAPI(Node):
                     f'Open serial port error, try to reopen port:{self.serial_port}, info: {e}')
                 time.sleep(3)
 
-<<<<<<< HEAD
-
-        # 初始化imu数据
-=======
         #init port check param
         self.last_yaw = 0.0
         self.last_pitch = 0.0
         self.last_timestamp = 0.0
         #初始化imu数据
->>>>>>> a8048d3a0e31d3c689d4b46f5ca9b869874a26fc
         self.get_yaw = 0.0
         self.get_pitch = 0.0
         self.get_roll = 0.0
@@ -111,11 +103,7 @@ class RobotAPI(Node):
         self.robot_status = RobotStatus(self.robot_serial.status, self)
         self.robot_serial.realtime_pub = self.robot_status.realtime_callback
         self.robot_serial.serial_done = True
-<<<<<<< HEAD
-        # 创建tf广播器
-=======
         #创建tf广播器
->>>>>>> a8048d3a0e31d3c689d4b46f5ca9b869874a26fc
         self.tf_broadcaster = tf2_ros.TransformBroadcaster(self)
         self.tf_timer = self.create_timer(0.01, self.broadcast_transform)
         # init core api
@@ -123,18 +111,6 @@ class RobotAPI(Node):
         # init expanded api
         self.init_robot()
         # Init robot tx/rx/heartbeat timer
-<<<<<<< HEAD
-        period = 150
-        self.red_blue_timer = self.create_timer(1/period, self.robot_serial.red_blue_info_callback)
-        self.imu_gimbal_timer = self.create_timer(1/period, self.robot_serial.imu_gimbal_callback) ###
-        self.uart_timer = self.create_timer(1/period, self.robot_serial.process)
-        self.uartrx_timer = self.create_timer(
-            1/period, self.robot_serial.rx_function)
-        # 心跳模块
-        # self.heartbeat_timer = self.create_timer(0.5, self.heartbeat)
-        #
-        # self.test_timer = self.create_timer(1/period,self.test_callback)
-=======
         period = 90
         # self.red_blue_timer = self.create_timer(1/period, self.robot_serial.red_blue_info_callback)
         self.imu_gimbal_timer = self.create_timer(1/period, self.robot_serial.imu_gimbal_callback)
@@ -147,7 +123,6 @@ class RobotAPI(Node):
         # self.heartbeat_timer = self.create_timer(0.5, self.heartbeat)
         #
         # self.test_timer = self.create_timer(1,self.test_callback)
->>>>>>> a8048d3a0e31d3c689d4b46f5ca9b869874a26fc
         
         
     def test_callback(self):
@@ -181,15 +156,10 @@ class RobotAPI(Node):
                 depth=20
             )
             
-<<<<<<< HEAD
             # 訂閱純視覺(無IMU)得到的雲台轉動角度信息
             self.gimbal_sub = self.create_subscription(
                 GimbalCmd, 'armor_solver/cmd_gimbal', self.gimbal_callback, qos_profile)
             # 訂閱純視覺下的開火狀態信息
-=======
-            self.gimbal_sub = self.create_subscription(
-                GimbalCmd, 'armor_solver/cmd_gimbal', self.gimbal_callback, qos_profile)
->>>>>>> a8048d3a0e31d3c689d4b46f5ca9b869874a26fc
             self.barrel_sub = self.create_subscription(
                 Shooter, '/core/shooter_api', self.barrel_callback, 10)
             self.imu_tf_sub = self.create_subscription(SerialReceiveData, 'serial/receive', self.getImu_callback, 10)
@@ -228,48 +198,14 @@ class RobotAPI(Node):
 
         # pitch = math.atan2(msg.position.z, math.sqrt(msg.position.x**2 + msg.position.y**2))
         # yaw = math.atan2(msg.position.y, msg.position.x)
-<<<<<<< HEAD
-        old_yaw = msg.yaw
-        old_pitch = msg.pitch
-        mode = 1
-=======
 
         mode = 1
         #self.get_logger().info("recived data gimbal change, position.x: {}, position.y: {}, position.z: {}".format(
          #   msg.position.x, msg.position.y, msg.position.z))
->>>>>>> a8048d3a0e31d3c689d4b46f5ca9b869874a26fc
         if msg.fire_advice == False:
             self.fire_advice = 0.0
         else:
             self.fire_advice = 1.0
-<<<<<<< HEAD
-        if(msg.yaw ==0.0 and msg.pitch ==0.0):
-            self.fire_advice = 0.0
-            self.robot_serial.send_data(
-            "gimbal",
-            #[mode, math.degrees(msg.yaw), math.degrees(msg.pitch), math.degrees(msg.roll),0, 0, 0, 0])  #change by ye add msg.roll
-            [mode, old_yaw, old_pitch, self.fire_advice, 0, 0, 0])
-        else:
-            self.robot_serial.send_data(
-            "gimbal",
-            #[mode, math.degrees(msg.yaw), math.degrees(msg.pitch), math.degrees(msg.roll),0, 0, 0, 0])  #change by ye add msg.roll
-            [mode, msg.yaw, msg.pitch, self.fire_advice, 0, 0, 0])        
-        #self.get_logger().info("recived data gimbal change, position.x: {}, position.y: {}, position.z: {}".format(
-         #   msg.position.x, msg.position.y, msg.position.z))
-    
-
-        #self.get_logger().info(f"sending: {msg.yaw},{msg.pitch},{msg.roll}") #change by ye     add msg.roll
-        #self.get_logger().info(f"sending: {msg.yaw},{msg.pitch},{self.fire_advice}")
-        self.get_logger().info(f"sending: {self.fire_advice}")
-
-    #transform odom info
-    def getImu_callback(self, msg:SerialReceiveData) -> None:
-        self.get_yaw = msg.yaw
-        self.get_pitch = msg.pitch
-        self.get_roll = msg.roll
-        #print(f"received pub info {self.get_yaw}")
-
-=======
 
         self.robot_serial.send_data(
             "gimbal",
@@ -323,7 +259,6 @@ class RobotAPI(Node):
         #     self.last_pitch = current_pitch
         #     self.last_timestamp = current_time
         # #print(f"received pub info {self.get_yaw}")
->>>>>>> a8048d3a0e31d3c689d4b46f5ca9b869874a26fc
 
     def broadcast_transform(self):
         def euler_to_quaternion(roll, pitch, yaw):
@@ -431,8 +366,4 @@ class RobotAPI(Node):
         odom_list.append(msg.pose.orientation.y)
         odom_list.append(msg.pose.orientation.z)
         odom_list.append(msg.pose.orientation.w)
-<<<<<<< HEAD
         self.robot_serial.send_data("odom", odom_list)
-=======
-        self.robot_serial.send_data("odom", odom_list)
->>>>>>> a8048d3a0e31d3c689d4b46f5ca9b869874a26fc

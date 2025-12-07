@@ -1,9 +1,5 @@
 odom2camera:
-<<<<<<< HEAD
-  xyz: "\"0.10 0.0  0.05\""
-=======
   xyz: "\"0.10 0.0  0.02\""
->>>>>>> a8048d3a0e31d3c689d4b46f5ca9b869874a26fc
   rpy: "\"0.0  0.0  0.0\""
 
 # 设置启动参数
@@ -18,8 +14,4 @@ hero_solver: false
 # true: 开启打符 false：关闭打符
 rune: false
 # true: 启动导航tf false：不启动导航tf
-<<<<<<< HEAD
 navigation: false
-=======
-navigation: false
->>>>>>> a8048d3a0e31d3c689d4b46f5ca9b869874a26fc
