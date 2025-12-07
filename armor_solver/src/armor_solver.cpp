@@ -114,7 +114,7 @@ rm_interfaces::msg::GimbalCmd Solver::solve(const rm_interfaces::msg::Target &ta
     (current_time - rclcpp::Time(target.header.stamp)).seconds() + prediction_delay_;
 
   // c. 迭代求解
-  int num_iterations = 3;
+  int num_iterations = 5;
   double flying_time_guess = 0.0;
   Eigen::Vector3d chosen_armor_position; // 我们要求的最终目标点 (odom 系)
   Eigen::Vector3d predicted_center_odom; // 迭代后的中心点 (odom 系)

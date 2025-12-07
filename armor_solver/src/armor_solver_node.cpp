@@ -73,7 +73,7 @@ ArmorSolverNode::ArmorSolverNode(const rclcpp::NodeOptions &options)
   s2qx_ = declare_parameter("ekf.sigma2_q_x", 20.0);
   s2qy_ = declare_parameter("ekf.sigma2_q_y", 20.0);
   s2qz_ = declare_parameter("ekf.sigma2_q_z", 20.0);
-  s2qyaw_ = declare_parameter("ekf.sigma2_q_yaw", 100.0);
+  s2qyaw_ = declare_parameter("ekf.sigma2_q_yaw", 150.0);
   s2qr_ = declare_parameter("ekf.sigma2_q_r", 800.0);
   s2qd_zc_ = declare_parameter("ekf.sigma2_q_d_zc", 800.0);
 
