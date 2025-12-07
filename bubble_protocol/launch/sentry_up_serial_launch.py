@@ -13,7 +13,11 @@ from launch_ros.actions import Node
 args_list = [
     DeclareLaunchArgument(
         'robot_type',
+<<<<<<< HEAD
         default_value='sentry_up', # 选择模式
+=======
+        default_value='sentry_up',
+>>>>>>> a8048d3a0e31d3c689d4b46f5ca9b869874a26fc
         description='Robot name',
         choices=[
             "sentry_up", "sentry_down", "infantry"
@@ -21,7 +25,11 @@ args_list = [
 
     DeclareLaunchArgument(
         'serial_port',
+<<<<<<< HEAD
         default_value='/dev/ttyACM0',
+=======
+        default_value='/dev/ttyrobomaster',
+>>>>>>> a8048d3a0e31d3c689d4b46f5ca9b869874a26fc
         description='Onboard serial port name'
     ),
 ]
@@ -49,4 +57,8 @@ def generate_launch_description():
 #
 #     import time
 #     time.sleep(3)
+<<<<<<< HEAD
 #     os.system(" ash '/home/nv/Desktop/bubble/src/bubble_bringup/script/autostart.sh'")
+=======
+#     os.system("bash '/home/nv/Desktop/bubble/src/bubble_bringup/script/autostart.sh'")
+>>>>>>> a8048d3a0e31d3c689d4b46f5ca9b869874a26fc

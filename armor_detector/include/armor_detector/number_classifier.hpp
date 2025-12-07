@@ -46,7 +46,11 @@ public:
   void classify(const cv::Mat &src, Armor &armor) noexcept;
   // LJH:11.16 添加为GPU并行准备的批处理
   void classify_batch(std::vector<Armor> & armors) noexcept;
+<<<<<<< HEAD
 
+=======
+  
+>>>>>>> a8048d3a0e31d3c689d4b46f5ca9b869874a26fc
   // Erase the ignore classes
   void eraseIgnoreClasses(std::vector<Armor> &armors) noexcept;
 

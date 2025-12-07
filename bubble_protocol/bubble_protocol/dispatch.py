@@ -14,6 +14,14 @@ to be received by other subscribers.
 import math
 from math import pi
 import time
+<<<<<<< HEAD
+=======
+import serial
+
+import os
+import sys
+import subprocess
+>>>>>>> a8048d3a0e31d3c689d4b46f5ca9b869874a26fc
 
 import geometry_msgs
 from rclpy.node import Node
@@ -85,8 +93,16 @@ class RobotAPI(Node):
                     f'Open serial port error, try to reopen port:{self.serial_port}, info: {e}')
                 time.sleep(3)
 
+<<<<<<< HEAD
 
         # 初始化imu数据
+=======
+        #init port check param
+        self.last_yaw = 0.0
+        self.last_pitch = 0.0
+        self.last_timestamp = 0.0
+        #初始化imu数据
+>>>>>>> a8048d3a0e31d3c689d4b46f5ca9b869874a26fc
         self.get_yaw = 0.0
         self.get_pitch = 0.0
         self.get_roll = 0.0
@@ -95,7 +111,11 @@ class RobotAPI(Node):
         self.robot_status = RobotStatus(self.robot_serial.status, self)
         self.robot_serial.realtime_pub = self.robot_status.realtime_callback
         self.robot_serial.serial_done = True
+<<<<<<< HEAD
         # 创建tf广播器
+=======
+        #创建tf广播器
+>>>>>>> a8048d3a0e31d3c689d4b46f5ca9b869874a26fc
         self.tf_broadcaster = tf2_ros.TransformBroadcaster(self)
         self.tf_timer = self.create_timer(0.01, self.broadcast_transform)
         # init core api
@@ -103,6 +123,7 @@ class RobotAPI(Node):
         # init expanded api
         self.init_robot()
         # Init robot tx/rx/heartbeat timer
+<<<<<<< HEAD
         period = 150
         self.red_blue_timer = self.create_timer(1/period, self.robot_serial.red_blue_info_callback)
         self.imu_gimbal_timer = self.create_timer(1/period, self.robot_serial.imu_gimbal_callback) ###
@@ -113,6 +134,20 @@ class RobotAPI(Node):
         # self.heartbeat_timer = self.create_timer(0.5, self.heartbeat)
         #
         # self.test_timer = self.create_timer(1/period,self.test_callback)
+=======
+        period = 90
+        # self.red_blue_timer = self.create_timer(1/period, self.robot_serial.red_blue_info_callback)
+        self.imu_gimbal_timer = self.create_timer(1/period, self.robot_serial.imu_gimbal_callback)
+        self.uart_timer = self.create_timer(1/period, self.robot_serial.process)
+        self.uartrx_timer = self.create_timer(
+            1/period, self.robot_serial.rx_function)
+        
+
+        # 心跳模块
+        # self.heartbeat_timer = self.create_timer(0.5, self.heartbeat)
+        #
+        # self.test_timer = self.create_timer(1,self.test_callback)
+>>>>>>> a8048d3a0e31d3c689d4b46f5ca9b869874a26fc
         
         
     def test_callback(self):
@@ -146,10 +181,15 @@ class RobotAPI(Node):
                 depth=20
             )
             
+<<<<<<< HEAD
             # 訂閱純視覺(無IMU)得到的雲台轉動角度信息
             self.gimbal_sub = self.create_subscription(
                 GimbalCmd, 'armor_solver/cmd_gimbal', self.gimbal_callback, qos_profile)
             # 訂閱純視覺下的開火狀態信息
+=======
+            self.gimbal_sub = self.create_subscription(
+                GimbalCmd, 'armor_solver/cmd_gimbal', self.gimbal_callback, qos_profile)
+>>>>>>> a8048d3a0e31d3c689d4b46f5ca9b869874a26fc
             self.barrel_sub = self.create_subscription(
                 Shooter, '/core/shooter_api', self.barrel_callback, 10)
             self.imu_tf_sub = self.create_subscription(SerialReceiveData, 'serial/receive', self.getImu_callback, 10)
@@ -188,13 +228,21 @@ class RobotAPI(Node):
 
         # pitch = math.atan2(msg.position.z, math.sqrt(msg.position.x**2 + msg.position.y**2))
         # yaw = math.atan2(msg.position.y, msg.position.x)
+<<<<<<< HEAD
         old_yaw = msg.yaw
         old_pitch = msg.pitch
         mode = 1
+=======
+
+        mode = 1
+        #self.get_logger().info("recived data gimbal change, position.x: {}, position.y: {}, position.z: {}".format(
+         #   msg.position.x, msg.position.y, msg.position.z))
+>>>>>>> a8048d3a0e31d3c689d4b46f5ca9b869874a26fc
         if msg.fire_advice == False:
             self.fire_advice = 0.0
         else:
             self.fire_advice = 1.0
+<<<<<<< HEAD
         if(msg.yaw ==0.0 and msg.pitch ==0.0):
             self.fire_advice = 0.0
             self.robot_serial.send_data(
@@ -221,6 +269,61 @@ class RobotAPI(Node):
         self.get_roll = msg.roll
         #print(f"received pub info {self.get_yaw}")
 
+=======
+
+        self.robot_serial.send_data(
+            "gimbal",
+            [mode, msg.yaw-10, msg.pitch, self.fire_advice, 0, 0, 0])
+        # self.get_logger().info(f"sending: {msg.yaw},{msg.pitch},{self.fire_advice}")
+
+    #transform odom info
+    def getImu_callback(self, msg: SerialReceiveData) -> None:
+        self.get_yaw = msg.yaw
+        self.get_pitch = msg.pitch
+        self.get_roll = msg.roll
+
+        # # 判断是否需要重启串口
+        # current_time = time.time()
+        # current_yaw = self.get_yaw
+        # current_pitch = self.get_pitch
+
+        # if current_yaw == self.last_yaw and current_pitch == self.last_pitch:
+        #     time_diff = current_time - self.last_timestamp
+        #     if time_diff >= 1.0:
+        #         self.get_logger().warn("IMU data unchanged for 1s. Restarting serial port...")
+        #         # try:
+        #         #     # 使用系统命令安全重启串口（需配置免密 sudo）
+        #         #     subprocess.run(
+        #         #         ["sudo", "sh", "-c", "echo 0 > /sys/bus/usb/devices/usb3/3-1/authorized"],  # 示例：禁用设备
+        #         #         check=True
+        #         #     )
+        #         #     time.sleep(2)  # 等待设备重新枚举
+        #         #     subprocess.run(
+        #         #         ["sudo", "sh", "-c", "echo 1 > /sys/bus/usb/devices/usb3/3-1/authorized"],  # 示例：启用设备
+        #         #         check=True
+        #         #     )
+        #         #     time.sleep(2)
+        #         #     # 重新初始化串口（无需手动 open，依赖硬件自动连接）
+        #         #     self.robot_serial.init_device(
+        #         #         port="/dev/ttyrobomaster",
+        #         #         baudrate=self.robot_serial.baudrate,
+        #         #         timeout_T=0
+        #         #     )
+                    
+        #         #     self.last_timestamp = time.time()
+        #         #     self.get_logger().info("Serial port restarted via hardware reset.")
+                    
+        #         # except subprocess.CalledProcessError as e:
+        #         #     self.get_logger().error(f"Hardware reset failed: {e}")
+        #         # except Exception as e:
+        #         #     self.get_logger().error(f"Serial init error: {e}")
+        # else:
+        #     # 更新最新数据和时间戳
+        #     self.last_yaw = current_yaw
+        #     self.last_pitch = current_pitch
+        #     self.last_timestamp = current_time
+        # #print(f"received pub info {self.get_yaw}")
+>>>>>>> a8048d3a0e31d3c689d4b46f5ca9b869874a26fc
 
     def broadcast_transform(self):
         def euler_to_quaternion(roll, pitch, yaw):
@@ -328,4 +431,8 @@ class RobotAPI(Node):
         odom_list.append(msg.pose.orientation.y)
         odom_list.append(msg.pose.orientation.z)
         odom_list.append(msg.pose.orientation.w)
+<<<<<<< HEAD
         self.robot_serial.send_data("odom", odom_list)
+=======
+        self.robot_serial.send_data("odom", odom_list)
+>>>>>>> a8048d3a0e31d3c689d4b46f5ca9b869874a26fc

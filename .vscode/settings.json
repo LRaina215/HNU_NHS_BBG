@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 {
     "python.autoComplete.extraPaths": [
         "/opt/ros/foxy/lib/python3.8/site-packages"
@@ -5,4 +6,25 @@
     "python.analysis.extraPaths": [
         "/opt/ros/foxy/lib/python3.8/site-packages"
     ]
+=======
+{
+    "python.autoComplete.extraPaths": [
+        "/home/robomaster/zxzzb/install/rmctrl_msgs/lib/python3.8/site-packages",
+        "/home/robomaster/zxzzb/install/game_msgs/lib/python3.8/site-packages",
+        "/home/robomaster/zxzzb/install/bubble_protocol/lib/python3.8/site-packages",
+        "/home/robomaster/zxzzb/install/bubble_decision/lib/python3.8/site-packages",
+        "/home/robomaster/zxzzb/install/bboxes_ex_msgs/lib/python3.8/site-packages",
+        "/home/robomaster/zxzzb/install/auto_aim_interfaces/lib/python3.8/site-packages",
+        "/opt/ros/galactic/lib/python3.8/site-packages"
+    ],
+    "python.analysis.extraPaths": [
+        "/home/robomaster/zxzzb/install/rmctrl_msgs/lib/python3.8/site-packages",
+        "/home/robomaster/zxzzb/install/game_msgs/lib/python3.8/site-packages",
+        "/home/robomaster/zxzzb/install/bubble_protocol/lib/python3.8/site-packages",
+        "/home/robomaster/zxzzb/install/bubble_decision/lib/python3.8/site-packages",
+        "/home/robomaster/zxzzb/install/bboxes_ex_msgs/lib/python3.8/site-packages",
+        "/home/robomaster/zxzzb/install/auto_aim_interfaces/lib/python3.8/site-packages",
+        "/opt/ros/galactic/lib/python3.8/site-packages"
+    ]
+>>>>>>> a8048d3a0e31d3c689d4b46f5ca9b869874a26fc
 }

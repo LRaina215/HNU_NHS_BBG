@@ -32,7 +32,11 @@
   <depend>class_loader</depend>
   <depend>image_transport</depend>
   <depend>cv_bridge</depend>
+<<<<<<< HEAD
   <!--<depend>tf2_eigen</depend>-->
+=======
+
+>>>>>>> a8048d3a0e31d3c689d4b46f5ca9b869874a26fc
 
   <test_depend>ament_lint_auto</test_depend>
   <test_depend>ament_lint_common</test_depend>

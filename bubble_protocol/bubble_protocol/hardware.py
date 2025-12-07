@@ -42,8 +42,16 @@ class RobotSerial(serial.Serial, Node):
             Class return a serial port object.
         '''
         Node.__init__(self, "enemy_color")
+<<<<<<< HEAD
         self.RB_info_pub_ = self.create_publisher(Int32, "red_blue_info", 10)
         self.Imu_gimbal_pub_ = self.create_publisher(SerialReceiveData, "serial/receive", 10) ###
+=======
+
+        self.init_device(port, baudrate, timeout_T)  # 初始化时保存参数
+
+        # self.RB_info_pub_ = self.create_publisher(Int32, "red_blue_info", 10)
+        self.Imu_gimbal_pub_ = self.create_publisher(SerialReceiveData, "serial/receive", 10)
+>>>>>>> a8048d3a0e31d3c689d4b46f5ca9b869874a26fc
         self.init_device(port, baudrate, timeout_T)
         self.init_protocol(name)
         self.tx_thread = threading.Thread(target=self.run_tx_thread)
@@ -63,6 +71,19 @@ class RobotSerial(serial.Serial, Node):
         self.check_serial_timer.daemon = True
         self.check_serial_timer.start()
     
+<<<<<<< HEAD
+=======
+    def init_device(self, port: str, baudrate: int, timeout_T: int) -> None:
+        super().__init__(port=port, baudrate=baudrate, timeout=timeout_T)
+        # 保存参数到成员变量
+        self.port_name = port
+        self.baudrate = baudrate
+        self.timeout_T = timeout_T
+        self.rx_count = 0
+        self.tx_count = 0
+        self.reset_rx_buffer()
+    
+>>>>>>> a8048d3a0e31d3c689d4b46f5ca9b869874a26fc
     def run_tx_thread(self):
         '''threading to continuously process the transmit buffer'''
         while True:
@@ -199,9 +220,13 @@ class RobotSerial(serial.Serial, Node):
                     self.rx_status = 6
                 else:  # check fail
                     #print("check fail")
+<<<<<<< HEAD
                     #debug
                     self.rx_status = 6
                     # 由于debug故注释
+=======
+                    self.rx_status = 6
+>>>>>>> a8048d3a0e31d3c689d4b46f5ca9b869874a26fc
                     self.reset_rx_buffer()
             elif self.rx_status == 6:  # wait ADD_CHECK
                 if rx_byte == self.current_packet.info[ADD_CHECK_POSE]:
@@ -276,9 +301,17 @@ class RobotSerial(serial.Serial, Node):
                 #     self.red_blue_msg = 0
                 # else:
                 self.red_blue_msg = int(int(unpack_info[4])/1000)
+<<<<<<< HEAD
                 self.imu_yaw = int(int(unpack_info[1])/1000)
                 self.imu_pitch = int(int(unpack_info[2])/1000)
                 self.imu_roll = int(int(unpack_info[3])/1000)
+=======
+                self.imu_yaw = int(unpack_info[1])/1000.0
+                self.imu_pitch = int(unpack_info[2])/1000.0
+                self.imu_roll = int(unpack_info[3])/1000.0
+
+
+>>>>>>> a8048d3a0e31d3c689d4b46f5ca9b869874a26fc
                 #print(self.red_blue_msg)
                 #set_param('/armor_detector','detect_color',int(unpack_info[4]/1000))#change 11.24
                 #set_parameter(rclpy.Parameter('detect_color', int(self.unpack_info[4] / 1000)))
@@ -308,9 +341,14 @@ class RobotSerial(serial.Serial, Node):
         #else:
             #self.get_logger().warn("Red-blue message is None. No message published.")
 
+<<<<<<< HEAD
     # 攫取C板的IMU數據
     def imu_gimbal_callback(self):
         msg = SerialReceiveData() # 统一数据格式
+=======
+    def imu_gimbal_callback(self):
+        msg = SerialReceiveData()
+>>>>>>> a8048d3a0e31d3c689d4b46f5ca9b869874a26fc
         msg.yaw = float(self.imu_yaw)
         msg.pitch = float(self.imu_pitch)
         msg.roll = float(self.imu_roll)

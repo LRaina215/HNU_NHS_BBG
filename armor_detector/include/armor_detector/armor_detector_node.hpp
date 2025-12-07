@@ -60,13 +60,22 @@ namespace fyt::auto_aim {
 class ArmorDetectorNode : public rclcpp::Node {
 public:
   ArmorDetectorNode(const rclcpp::NodeOptions &options);
+  //Init enemy color
+  EnemyColor detect_color_;
+  struct colorStruct
+  {
+    EnemyColor detect_color;
+    /* data */
+  };
+  colorStruct enemy_color_;
+  
 
 private:
   void imageCallback(const sensor_msgs::msg::Image::ConstSharedPtr img_msg);
   // void targetCallback(const rm_interfaces::msg::Target::SharedPtr
   // target_msg);
 
-  std::unique_ptr<Detector> initDetector();
+  std::unique_ptr<Detector> initDetector(EnemyColor color);
 
   std::vector<Armor>
   detectArmors(const sensor_msgs::msg::Image::ConstSharedPtr &img_msg);
@@ -94,8 +103,6 @@ private:
   // Armor Detector
   std::unique_ptr<Detector> detector_;
 
-  //Init enemy color
-  EnemyColor detect_color_ = EnemyColor::RED;
 
   // Pose Solver
   bool use_ba_;
@@ -147,9 +154,6 @@ private:
   image_transport::Publisher binary_img_pub_;
   image_transport::Publisher number_img_pub_;
   image_transport::Publisher result_img_pub_;
-
-  // red_blue_color
-  int color_;
 };
 
 } // namespace fyt::auto_aim
