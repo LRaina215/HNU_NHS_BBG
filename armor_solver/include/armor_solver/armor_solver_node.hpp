@@ -65,17 +65,10 @@ private:
 
   void publishMarkers(const rm_interfaces::msg::Target &target_msg,
                       const rm_interfaces::msg::GimbalCmd &gimbal_cmd) noexcept;
-<<<<<<< HEAD
-
-
-  void setModeCallback(const std::shared_ptr<rm_interfaces::srv::SetMode::Request> request,
-                       std::shared_ptr<rm_interfaces::srv::SetMode::Response> response);
-=======
                       
   void setModeCallback(const std::shared_ptr<rm_interfaces::srv::SetMode::Request> request,
                        std::shared_ptr<rm_interfaces::srv::SetMode::Response> response);
 
->>>>>>> a8048d3a0e31d3c689d4b46f5ca9b869874a26fc
   void processImage(const cv::Mat &image, const std_msgs::msg::Header &header);
 
   cv::Point2f project3DTo2D(const Eigen::Vector3d& point3d);
@@ -83,12 +76,7 @@ private:
   cv::Point2f PointConvert (geometry_msgs::msg::Point odom_pre_point);
 
   void PreImageCallback(const sensor_msgs::msg::Image::ConstSharedPtr &image);
-<<<<<<< HEAD
-
-
-=======
   
->>>>>>> a8048d3a0e31d3c689d4b46f5ca9b869874a26fc
   bool debug_mode_;
 
   // Heartbeat
@@ -107,13 +95,8 @@ private:
   cv::Mat dist_coeffs_;
   cv::Point2f camera_plane_point_;
   std::mutex point_mutex_;
-<<<<<<< HEAD
-  // Armor Solver
-  image_transport::ImageTransport it_;
-=======
 
   // Armor Solver
->>>>>>> a8048d3a0e31d3c689d4b46f5ca9b869874a26fc
   std::unique_ptr<Solver> solver_;
   std::vector<cv::Point3d> object_points;
   std::vector<cv::Point2d> image_points;
@@ -152,12 +135,6 @@ private:
 
   image_transport::Publisher vis_predict_image_pub_;
   image_transport::Subscriber result_image_sub_;
-<<<<<<< HEAD
-
-
-
-=======
->>>>>>> a8048d3a0e31d3c689d4b46f5ca9b869874a26fc
 };
 
 }  // namespace fyt::auto_aim

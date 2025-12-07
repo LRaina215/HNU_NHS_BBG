@@ -296,7 +296,7 @@ void ArmorSolverNode::armorsCallback(const rm_interfaces::msg::Armors::SharedPtr
     try {
       armor.pose = tf2_buffer_->transform(ps, target_frame_).pose;
     } catch (const tf2::TransformException &ex) {
-      FYT_ERROR("armor_solver", "Transform error: {}", ex.what());
+      FYT_ERROR("armor_solver", "Transform err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or: {}", ex.what());
       return;
     }
   }
