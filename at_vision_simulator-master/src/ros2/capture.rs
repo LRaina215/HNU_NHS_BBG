@@ -194,7 +194,7 @@ fn receive_image_from_buffer(
                                 .chunks(aligned_row_bytes)
                                 .take(height as usize)
                                 .flat_map(|row| &row[..row_bytes.min(row.len())])
-                                .cloned()
+                                .cloned0()
                                 .collect();
                         }
                         let mut bevy_image =

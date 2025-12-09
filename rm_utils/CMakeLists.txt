@@ -11,7 +11,7 @@ if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
 endif()
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
-set(OpenCV_DIR "/usr/local/opencv4.5.4/lib/cmake/opencv4")
+set(OpenCV_DIR "/usr/local/opencv4.5/lib/cmake/opencv4")
 # find package
 find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)

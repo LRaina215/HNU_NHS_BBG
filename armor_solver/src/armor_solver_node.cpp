@@ -53,8 +53,8 @@ ArmorSolverNode::ArmorSolverNode(const rclcpp::NodeOptions &options)
                 image_transport::create_publisher(this, "armor_solver/pre_aim_img");
 
   camera_matrix_ = (cv::Mat_<double>(3, 3) <<
-                      1826.13648271031,0,742.320921588837,
-                      0,1826.07366735623,361.122778006025,
+                      1826.13648271031,0,360.320921588837,
+                      0,1826.07366735623,320.122778006025,
                       0,0,1);
   dist_coeffs_ = (cv::Mat_<double>(1, 5) << -0.0602940050417836,0.0436806755829738, 0, 0, 0);
   //Use for debugging
