@@ -38,7 +38,7 @@ limitations under the License.
 - **收益：** 极大提升了多目标识别时的 GPU 利用率和帧率。
 - **控制：** 通过 `CMakeLists.txt` 中的 `ENABLE_GPU_BATCHING` 宏来启停此功能。
 
-​	如果你以后想关闭它进行对比测试，不需要改代码，只需要在编译时输入： `colcon build --cmake-args -DENABLE_GPU_BATCHING=OFF`
+​	**如果你以后想关闭它进行对比测试，不需要改代码，只需要在编译时输入： `colcon build --cmake-args -DENABLE_GPU_BATCHING=OFF`**
 
 
 
@@ -85,7 +85,10 @@ limitations under the License.
 
 
 
-#### 6. 代码重构：移除硬编码内参，适配 ROS 2 标准 CameraInfo (2025-12-21) - **问题 (Hardcoded Intrinsics)：**  之前的版本中，相机内参矩阵 ($K$) 和畸变系数 ($D$) 被硬编码在 `armor_detector` 的源码中。这导致每当调整相机焦距、更换镜头或修改分辨率时，都必须手动修改 C++ 代码并重新编译，极不灵活且容易出错。 - **优化 (Auto-Subscription)：**
+#### 6. 代码重构：移除硬编码内参，适配 ROS 2 标准 CameraInfo (2025-12-21) 
+
+- **问题 (Hardcoded Intrinsics)：**  之前的版本中，相机内参矩阵 ($K$) 和畸变系数 ($D$) 被硬编码在 `armor_detector` 的源码中。这导致每当调整相机焦距、更换镜头或修改分辨率时，都必须手动修改 C++ 代码并重新编译，极不灵活且容易出错。 
+- **优化 (Auto-Subscription)：**
 
 1. 在 `ArmorDetectorNode` 初始化逻辑中，删除了硬编码的 `cv::Mat` 参数。  
 
@@ -103,9 +106,9 @@ limitations under the License.
 
   
 
-#### 8. 稳定性优化：移除预处理阶段的 CPU 并行 (2025-12-21) - 
+#### 8. 稳定性优化：移除预处理阶段的 CPU 并行 (2025-12-21) （没有完全移除，两种代码都进行了保留）
 
-**背景：** 在引入 GPU Batching 时，为了追求极致性能，曾尝试使用 `std::execution::par` 对装甲板的预处理（如 `extractNumber` 提取数字图、`correctCorners` 角点修正）进行 CPU 多线程并行。
+- **背景：** 在引入 GPU Batching 时，为了追求极致性能，曾尝试使用 `std::execution::par` 对装甲板的预处理（如 `extractNumber` 提取数字图、`correctCorners` 角点修正）进行 CPU 多线程并行。
 
 - **问题：** 经过调试发现，这些预处理操作计算量极小（"极其轻量"），但频繁开启多线程引入了**线程安全隐患**和额外的上下文切换开销，导致程序偶发不稳定。 
 
