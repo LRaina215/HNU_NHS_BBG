@@ -1,9 +1,0 @@
-/target
-*.stp
-.DS_Store
-assets_old
-assets/*.blend
-assets/*.blend1
-.idea
-screenshot-*.png
-dataset
