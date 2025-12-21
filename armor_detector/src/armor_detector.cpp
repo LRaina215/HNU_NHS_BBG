@@ -51,7 +51,7 @@ std::vector<Armor> Detector::detect(const cv::Mat &input) noexcept {
   if (!armors_.empty() && classifier != nullptr) {
     // 11.16 LJH: 添加GPU并行运算功能
     #ifdef ENABLE_GPU_BATCHING
-    FYT_INFO("Detector", "Using GPU Batching Path"); // 添加日志
+    // FYT_INFO("Detector", "Using GPU Batching Path"); // 添加日志
     // 4. & 6. 在 CPU 上并行执行所有“预处理”工作
     std::for_each(
       std::execution::par, armors_.begin(), armors_.end(), [this, &input](Armor &armor) {
@@ -68,6 +68,24 @@ std::vector<Armor> Detector::detect(const cv::Mat &input) noexcept {
 
     // 5. 在 GPU 上执行“一次性”批量分类
     classifier->classify_batch(armors_);
+
+    // // 12.21 -- ljh
+    // // 移除 std::execution::par，改为普通的 for_each 或 for 循环
+    // // 因为这几个操作极其轻量，且容易引发线程安全问题
+    // std::for_each(armors_.begin(), armors_.end(), [this, &input](Armor &armor) {
+    //     // 4. 提取数字图像 (CPU 串行安全执行)
+    //     armor.number_img = classifier->extractNumber(input, armor);
+
+    //     // 6. 校正角点 (CPU 串行安全执行)
+    //     if (corner_corrector != nullptr) {
+    //       corner_corrector->correctCorners(armor, gray_img_);
+    //     }
+    //   });
+
+    // // 5. 所有的预处理安全完成后，再统一发送给 GPU 进行并行推理
+    // // 这才是性能提升的大头，且是线程安全的
+    // classifier->classify_batch(armors_);
+
     #else
     // Parallel processing
     std::for_each(

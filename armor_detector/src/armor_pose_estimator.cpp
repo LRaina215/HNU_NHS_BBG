@@ -159,7 +159,7 @@ void ArmorPoseEstimator::sortPnPResult(const Armor &armor,
       (angle < 0 && rpy1[2] < 0 && rpy2[2] > 0)) {
     std::swap(rvec1, rvec2);
     std::swap(tvec1, tvec2);
-    FYT_DEBUG("armor_detector", "PnP Solution 2 Selected");
+    // FYT_DEBUG("armor_detector", "PnP Solution 2 Selected");
   }
 }
 

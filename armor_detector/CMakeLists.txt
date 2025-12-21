@@ -5,6 +5,16 @@ project(armor_detector)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+# ==================== 新增部分 ====================
+# 定义一个选项，默认名为 ENABLE_GPU_BATCHING，默认值为 ON (开启)
+option(ENABLE_GPU_BATCHING "Enable GPU batching for number classification" ON)
+
+if(ENABLE_GPU_BATCHING)
+    message(STATUS "GPU Batching Enabled!")
+    add_definitions(-DENABLE_GPU_BATCHING)
+endif()
+# =================================================
+
 ## By adding -Wall and -Werror, the compiler does not ignore warnings anymore,
 ## enforcing cleaner code.
 add_definitions(-Wall -Werror)
@@ -23,7 +33,7 @@ set(EXTERNAL_INCLUDE_DIRS ${G2O_INCLUDE_DIR})
 set(EXTERNAL_LIBS ${G2O_LIBRARIES})
 set(OpenCV_DIR "/usr/local/opencv4.5.4/lib/cmake/opencv4")
 find_package(ament_cmake_auto REQUIRED)
-find_package(OpenCV REQUIRED)
+find_package(OpenCV 4.5.4 REQUIRED)
 
 find_package(TBB REQUIRED COMPONENTS tbb)
 find_package(G2O REQUIRED)

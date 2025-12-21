@@ -305,7 +305,7 @@ std::vector<Armor> ArmorDetectorNode::detectArmors(
   auto final_time = this->now();
   auto latency = (final_time - img_msg->header.stamp).seconds() * 1000;
 
-  RCLCPP_INFO(this->get_logger(), "Latency: %d ms", int(latency));
+  // RCLCPP_INFO(this->get_logger(), "Latency: %d ms", int(latency));
 
   // Publish debug info
   if (debug_) {

@@ -136,8 +136,9 @@ private:
 
   image_transport::Publisher vis_predict_image_pub_;
   image_transport::Subscriber result_image_sub_;
-
-
+  // 12.21
+  rclcpp::Subscription<sensor_msgs::msg::CameraInfo>::SharedPtr cam_info_sub_;
+  void cameraInfoCallback(const sensor_msgs::msg::CameraInfo::SharedPtr msg);
 
 };
 

@@ -51,13 +51,14 @@ ArmorSolverNode::ArmorSolverNode(const rclcpp::NodeOptions &options)
   result_image_sub_ = it_.subscribe("armor_detector/result_img",1,std::bind(&ArmorSolverNode::PreImageCallback, this, std::placeholders::_1));
   vis_predict_image_pub_ =  
                 image_transport::create_publisher(this, "armor_solver/pre_aim_img");
+  // 12.21
+  cam_info_sub_ = this->create_subscription<sensor_msgs::msg::CameraInfo>(
+      "camera_info", rclcpp::SensorDataQoS(),
+      std::bind(&ArmorSolverNode::cameraInfoCallback, this, std::placeholders::_1));
 
-  camera_matrix_ = (cv::Mat_<double>(3, 3) <<
-                      1826.13648271031,0,360.320921588837,
-                      0,1826.07366735623,320.122778006025,
-                      0,0,1);
-  dist_coeffs_ = (cv::Mat_<double>(1, 5) << -0.0602940050417836,0.0436806755829738, 0, 0, 0);
-  //Use for debugging
+  camera_matrix_ = cv::Mat();
+  dist_coeffs_ = cv::Mat();
+
   pre_target_point_pub_ = this->create_publisher<geometry_msgs::msg::Point>("armor_solver/pre_target_debug_point", 10);
   //7.16---
 
@@ -240,6 +241,21 @@ void ArmorSolverNode::timerCallback() {
   }
 }
 
+// 12.21
+void ArmorSolverNode::cameraInfoCallback(const sensor_msgs::msg::CameraInfo::SharedPtr msg) {
+  // 加锁，防止和预测线程冲突
+  std::lock_guard<std::mutex> lock(point_mutex_);
+
+  // 将 ROS 的 array 转换为 OpenCV 的 Mat
+  camera_matrix_ = cv::Mat(3, 3, CV_64F, const_cast<double*>(msg->k.data())).clone();
+  dist_coeffs_ = cv::Mat(1, 5, CV_64F, const_cast<double*>(msg->d.data())).clone();
+
+  // 如果只需要读取一次，可以在这里销毁订阅者释放资源 (可选)
+  cam_info_sub_.reset(); 
+  
+  // FYT_INFO("armor_solver", "收到相机内参，已自动更新！");
+}
+
 void ArmorSolverNode::initMarkers() noexcept {
   // Visualization Marker Publisher
   // See http://wiki.ros.org/rviz/DisplayTypes/Marker
@@ -295,6 +311,13 @@ void ArmorSolverNode::armorsCallback(const rm_interfaces::msg::Armors::SharedPtr
 
   // Tranform armor position from image frame to world coordinate
   for (auto &armor : armors_msg->armors) {
+
+    // 12.21
+    if (std::isnan(armor.pose.position.x) || std::isnan(armor.pose.position.y) || std::isnan(armor.pose.position.z)) {
+        FYT_WARN("armor_solver", "Received NaN armor pose from detector! Skipping.");
+        continue; 
+    }
+
     geometry_msgs::msg::PoseStamped ps;
     ps.header = armors_msg->header;
     ps.pose = armor.pose;
@@ -512,6 +535,17 @@ void ArmorSolverNode::setModeCallback(
 //7.16---
 cv::Point2f ArmorSolverNode::PointConvert (geometry_msgs::msg::Point odom_3d_point)
 {
+  // [新增] 安全检查：如果内参还没收到，直接返回无效点
+  if (camera_matrix_.empty() || dist_coeffs_.empty()) {
+    // 可以在这里打印一次警告，用 static bool 控制频率
+    static bool warned = false;
+    if (!warned) {
+      FYT_WARN("armor_solver", "Waitting for camera_info ... cannot reflect pre-points.");
+      warned = true;
+    }
+    return cv::Point2f(-1, -1);
+  }
+
   try {
   //convert to camera
   geometry_msgs::msg::PointStamped odom_point_stamped;
@@ -612,6 +646,7 @@ void ArmorSolverNode::PreImageCallback(const sensor_msgs::msg::Image::ConstShare
   }  
 }
 //7.16---
+
 }// namespace fyt::auto_aim
 
 #include "rclcpp_components/register_node_macro.hpp"
