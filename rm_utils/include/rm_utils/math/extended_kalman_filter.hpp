@@ -27,15 +27,17 @@
 // ceres
 #include <ceres/jet.h>
 
-namespace fyt {
+namespace fyt
+{
 
 // Extended Kalman Filter with auto differentiation
 // N_X: state vector dimension
 // N_Z: measurement vector dimension
 // PredicFunc: process nonlinear vector function
 // MeasureFunc: observation nonlinear vector function
-template <int N_X, int N_Z, class PredicFunc, class MeasureFunc>
-class ExtendedKalmanFilter {
+template<int N_X, int N_Z, class PredicFunc, class MeasureFunc>
+class ExtendedKalmanFilter
+{
 public:
   ExtendedKalmanFilter() = default;
 
@@ -47,27 +49,30 @@ public:
   using MatrixZ1 = Eigen::Matrix<double, N_Z, 1>;
 
   using UpdateQFunc = std::function<MatrixXX()>;
-  using UpdateRFunc = std::function<MatrixZZ(const MatrixZ1 &z)>;
+  using UpdateRFunc = std::function<MatrixZZ(const MatrixZ1 & z)>;
 
-  explicit ExtendedKalmanFilter(const PredicFunc &f,
-                                const MeasureFunc &h,
-                                const UpdateQFunc &u_q,
-                                const UpdateRFunc &u_r,
-                                const MatrixXX &P0) noexcept
-  : f(f), h(h), update_Q(u_q), update_R(u_r), P_post(P0) {
+  explicit ExtendedKalmanFilter(
+    const PredicFunc & f,
+    const MeasureFunc & h,
+    const UpdateQFunc & u_q,
+    const UpdateRFunc & u_r,
+    const MatrixXX & P0) noexcept
+  : f(f), h(h), update_Q(u_q), update_R(u_r), P_post(P0)
+  {
     F = MatrixXX::Zero();
     H = MatrixZX::Zero();
   }
 
   // Set the initial state
-  void setState(const MatrixX1 &x0) noexcept { x_post = x0; }
+  void setState(const MatrixX1 & x0) noexcept {x_post = x0;}
 
-  void setPredictFunc(const PredicFunc &f) noexcept { this->f = f; }
+  void setPredictFunc(const PredicFunc & f) noexcept {this->f = f;}
 
-  void setMeasureFunc(const MeasureFunc &h) noexcept { this->h = h; }
+  void setMeasureFunc(const MeasureFunc & h) noexcept {this->h = h;}
 
   // Compute a predicted state
-  MatrixX1 predict() noexcept {
+  MatrixX1 predict() noexcept
+  {
     ceres::Jet<double, N_X> x_e_jet[N_X];
     for (int i = 0; i < N_X; ++i) {
       x_e_jet[i].a = x_post[i];
@@ -90,7 +95,8 @@ public:
   }
 
   // Update the estimated state based on measurement
-  MatrixX1 update(const MatrixZ1 &z) noexcept {
+  MatrixX1 update(const MatrixZ1 & z) noexcept
+  {
     ceres::Jet<double, N_X> x_p_jet[N_X];
     for (int i = 0; i < N_X; i++) {
       x_p_jet[i].a = x_pri[i];

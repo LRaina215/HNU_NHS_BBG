@@ -27,18 +27,19 @@
 #include <fmt/color.h>
 #include <fmt/core.h>
 
-namespace fyt::logger {
+namespace fyt::logger
+{
 
-enum class LogLevel : std::uint8_t { DEBUG, INFO, WARN, ERROR, FATAL };
+enum class LogLevel : std::uint8_t {DEBUG, INFO, WARN, ERROR, FATAL};
 
-constexpr const char *LogNameTable[5] = {"DEBUG", "INFO", "WARN", "ERROR", "FATAL"};
+constexpr const char * LogNameTable[5] = {"DEBUG", "INFO", "WARN", "ERROR", "FATAL"};
 
 // DEBUG = gray, INFO = white, WARN = yellow, ERROR = red, FATAL = blue
-constexpr const char *LogColorTable[5] = {"<font color=\"#9B9B9B\">{}</font>",
-                                          "<font color=\"#FFFFFF\">{}</font>",
-                                          "<font color=\"#FFFF00\">{}</font>",
-                                          "<font color=\"#FF0000\">{}</font>",
-                                          "<font color=\"#0000FF\">{}</font>"};
+constexpr const char * LogColorTable[5] = {"<font color=\"#9B9B9B\">{}</font>",
+  "<font color=\"#FFFFFF\">{}</font>",
+  "<font color=\"#FFFF00\">{}</font>",
+  "<font color=\"#FF0000\">{}</font>",
+  "<font color=\"#0000FF\">{}</font>"};
 
 constexpr fmt::color LogFmtColorTable[5] = {
   fmt::color::gray, fmt::color::white, fmt::color::yellow, fmt::color::red, fmt::color::blue};
@@ -53,4 +54,3 @@ using LogOptions = unsigned char;
 
 }  // namespace fyt::logger
 #endif  // RM_UTILS_LOGGER_TYPES_HPP_
- 

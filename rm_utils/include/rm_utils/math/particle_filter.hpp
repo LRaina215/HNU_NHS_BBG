@@ -19,11 +19,13 @@
 #include <random>
 #include <set>
 
-namespace fyt {
+namespace fyt
+{
 
-template <int N_X, int N_Z, int P_NUM>
+template<int N_X, int N_Z, int P_NUM>
 // 粒子滤波器，目前实现的版本效率不高，可以考虑使用OpenMP等并行计算库进行优化
-class ParticleFilter {
+class ParticleFilter
+{
   using Particles = Eigen::Matrix<double, N_X, P_NUM>;
   using Weights = Eigen::Matrix<double, P_NUM, 1>;
   using VectorX = Eigen::Matrix<double, N_X, 1>;
@@ -34,26 +36,30 @@ class ParticleFilter {
   using PredictFunc = std::function<VectorX(const VectorX &)>;
   using MeasureFunc = std::function<VectorZ(const VectorX &)>;
   using UpdateQFunc = std::function<MatrixXX()>;
-  using UpdateRFunc = std::function<MatrixZZ(const VectorZ &z)>;
+  using UpdateRFunc = std::function<MatrixZZ(const VectorZ & z)>;
 
 public:
-  explicit ParticleFilter(const PredictFunc &f,
-                          const MeasureFunc &h,
-                          const UpdateQFunc &u_q,
-                          const UpdateRFunc &u_r) noexcept
-  : f(f), h(h), update_q(u_q), update_r(u_r) {
+  explicit ParticleFilter(
+    const PredictFunc & f,
+    const MeasureFunc & h,
+    const UpdateQFunc & u_q,
+    const UpdateRFunc & u_r) noexcept
+  : f(f), h(h), update_q(u_q), update_r(u_r)
+  {
     particles_ = Particles::Zero();
     weights_ = Weights::Zero();
   }
 
-  void initState(const VectorX &x0) noexcept {
+  void initState(const VectorX & x0) noexcept
+  {
     auto noise = generateRandomNoise(update_q());
 
     particles_ = x0.replicate(1, P_NUM) + noise;
     weights_ = Weights::Ones() / P_NUM;
   }
 
-  void setDim(size_t dim, double val) {
+  void setDim(size_t dim, double val)
+  {
     std::random_device rd;
     auto gen = std::default_random_engine(rd());
     auto process_cov = update_q();
@@ -64,7 +70,8 @@ public:
     }
   }
 
-  VectorX predict() {
+  VectorX predict()
+  {
     Particles pred_particles = Particles::Zero();
     // 根据状态转移方程进行预测
     for (int i = 0; i < P_NUM; i++) {
@@ -74,7 +81,8 @@ public:
     return particles_ * weights_;
   }
 
-  VectorX update(const VectorZ &z) {
+  VectorX update(const VectorZ & z)
+  {
     Weights w = Weights::Zero();
     MatrixZZ measurement_cov = update_r(z);
 
@@ -100,7 +108,8 @@ public:
   }
 
 private:
-  void resample() {
+  void resample()
+  {
     Particles new_particles = Particles::Zero();
     Weights new_weights = Weights::Zero();
     Particles noise = generateRandomNoise(update_q());
@@ -129,10 +138,12 @@ private:
     weights_ = new_weights;
   }
 
-  template <int dim>
-  double gaussainLikelyhood(const Eigen::Matrix<double, dim, 1> &x,
-                            const Eigen::Matrix<double, dim, 1> &mean,
-                            const Eigen::Matrix<double, dim, dim> &cov) {
+  template<int dim>
+  double gaussainLikelyhood(
+    const Eigen::Matrix<double, dim, 1> & x,
+    const Eigen::Matrix<double, dim, 1> & mean,
+    const Eigen::Matrix<double, dim, dim> & cov)
+  {
     // 在服从均值为mean，协方差为cov的高斯分布下，x出现的概率
     auto diff = x - mean;
     auto exponent = -0.5 * diff.transpose() * cov.inverse() * diff;
@@ -140,7 +151,8 @@ private:
   }
 
   // 生成服从高斯分布的随机噪声，假设各个维度之间相互独立
-  Particles generateRandomNoise(const MatrixXX &cov) {
+  Particles generateRandomNoise(const MatrixXX & cov)
+  {
     std::random_device rd;
     auto gen = std::default_random_engine(rd());
     auto distributions = std::vector<std::normal_distribution<double>>(N_X);

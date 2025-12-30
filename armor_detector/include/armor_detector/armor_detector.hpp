@@ -24,7 +24,7 @@
 #include <rm_utils/common.hpp>
 #include <string>
 #include <vector>
-// third party 
+// third party
 #include <opencv2/core.hpp>
 #include <opencv2/core/types.hpp>
 // project
@@ -34,10 +34,13 @@
 #include "rm_interfaces/msg/debug_armors.hpp"
 #include "rm_interfaces/msg/debug_lights.hpp"
 
-namespace fyt::auto_aim {
-class Detector {
+namespace fyt::auto_aim
+{
+class Detector
+{
 public:
-  struct LightParams {
+  struct LightParams
+  {
     // width / height
     double min_ratio;
     double max_ratio;
@@ -47,7 +50,8 @@ public:
     int color_diff_thresh;
   };
 
-  struct ArmorParams {
+  struct ArmorParams
+  {
     double min_light_ratio;
     // light pairs distance
     double min_small_center_distance;
@@ -58,24 +62,26 @@ public:
     double max_angle;
   };
 
-  Detector(const int &bin_thres, const EnemyColor &color, const LightParams &l,
-           const ArmorParams &a);
+  Detector(
+    const int & bin_thres, const EnemyColor & color, const LightParams & l,
+    const ArmorParams & a);
 
-  std::vector<Armor> detect(const cv::Mat &input) noexcept;
+  std::vector<Armor> detect(const cv::Mat & input) noexcept;
 
-  cv::Mat preprocessImage(const cv::Mat &input) noexcept;
-  std::vector<Light> findLights(const cv::Mat &rbg_img,
-                                const cv::Mat &binary_img) noexcept;
-  std::vector<Armor> matchLights(const std::vector<Light> &lights) noexcept;
+  cv::Mat preprocessImage(const cv::Mat & input) noexcept;
+  std::vector<Light> findLights(
+    const cv::Mat & rbg_img,
+    const cv::Mat & binary_img) noexcept;
+  std::vector<Armor> matchLights(const std::vector<Light> & lights) noexcept;
 
   // For debug usage
   cv::Mat getAllNumbersImage() const noexcept;
-  void drawResults(cv::Mat &img) const noexcept;
+  void drawResults(cv::Mat & img) const noexcept;
 
   // Parameters
   int binary_thres;
   EnemyColor detect_color;
-  
+
   LightParams light_params;
   ArmorParams armor_params;
 
@@ -88,9 +94,9 @@ public:
   rm_interfaces::msg::DebugArmors debug_armors;
 
 private:
-  bool isLight(const Light &possible_light) noexcept;
-  bool containLight(const int i,const int j,const std::vector<Light> &lights) noexcept;
-  ArmorType isArmor(const Light &light_1, const Light &light_2) noexcept;
+  bool isLight(const Light & possible_light) noexcept;
+  bool containLight(const int i, const int j, const std::vector<Light> & lights) noexcept;
+  ArmorType isArmor(const Light & light_1, const Light & light_2) noexcept;
 
   cv::Mat gray_img_;
 

@@ -33,23 +33,27 @@
 #include "rm_interfaces/msg/armor.hpp"
 #include "rm_utils/math/pnp_solver.hpp"
 
-namespace fyt::auto_aim {
-class ArmorPoseEstimator {
+namespace fyt::auto_aim
+{
+class ArmorPoseEstimator
+{
 public:
   explicit ArmorPoseEstimator(sensor_msgs::msg::CameraInfo::SharedPtr camera_info);
 
-  std::vector<rm_interfaces::msg::Armor> extractArmorPoses(const std::vector<Armor> &armors,
-                                               Eigen::Matrix3d R_imu_camera);
+  std::vector<rm_interfaces::msg::Armor> extractArmorPoses(
+    const std::vector<Armor> & armors,
+    Eigen::Matrix3d R_imu_camera);
 
-  void enableBA(bool enable) { use_ba_ = enable; }
+  void enableBA(bool enable) {use_ba_ = enable;}
 
 private:
   // Select the best PnP solution according to the armor's direction in image, only available for SOLVEPNP_IPPE
-  void sortPnPResult(const Armor &armor, std::vector<cv::Mat> &rvecs,
-                     std::vector<cv::Mat> &tvecs) const;
+  void sortPnPResult(
+    const Armor & armor, std::vector<cv::Mat> & rvecs,
+    std::vector<cv::Mat> & tvecs) const;
 
   // Convert a rotation matrix to RPY
-  static Eigen::Vector3d rotationMatrixToRPY(const Eigen::Matrix3d &R);
+  static Eigen::Vector3d rotationMatrixToRPY(const Eigen::Matrix3d & R);
 
   bool use_ba_;
 

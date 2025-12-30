@@ -40,12 +40,15 @@
 #include "armor_detector/number_classifier.hpp"
 #include "armor_detector/types.hpp"
 
-namespace fyt::auto_aim {
-NumberClassifier::NumberClassifier(const std::string &model_path,
-                                   const std::string &label_path,
-                                   const double thre,
-                                   const std::vector<std::string> &ignore_classes)
-: threshold(thre), ignore_classes_(ignore_classes) {
+namespace fyt::auto_aim
+{
+NumberClassifier::NumberClassifier(
+  const std::string & model_path,
+  const std::string & label_path,
+  const double thre,
+  const std::vector<std::string> & ignore_classes)
+: threshold(thre), ignore_classes_(ignore_classes)
+{
   net_ = cv::dnn::readNetFromONNX(model_path);
   std::ifstream label_file(label_path);
   std::string line;
@@ -54,7 +57,8 @@ NumberClassifier::NumberClassifier(const std::string &model_path,
   }
 }
 
-cv::Mat NumberClassifier::extractNumber(const cv::Mat &src, const Armor &armor) const noexcept {
+cv::Mat NumberClassifier::extractNumber(const cv::Mat & src, const Armor & armor) const noexcept
+{
   // Light length in image
   static const int light_length = 12;
   // Image size after warp
@@ -93,11 +97,11 @@ cv::Mat NumberClassifier::extractNumber(const cv::Mat &src, const Armor &armor) 
 }
 
 
-void NumberClassifier::classify(const cv::Mat &src, Armor &armor) noexcept 
+void NumberClassifier::classify(const cv::Mat & src, Armor & armor) noexcept
 {
   cv::Mat input = armor.number_img / 255.0;
 
-  // Create blob from image 
+  // Create blob from image
   cv::Mat blob;
   cv::dnn::blobFromImage(input, blob); // 将待识别图像转换成标准的Blob格式
   // Set the input blob for the neural network
@@ -120,7 +124,8 @@ void NumberClassifier::classify(const cv::Mat &src, Armor &armor) noexcept
   armor.classfication_result = fmt::format("{}:{:.1f}%", armor.number, armor.confidence * 100.0);
 }
 // 11.16 LJH : 改为对装甲板图像的批处理，提高装甲板检测效率
-void NumberClassifier::classify_batch(std::vector<Armor> &armors) noexcept {
+void NumberClassifier::classify_batch(std::vector<Armor> & armors) noexcept
+{
   // 如果没有装甲板，直接返回
   if (armors.empty()) {
     return;
@@ -129,7 +134,7 @@ void NumberClassifier::classify_batch(std::vector<Armor> &armors) noexcept {
   // 1. 准备批处理数据
   std::vector<cv::Mat> number_imgs;
   number_imgs.reserve(armors.size());
-  for (const auto &armor : armors) {
+  for (const auto & armor : armors) {
     // 归一化并添加到批处理向量中
     number_imgs.push_back(armor.number_img / 255.0);
   }
@@ -163,30 +168,32 @@ void NumberClassifier::classify_batch(std::vector<Armor> &armors) noexcept {
   }
 }
 
-void NumberClassifier::eraseIgnoreClasses(std::vector<Armor> &armors) noexcept {
+void NumberClassifier::eraseIgnoreClasses(std::vector<Armor> & armors) noexcept
+{
   armors.erase(
-    std::remove_if(armors.begin(),
-                   armors.end(),
-                   [this](const Armor &armor) {
-                     if (armor.confidence < threshold) {
-                       return true;
-                     }
+    std::remove_if(
+      armors.begin(),
+      armors.end(),
+      [this](const Armor & armor) {
+        if (armor.confidence < threshold) {
+          return true;
+        }
 
-                     for (const auto &ignore_class : ignore_classes_) {
-                       if (armor.number == ignore_class) {
-                         return true;
-                       }
-                     }
+        for (const auto & ignore_class : ignore_classes_) {
+          if (armor.number == ignore_class) {
+            return true;
+          }
+        }
 
-                     bool mismatch_armor_type = false;
-                     if (armor.type == ArmorType::LARGE) {
-                       mismatch_armor_type = armor.number == "outpost" || armor.number == "2" ||
-                                             armor.number == "sentry";
-                     } else if (armor.type == ArmorType::SMALL) {
-                       mismatch_armor_type = armor.number == "1" || armor.number == "base";
-                     }
-                     return mismatch_armor_type;
-                   }),
+        bool mismatch_armor_type = false;
+        if (armor.type == ArmorType::LARGE) {
+          mismatch_armor_type = armor.number == "outpost" || armor.number == "2" ||
+          armor.number == "sentry";
+        } else if (armor.type == ArmorType::SMALL) {
+          mismatch_armor_type = armor.number == "1" || armor.number == "base";
+        }
+        return mismatch_armor_type;
+      }),
     armors.end());
 }
 

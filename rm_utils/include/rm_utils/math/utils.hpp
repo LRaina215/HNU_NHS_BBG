@@ -22,14 +22,17 @@
 #include <opencv2/core.hpp>
 #include <opencv2/core/eigen.hpp>
 
-namespace fyt {
+namespace fyt
+{
 
 // util functions
-namespace utils {
+namespace utils
+{
 // Convert euler angles to rotation matrix
 enum class EulerOrder { XYZ, XZY, YXZ, YZX, ZXY, ZYX };
-template <typename Vec3Like>
-Eigen::Matrix3d eulerToMatrix(const Vec3Like &euler, EulerOrder order = EulerOrder::XYZ) {
+template<typename Vec3Like>
+Eigen::Matrix3d eulerToMatrix(const Vec3Like & euler, EulerOrder order = EulerOrder::XYZ)
+{
   auto r = Eigen::AngleAxisd(euler[0], Eigen::Vector3d::UnitX());
   auto p = Eigen::AngleAxisd(euler[1], Eigen::Vector3d::UnitY());
   auto y = Eigen::AngleAxisd(euler[2], Eigen::Vector3d::UnitZ());
@@ -49,8 +52,10 @@ Eigen::Matrix3d eulerToMatrix(const Vec3Like &euler, EulerOrder order = EulerOrd
   }
 }
 
-inline Eigen::Vector3d matrixToEuler(const Eigen::Matrix3d &R,
-                                     EulerOrder order = EulerOrder::XYZ) noexcept {
+inline Eigen::Vector3d matrixToEuler(
+  const Eigen::Matrix3d & R,
+  EulerOrder order = EulerOrder::XYZ) noexcept
+{
   switch (order) {
     case EulerOrder::XYZ:
       return R.eulerAngles(0, 1, 2);
@@ -67,7 +72,8 @@ inline Eigen::Vector3d matrixToEuler(const Eigen::Matrix3d &R,
   }
 }
 
-inline Eigen::Vector3d getRPY(const Eigen::Matrix3d &R) {
+inline Eigen::Vector3d getRPY(const Eigen::Matrix3d & R)
+{
   double yaw = atan2(R(0, 1), R(0, 0));
   double c2 = Eigen::Vector2d(R(2, 2), R(1, 2)).norm();
   double pitch = atan2(-R(0, 2), c2);
@@ -79,14 +85,16 @@ inline Eigen::Vector3d getRPY(const Eigen::Matrix3d &R) {
   return -Eigen::Vector3d(roll, pitch, yaw);
 }
 
-template <typename _Tp, int _rows, int _cols, int _options, int _maxRows, int _maxCols>
-cv::Mat eigenToCv(const Eigen::Matrix<_Tp, _rows, _cols, _options, _maxRows, _maxCols> &eigen_mat) {
+template<typename _Tp, int _rows, int _cols, int _options, int _maxRows, int _maxCols>
+cv::Mat eigenToCv(const Eigen::Matrix<_Tp, _rows, _cols, _options, _maxRows, _maxCols> & eigen_mat)
+{
   cv::Mat cv_mat;
   cv::eigen2cv(eigen_mat, cv_mat);
   return cv_mat;
 }
 
-inline Eigen::MatrixXd cvToEigen(const cv::Mat &cv_mat) noexcept {
+inline Eigen::MatrixXd cvToEigen(const cv::Mat & cv_mat) noexcept
+{
   Eigen::MatrixXd eigen_mat = Eigen::MatrixXd::Zero(cv_mat.rows, cv_mat.cols);
   cv::cv2eigen(cv_mat, eigen_mat);
   return eigen_mat;

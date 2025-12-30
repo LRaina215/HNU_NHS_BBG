@@ -20,21 +20,23 @@
 #include <fstream>
 #include <mutex>
 
-namespace fyt::logger {
+namespace fyt::logger
+{
 
-class Writer {
+class Writer
+{
 public:
-  explicit Writer(const std::string &filename);
+  explicit Writer(const std::string & filename);
 
   ~Writer();
 
-  void write(const std::string &message);
+  void write(const std::string & message);
 
   void flush();
 
 private:
   std::ofstream file_;
-  std::mutex &r_mutex_;
+  std::mutex & r_mutex_;
 };
 }  // namespace fyt::logger
-#endif  // RM_UTILS_LOGGER_WRITER_HPP_ 
+#endif  // RM_UTILS_LOGGER_WRITER_HPP_

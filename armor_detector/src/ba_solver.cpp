@@ -33,11 +33,14 @@
 #include "rm_utils/logger/log.hpp"
 #include "rm_utils/math/utils.hpp"
 
-namespace fyt::auto_aim {
+namespace fyt::auto_aim
+{
 G2O_USE_OPTIMIZATION_LIBRARY(dense)
 
-BaSolver::BaSolver(std::array<double, 9> &camera_matrix,
-                   std::vector<double> &dist_coeffs) {
+BaSolver::BaSolver(
+  std::array<double, 9> & camera_matrix,
+  std::vector<double> & dist_coeffs)
+{
   K_ = Eigen::Matrix3d::Identity();
   K_(0, 0) = camera_matrix[0];
   K_(1, 1) = camera_matrix[4];
@@ -48,18 +51,20 @@ BaSolver::BaSolver(std::array<double, 9> &camera_matrix,
   optimizer_.setVerbose(false);
   // Optimization method
   optimizer_.setAlgorithm(
-      g2o::OptimizationAlgorithmFactory::instance()->construct(
-          "lm_dense", solver_property_));
+    g2o::OptimizationAlgorithmFactory::instance()->construct(
+      "lm_dense", solver_property_));
   // Initial step size
   lm_algorithm_ = dynamic_cast<g2o::OptimizationAlgorithmLevenberg *>(
-      const_cast<g2o::OptimizationAlgorithm *>(optimizer_.algorithm()));
+    const_cast<g2o::OptimizationAlgorithm *>(optimizer_.algorithm()));
   lm_algorithm_->setUserLambdaInit(0.1);
 }
 
 Eigen::Matrix3d
-BaSolver::solveBa(const Armor &armor, const Eigen::Vector3d &t_camera_armor,
-                  const Eigen::Matrix3d &R_camera_armor,
-                  const Eigen::Matrix3d &R_imu_camera) noexcept {
+BaSolver::solveBa(
+  const Armor & armor, const Eigen::Vector3d & t_camera_armor,
+  const Eigen::Matrix3d & R_camera_armor,
+  const Eigen::Matrix3d & R_imu_camera) noexcept
+{
   // Reset optimizer
   optimizer_.clear();
 
@@ -79,36 +84,37 @@ BaSolver::solveBa(const Armor &armor, const Eigen::Vector3d &t_camera_armor,
 
   // Get the pitch angle of the armor
   double armor_pitch =
-      armor.number == "outpost" ? -FIFTTEN_DEGREE_RAD : FIFTTEN_DEGREE_RAD;
+    armor.number == "outpost" ? -FIFTTEN_DEGREE_RAD : FIFTTEN_DEGREE_RAD;
   Sophus::SO3d R_pitch = Sophus::SO3d::exp(Eigen::Vector3d(0, armor_pitch, 0));
 
   // Get the 3D points of the armor
   const auto armor_size =
-      armor.type == ArmorType::SMALL
-          ? Eigen::Vector2d(SMALL_ARMOR_WIDTH, SMALL_ARMOR_HEIGHT)
-          : Eigen::Vector2d(LARGE_ARMOR_WIDTH, LARGE_ARMOR_HEIGHT);
+    armor.type == ArmorType::SMALL ?
+    Eigen::Vector2d(SMALL_ARMOR_WIDTH, SMALL_ARMOR_HEIGHT) :
+    Eigen::Vector2d(LARGE_ARMOR_WIDTH, LARGE_ARMOR_HEIGHT);
   const auto object_points =
-      Armor::buildObjectPoints<Eigen::Vector3d>(armor_size(0), armor_size(1));
+    Armor::buildObjectPoints<Eigen::Vector3d>(armor_size(0), armor_size(1));
 
   // Fill the optimizer
   size_t id_counter = 0;
 
-  VertexYaw *v_yaw = new VertexYaw();
+  VertexYaw * v_yaw = new VertexYaw();
   v_yaw->setId(id_counter++);
   v_yaw->setEstimate(initial_armor_yaw);
   optimizer_.addVertex(v_yaw);
 
-  const auto &landmarks = armor.landmarks();
+  const auto & landmarks = armor.landmarks();
   for (size_t i = 0; i < Armor::N_LANDMARKS; i++) {
-    g2o::VertexPointXYZ *v_point = new g2o::VertexPointXYZ();
+    g2o::VertexPointXYZ * v_point = new g2o::VertexPointXYZ();
     v_point->setId(id_counter++);
-    v_point->setEstimate(Eigen::Vector3d(
+    v_point->setEstimate(
+      Eigen::Vector3d(
         object_points[i].x(), object_points[i].y(), object_points[i].z()));
     v_point->setFixed(true);
     optimizer_.addVertex(v_point);
 
-    EdgeProjection *edge =
-        new EdgeProjection(R_camera_imu, R_pitch, t_camera_armor, K_);
+    EdgeProjection * edge =
+      new EdgeProjection(R_camera_imu, R_pitch, t_camera_armor, K_);
     edge->setId(id_counter++);
     edge->setVertex(0, v_yaw);
     edge->setVertex(1, v_point);

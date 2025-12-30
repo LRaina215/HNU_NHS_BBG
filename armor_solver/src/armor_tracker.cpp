@@ -32,19 +32,21 @@
 // project
 #include "rm_utils/logger/log.hpp"
 
-namespace fyt::auto_aim {
+namespace fyt::auto_aim
+{
 Tracker::Tracker(double max_match_distance, double max_match_yaw_diff)
-: tracker_state(LOST)
-, tracked_id(std::string(""))
-, measurement(Eigen::VectorXd::Zero(4))
-, target_state(Eigen::VectorXd::Zero(9))
-, max_match_distance_(max_match_distance)
-, max_match_yaw_diff_(max_match_yaw_diff)
-, detect_count_(0)
-, lost_count_(0)
-, last_yaw_(0) {}
+: tracker_state(LOST),
+  tracked_id(std::string("")),
+  measurement(Eigen::VectorXd::Zero(4)),
+  target_state(Eigen::VectorXd::Zero(9)),
+  max_match_distance_(max_match_distance),
+  max_match_yaw_diff_(max_match_yaw_diff),
+  detect_count_(0),
+  lost_count_(0),
+  last_yaw_(0) {}
 
-void Tracker::init(const Armors::SharedPtr &armors_msg) noexcept {
+void Tracker::init(const Armors::SharedPtr & armors_msg) noexcept
+{
   if (armors_msg->armors.empty()) {
     return;
   }
@@ -52,7 +54,7 @@ void Tracker::init(const Armors::SharedPtr &armors_msg) noexcept {
   // Simply choose the armor that is closest to image center
   double min_distance = DBL_MAX;
   tracked_armor = armors_msg->armors[0];
-  for (const auto &armor : armors_msg->armors) {
+  for (const auto & armor : armors_msg->armors) {
     if (armor.distance_to_image_center < min_distance) {
       min_distance = armor.distance_to_image_center;
       tracked_armor = armor;
@@ -66,7 +68,8 @@ void Tracker::init(const Armors::SharedPtr &armors_msg) noexcept {
   tracker_state = DETECTING;
 
   if (tracked_armor.type == "large" &&
-      (tracked_id == "3" || tracked_id == "4" || tracked_id == "5")) {
+    (tracked_id == "3" || tracked_id == "4" || tracked_id == "5"))
+  {
     tracked_armors_num = ArmorsNum::BALANCE_2;
   } else if (tracked_id == "outpost") {
     tracked_armors_num = ArmorsNum::OUTPOST_3;
@@ -75,7 +78,8 @@ void Tracker::init(const Armors::SharedPtr &armors_msg) noexcept {
   }
 }
 
-void Tracker::update(const Armors::SharedPtr &armors_msg) noexcept {
+void Tracker::update(const Armors::SharedPtr & armors_msg) noexcept
+{
   // KF predict
   Eigen::VectorXd ekf_prediction = ekf->predict();
 
@@ -90,7 +94,7 @@ void Tracker::update(const Armors::SharedPtr &armors_msg) noexcept {
     auto predicted_position = getArmorPositionFromState(ekf_prediction);
     double min_position_diff = DBL_MAX;
     double yaw_diff = DBL_MAX;
-    for (const auto &armor : armors_msg->armors) {
+    for (const auto & armor : armors_msg->armors) {
       // Only consider armors with the same id
       if (armor.number == tracked_id) {
         same_id_armor = armor;
@@ -107,7 +111,8 @@ void Tracker::update(const Armors::SharedPtr &armors_msg) noexcept {
           tracked_armor = armor;
           // Update tracked armor type
           if (tracked_armor.type == "large" &&
-              (tracked_id == "3" || tracked_id == "4" || tracked_id == "5")) {
+            (tracked_id == "3" || tracked_id == "4" || tracked_id == "5"))
+          {
             tracked_armors_num = ArmorsNum::BALANCE_2;
           } else if (tracked_id == "outpost") {
             tracked_armors_num = ArmorsNum::OUTPOST_3;
@@ -184,7 +189,8 @@ void Tracker::update(const Armors::SharedPtr &armors_msg) noexcept {
   }
 }
 
-void Tracker::initEKF(const Armor &a) noexcept {
+void Tracker::initEKF(const Armor & a) noexcept
+{
   double xa = a.pose.position.x;
   double ya = a.pose.position.y;
   double za = a.pose.position.z;
@@ -203,7 +209,8 @@ void Tracker::initEKF(const Armor &a) noexcept {
   ekf->setState(target_state);
 }
 
-void Tracker::handleArmorJump(const Armor &current_armor) noexcept {
+void Tracker::handleArmorJump(const Armor & current_armor) noexcept
+{
   double last_yaw = target_state(6);
   double yaw = orientationToYaw(current_armor.pose.orientation);
 
@@ -243,7 +250,8 @@ void Tracker::handleArmorJump(const Armor &current_armor) noexcept {
   ekf->setState(target_state);
 }
 
-double Tracker::orientationToYaw(const geometry_msgs::msg::Quaternion &q) noexcept {
+double Tracker::orientationToYaw(const geometry_msgs::msg::Quaternion & q) noexcept
+{
   // Get armor yaw
   tf2::Quaternion tf_q;
   tf2::fromMsg(q, tf_q);
@@ -255,7 +263,8 @@ double Tracker::orientationToYaw(const geometry_msgs::msg::Quaternion &q) noexce
   return yaw;
 }
 
-Eigen::Vector3d Tracker::getArmorPositionFromState(const Eigen::VectorXd &x) noexcept {
+Eigen::Vector3d Tracker::getArmorPositionFromState(const Eigen::VectorXd & x) noexcept
+{
   // Calculate predicted position of the current armor
   double xc = x(0), yc = x(2), za = x(4) + x(9);
   double yaw = x(6), r = x(8);

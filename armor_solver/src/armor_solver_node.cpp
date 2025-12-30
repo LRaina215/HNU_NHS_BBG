@@ -28,11 +28,13 @@
 #include "rm_utils/common.hpp"
 #include "rm_utils/heartbeat.hpp"
 
-namespace fyt::auto_aim {
-ArmorSolverNode::ArmorSolverNode(const rclcpp::NodeOptions &options)
+namespace fyt::auto_aim
+{
+ArmorSolverNode::ArmorSolverNode(const rclcpp::NodeOptions & options)
 : Node("armor_solver", options),
-  it_(std::shared_ptr<rclcpp::Node>(this, [](rclcpp::Node*){})),
-  solver_(nullptr){ 
+  it_(std::shared_ptr<rclcpp::Node>(this, [](rclcpp::Node *) {})),
+  solver_(nullptr)
+{
   // Register logger
   FYT_REGISTER_LOGGER("armor_solver", "~/fyt2024-log", INFO);
   FYT_INFO("armor_solver", "Starting ArmorSolverNode!");
@@ -45,21 +47,26 @@ ArmorSolverNode::ArmorSolverNode(const rclcpp::NodeOptions &options)
   tracker_ = std::make_unique<Tracker>(max_match_distance, max_match_yaw_diff);
   tracker_->tracking_thres = this->declare_parameter("tracker.tracking_thres", 5);
   lost_time_thres_ = this->declare_parameter("tracker.lost_time_thres", 0.3);
-  predicted_position_pub_ = this->create_publisher<geometry_msgs::msg::Point>("armor_solver/predicted_position", 10);
+  predicted_position_pub_ = this->create_publisher<geometry_msgs::msg::Point>(
+    "armor_solver/predicted_position", 10);
 
   //7.16---
-  result_image_sub_ = it_.subscribe("armor_detector/result_img",1,std::bind(&ArmorSolverNode::PreImageCallback, this, std::placeholders::_1));
-  vis_predict_image_pub_ =  
-                image_transport::create_publisher(this, "armor_solver/pre_aim_img");
+  result_image_sub_ =
+    it_.subscribe(
+    "armor_detector/result_img", 1,
+    std::bind(&ArmorSolverNode::PreImageCallback, this, std::placeholders::_1));
+  vis_predict_image_pub_ =
+    image_transport::create_publisher(this, "armor_solver/pre_aim_img");
   // 12.21
   cam_info_sub_ = this->create_subscription<sensor_msgs::msg::CameraInfo>(
-      "camera_info", rclcpp::SensorDataQoS(),
-      std::bind(&ArmorSolverNode::cameraInfoCallback, this, std::placeholders::_1));
+    "camera_info", rclcpp::SensorDataQoS(),
+    std::bind(&ArmorSolverNode::cameraInfoCallback, this, std::placeholders::_1));
 
   camera_matrix_ = cv::Mat();
   dist_coeffs_ = cv::Mat();
 
-  pre_target_point_pub_ = this->create_publisher<geometry_msgs::msg::Point>("armor_solver/pre_target_debug_point", 10);
+  pre_target_point_pub_ = this->create_publisher<geometry_msgs::msg::Point>(
+    "armor_solver/pre_target_debug_point", 10);
   //7.16---
 
   // EKF
@@ -79,46 +86,46 @@ ArmorSolverNode::ArmorSolverNode(const rclcpp::NodeOptions &options)
   s2qd_zc_ = declare_parameter("ekf.sigma2_q_d_zc", 800.0);
 
   auto u_q = [this]() {
-    Eigen::Matrix<double, X_N, X_N> q;
-    double t = dt_, x = s2qx_, y = s2qy_, z = s2qz_, yaw = s2qyaw_, r = s2qr_, d_zc=s2qd_zc_;
-    double q_x_x = pow(t, 4) / 4 * x, q_x_vx = pow(t, 3) / 2 * x, q_vx_vx = pow(t, 2) * x;
-    double q_y_y = pow(t, 4) / 4 * y, q_y_vy = pow(t, 3) / 2 * y, q_vy_vy = pow(t, 2) * y;
-    double q_z_z = pow(t, 4) / 4 * x, q_z_vz = pow(t, 3) / 2 * x, q_vz_vz = pow(t, 2) * z;
-    double q_yaw_yaw = pow(t, 4) / 4 * yaw, q_yaw_vyaw = pow(t, 3) / 2 * x,
-           q_vyaw_vyaw = pow(t, 2) * yaw;
-    double q_r = pow(t, 4) / 4 * r;
-    double q_d_zc = pow(t, 4) / 4 * d_zc;
-    // clang-format off
-    //    xc      v_xc    yc      v_yc    zc      v_zc    yaw         v_yaw       r       d_za
-    q <<  q_x_x,  q_x_vx, 0,      0,      0,      0,      0,          0,          0,      0,
-          q_x_vx, q_vx_vx,0,      0,      0,      0,      0,          0,          0,      0,
-          0,      0,      q_y_y,  q_y_vy, 0,      0,      0,          0,          0,      0,
-          0,      0,      q_y_vy, q_vy_vy,0,      0,      0,          0,          0,      0,
-          0,      0,      0,      0,      q_z_z,  q_z_vz, 0,          0,          0,      0,
-          0,      0,      0,      0,      q_z_vz, q_vz_vz,0,          0,          0,      0,
-          0,      0,      0,      0,      0,      0,      q_yaw_yaw,  q_yaw_vyaw, 0,      0,
-          0,      0,      0,      0,      0,      0,      q_yaw_vyaw, q_vyaw_vyaw,0,      0,
-          0,      0,      0,      0,      0,      0,      0,          0,          q_r,    0,
-          0,      0,      0,      0,      0,      0,      0,          0,          0,      q_d_zc;
+      Eigen::Matrix<double, X_N, X_N> q;
+      double t = dt_, x = s2qx_, y = s2qy_, z = s2qz_, yaw = s2qyaw_, r = s2qr_, d_zc = s2qd_zc_;
+      double q_x_x = pow(t, 4) / 4 * x, q_x_vx = pow(t, 3) / 2 * x, q_vx_vx = pow(t, 2) * x;
+      double q_y_y = pow(t, 4) / 4 * y, q_y_vy = pow(t, 3) / 2 * y, q_vy_vy = pow(t, 2) * y;
+      double q_z_z = pow(t, 4) / 4 * x, q_z_vz = pow(t, 3) / 2 * x, q_vz_vz = pow(t, 2) * z;
+      double q_yaw_yaw = pow(t, 4) / 4 * yaw, q_yaw_vyaw = pow(t, 3) / 2 * x,
+        q_vyaw_vyaw = pow(t, 2) * yaw;
+      double q_r = pow(t, 4) / 4 * r;
+      double q_d_zc = pow(t, 4) / 4 * d_zc;
+      // clang-format off
+      //    xc      v_xc    yc      v_yc    zc      v_zc    yaw         v_yaw       r       d_za
+      q << q_x_x, q_x_vx, 0, 0, 0, 0, 0, 0, 0, 0,
+        q_x_vx, q_vx_vx, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, q_y_y, q_y_vy, 0, 0, 0, 0, 0, 0,
+        0, 0, q_y_vy, q_vy_vy, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, q_z_z, q_z_vz, 0, 0, 0, 0,
+        0, 0, 0, 0, q_z_vz, q_vz_vz, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, q_yaw_yaw, q_yaw_vyaw, 0, 0,
+        0, 0, 0, 0, 0, 0, q_yaw_vyaw, q_vyaw_vyaw, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, q_r, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, q_d_zc;
 
-    // clang-format on
-    return q;
-  };
+      // clang-format on
+      return q;
+    };
   // update_R - measurement noise covariance matrix
   r_x_ = declare_parameter("ekf.r_x", 0.05);
   r_y_ = declare_parameter("ekf.r_y", 0.05);
   r_z_ = declare_parameter("ekf.r_z", 0.05);
   r_yaw_ = declare_parameter("ekf.r_yaw", 0.02);
-  auto u_r = [this](const Eigen::Matrix<double, Z_N, 1> &z) {
-    Eigen::Matrix<double, Z_N, Z_N> r;
-    // clang-format off
-    r << r_x_ * std::abs(z[0]), 0, 0, 0,
-         0, r_y_ * std::abs(z[1]), 0, 0,
-         0, 0, r_z_ * std::abs(z[2]), 0,
-         0, 0, 0, r_yaw_;
-    // clang-format on
-    return r;
-  };
+  auto u_r = [this](const Eigen::Matrix<double, Z_N, 1> & z) {
+      Eigen::Matrix<double, Z_N, Z_N> r;
+      // clang-format off
+      r << r_x_ * std::abs(z[0]), 0, 0, 0,
+        0, r_y_ * std::abs(z[1]), 0, 0,
+        0, 0, r_z_ * std::abs(z[2]), 0,
+        0, 0, 0, r_yaw_;
+      // clang-format on
+      return r;
+    };
   // P - error estimate covariance matrix
   Eigen::DiagonalMatrix<double, X_N> p0;
   p0.setIdentity();
@@ -136,31 +143,36 @@ ArmorSolverNode::ArmorSolverNode(const rclcpp::NodeOptions &options)
   // subscriber and filter
   armors_sub_.subscribe(this, "armor_detector/armors", rmw_qos_profile_sensor_data);
   target_frame_ = this->declare_parameter("target_frame", "odom");
-  tf2_filter_ = std::make_shared<tf2_filter>(armors_sub_,
-                                             *tf2_buffer_,
-                                             target_frame_,
-                                             10,
-                                             this->get_node_logging_interface(),
-                                             this->get_node_clock_interface(),
-                                             std::chrono::duration<int>(1));
+  tf2_filter_ = std::make_shared<tf2_filter>(
+    armors_sub_,
+    *tf2_buffer_,
+    target_frame_,
+    10,
+    this->get_node_logging_interface(),
+    this->get_node_clock_interface(),
+    std::chrono::duration<int>(1));
   // Register a callback with tf2_ros::MessageFilter to be called when
   // transforms are available
   tf2_filter_->registerCallback(&ArmorSolverNode::armorsCallback, this);
 
   // Measurement publisher (for debug usage)
-  measure_pub_ = this->create_publisher<rm_interfaces::msg::Measurement>("armor_solver/measurement",
-                                                                         rclcpp::SensorDataQoS());
+  measure_pub_ = this->create_publisher<rm_interfaces::msg::Measurement>(
+    "armor_solver/measurement",
+    rclcpp::SensorDataQoS());
 
   // Publisher
-  target_pub_ = this->create_publisher<rm_interfaces::msg::Target>("armor_solver/target",
-                                                                   rclcpp::SensorDataQoS());
-  gimbal_pub_ = this->create_publisher<rm_interfaces::msg::GimbalCmd>("armor_solver/cmd_gimbal",
-                                                                      20);
+  target_pub_ = this->create_publisher<rm_interfaces::msg::Target>(
+    "armor_solver/target",
+    rclcpp::SensorDataQoS());
+  gimbal_pub_ = this->create_publisher<rm_interfaces::msg::GimbalCmd>(
+    "armor_solver/cmd_gimbal",
+    20);
   // Timer 250 Hz
-  pub_timer_ = this->create_wall_timer(std::chrono::milliseconds(4),
-                                       std::bind(&ArmorSolverNode::timerCallback, this));
+  pub_timer_ = this->create_wall_timer(
+    std::chrono::milliseconds(4),
+    std::bind(&ArmorSolverNode::timerCallback, this));
   armor_target_.header.frame_id = "";
-  
+
   // Enable/Disable Armor Solver
   enable_ = true;
   set_mode_srv_ = this->create_service<rm_interfaces::srv::SetMode>(
@@ -176,7 +188,8 @@ ArmorSolverNode::ArmorSolverNode(const rclcpp::NodeOptions &options)
   heartbeat_ = HeartBeatPublisher::create(this);
 }
 
-void ArmorSolverNode::timerCallback() {
+void ArmorSolverNode::timerCallback()
+{
   if (solver_ == nullptr) {
     return;
   }
@@ -215,15 +228,15 @@ void ArmorSolverNode::timerCallback() {
       //7.16---
 
     } catch (...) {
-        
-      
+
+
       FYT_ERROR("armor_solver", "Something went wrong in solver!");
       control_msg.yaw_diff = 0;
       control_msg.pitch_diff = 0;
       control_msg.distance = -1;
       control_msg.fire_advice = false;
     }
-    
+
   } else {
     control_msg.yaw_diff = 0;
     control_msg.pitch_diff = 0;
@@ -242,21 +255,23 @@ void ArmorSolverNode::timerCallback() {
 }
 
 // 12.21
-void ArmorSolverNode::cameraInfoCallback(const sensor_msgs::msg::CameraInfo::SharedPtr msg) {
+void ArmorSolverNode::cameraInfoCallback(const sensor_msgs::msg::CameraInfo::SharedPtr msg)
+{
   // 加锁，防止和预测线程冲突
   std::lock_guard<std::mutex> lock(point_mutex_);
 
   // 将 ROS 的 array 转换为 OpenCV 的 Mat
-  camera_matrix_ = cv::Mat(3, 3, CV_64F, const_cast<double*>(msg->k.data())).clone();
-  dist_coeffs_ = cv::Mat(1, 5, CV_64F, const_cast<double*>(msg->d.data())).clone();
+  camera_matrix_ = cv::Mat(3, 3, CV_64F, const_cast<double *>(msg->k.data())).clone();
+  dist_coeffs_ = cv::Mat(1, 5, CV_64F, const_cast<double *>(msg->d.data())).clone();
 
   // 如果只需要读取一次，可以在这里销毁订阅者释放资源 (可选)
-  cam_info_sub_.reset(); 
-  
+  cam_info_sub_.reset();
+
   // FYT_INFO("armor_solver", "收到相机内参，已自动更新！");
 }
 
-void ArmorSolverNode::initMarkers() noexcept {
+void ArmorSolverNode::initMarkers() noexcept
+{
   // Visualization Marker Publisher
   // See http://wiki.ros.org/rviz/DisplayTypes/Marker
   position_marker_.ns = "position";
@@ -303,19 +318,22 @@ void ArmorSolverNode::initMarkers() noexcept {
   marker_pub_ =
     this->create_publisher<visualization_msgs::msg::MarkerArray>("armor_solver/marker", 10);
 }
-void ArmorSolverNode::armorsCallback(const rm_interfaces::msg::Armors::SharedPtr armors_msg) {
+void ArmorSolverNode::armorsCallback(const rm_interfaces::msg::Armors::SharedPtr armors_msg)
+{
   // Lazy initialize solver owing to weak_from_this() can't be called in constructor
   if (solver_ == nullptr) {
     solver_ = std::make_unique<Solver>(weak_from_this());
   }
 
   // Tranform armor position from image frame to world coordinate
-  for (auto &armor : armors_msg->armors) {
+  for (auto & armor : armors_msg->armors) {
 
     // 12.21
-    if (std::isnan(armor.pose.position.x) || std::isnan(armor.pose.position.y) || std::isnan(armor.pose.position.z)) {
-        FYT_WARN("armor_solver", "Received NaN armor pose from detector! Skipping.");
-        continue; 
+    if (std::isnan(armor.pose.position.x) || std::isnan(armor.pose.position.y) ||
+      std::isnan(armor.pose.position.z))
+    {
+      FYT_WARN("armor_solver", "Received NaN armor pose from detector! Skipping.");
+      continue;
     }
 
     geometry_msgs::msg::PoseStamped ps;
@@ -323,19 +341,21 @@ void ArmorSolverNode::armorsCallback(const rm_interfaces::msg::Armors::SharedPtr
     ps.pose = armor.pose;
     try {
       armor.pose = tf2_buffer_->transform(ps, target_frame_).pose;
-    } catch (const tf2::TransformException &ex) {
+    } catch (const tf2::TransformException & ex) {
       FYT_ERROR("armor_solver", "Transform error: {}", ex.what());
       return;
     }
   }
 
   // Filter abnormal armors
-  armors_msg->armors.erase(std::remove_if(armors_msg->armors.begin(),
-                                          armors_msg->armors.end(),
-                                          [](const rm_interfaces::msg::Armor &armor) {
-                                            return abs(armor.pose.position.z) > 2;
-                                          }),
-                           armors_msg->armors.end());
+  armors_msg->armors.erase(
+    std::remove_if(
+      armors_msg->armors.begin(),
+      armors_msg->armors.end(),
+      [](const rm_interfaces::msg::Armor & armor) {
+        return abs(armor.pose.position.z) > 2;
+      }),
+    armors_msg->armors.end());
 
   // Init message
   rm_interfaces::msg::Measurement measure_msg;
@@ -368,10 +388,11 @@ void ArmorSolverNode::armorsCallback(const rm_interfaces::msg::Armors::SharedPtr
     if (tracker_->tracker_state == Tracker::DETECTING) {
       target_msg.tracking = false;
     } else if (tracker_->tracker_state == Tracker::TRACKING ||
-               tracker_->tracker_state == Tracker::TEMP_LOST) {
+      tracker_->tracker_state == Tracker::TEMP_LOST)
+    {
       target_msg.tracking = true;
       // Fill target message
-      const auto &state = tracker_->target_state;
+      const auto & state = tracker_->target_state;
       target_msg.id = tracker_->tracked_id;
       target_msg.armors_num = static_cast<int>(tracker_->tracked_armors_num);
       target_msg.position.x = state(0);
@@ -396,8 +417,10 @@ void ArmorSolverNode::armorsCallback(const rm_interfaces::msg::Armors::SharedPtr
   last_time_ = time;
 }
 
-void ArmorSolverNode::publishMarkers(const rm_interfaces::msg::Target &target_msg,
-                                     const rm_interfaces::msg::GimbalCmd &gimbal_cmd) noexcept {
+void ArmorSolverNode::publishMarkers(
+  const rm_interfaces::msg::Target & target_msg,
+  const rm_interfaces::msg::GimbalCmd & gimbal_cmd) noexcept
+{
   position_marker_.header = target_msg.header;
   linear_v_marker_.header = target_msg.header;
   angular_v_marker_.header = target_msg.header;
@@ -445,7 +468,7 @@ void ArmorSolverNode::publishMarkers(const rm_interfaces::msg::Target &target_ms
       // Only 4 armors has 2 radius and height
       if (a_n == 4) {
         r = is_current_pair ? r1 : r2;
-        p_a.z = zc + d_zc +  (is_current_pair ? 0 : d_za);
+        p_a.z = zc + d_zc + (is_current_pair ? 0 : d_za);
         is_current_pair = !is_current_pair;
       } else {
         r = r1;
@@ -471,7 +494,7 @@ void ArmorSolverNode::publishMarkers(const rm_interfaces::msg::Target &target_ms
     trajectory_marker_.action = visualization_msgs::msg::Marker::ADD;
     trajectory_marker_.points.clear();
     trajectory_marker_.header.frame_id = "gimbal_link";
-    for (const auto &point : solver_->getTrajectory()) {
+    for (const auto & point : solver_->getTrajectory()) {
       geometry_msgs::msg::Point p;
       p.x = point.first;
       p.z = point.second;
@@ -507,7 +530,8 @@ void ArmorSolverNode::publishMarkers(const rm_interfaces::msg::Target &target_ms
 
 void ArmorSolverNode::setModeCallback(
   const std::shared_ptr<rm_interfaces::srv::SetMode::Request> request,
-  std::shared_ptr<rm_interfaces::srv::SetMode::Response> response) {
+  std::shared_ptr<rm_interfaces::srv::SetMode::Response> response)
+{
   response->success = true;
 
   VisionMode mode = static_cast<VisionMode>(request->mode);
@@ -520,20 +544,20 @@ void ArmorSolverNode::setModeCallback(
   switch (mode) {
     case VisionMode::AUTO_AIM_RED:
     case VisionMode::AUTO_AIM_BLUE: {
-      enable_ = true;
-      break;
-    }
+        enable_ = true;
+        break;
+      }
     default: {
-      enable_ = false;
-      break;
-    }
+        enable_ = false;
+        break;
+      }
   }
 
   FYT_WARN("armor_solver", "Set Mode to {}", visionModeToString(mode));
 }
 
 //7.16---
-cv::Point2f ArmorSolverNode::PointConvert (geometry_msgs::msg::Point odom_3d_point)
+cv::Point2f ArmorSolverNode::PointConvert(geometry_msgs::msg::Point odom_3d_point)
 {
   // [新增] 安全检查：如果内参还没收到，直接返回无效点
   if (camera_matrix_.empty() || dist_coeffs_.empty()) {
@@ -547,103 +571,98 @@ cv::Point2f ArmorSolverNode::PointConvert (geometry_msgs::msg::Point odom_3d_poi
   }
 
   try {
-  //convert to camera
-  geometry_msgs::msg::PointStamped odom_point_stamped;
-  odom_point_stamped.header.frame_id = target_frame_; // target_frame_ 应该是 "odom"
-  odom_point_stamped.header.stamp = this->now(); // 使用当前时间戳，或传入点的时间戳
-  odom_point_stamped.point = odom_3d_point;
+    //convert to camera
+    geometry_msgs::msg::PointStamped odom_point_stamped;
+    odom_point_stamped.header.frame_id = target_frame_; // target_frame_ 应该是 "odom"
+    odom_point_stamped.header.stamp = this->now(); // 使用当前时间戳，或传入点的时间戳
+    odom_point_stamped.point = odom_3d_point;
 
-  geometry_msgs::msg::PointStamped camera_3d_point_stamped;
+    geometry_msgs::msg::PointStamped camera_3d_point_stamped;
 
-        // 等待并执行从 target_frame_ (odom) 到 "camera_link" 的变换
-        // "camera_link" 是相机物理位置的坐标系，OpenCV 投影函数需要相机坐标系下的点
-        camera_3d_point_stamped = tf2_buffer_->transform(
-            odom_point_stamped,
-            "camera_link", // 目标帧：相机坐标系
-            tf2::durationFromSec(0.1) // 等待变换的超时时间
-        );
-        
-  std::vector<cv::Point3d> object_points;
-  object_points.push_back(cv::Point3d(-camera_3d_point_stamped.point.y,
-                                         -camera_3d_point_stamped.point.z,
-                                         camera_3d_point_stamped.point.x)); //NOTE!!! 相机坐标系与OpenCV坐标系不同 
+    // 等待并执行从 target_frame_ (odom) 到 "camera_link" 的变换
+    // "camera_link" 是相机物理位置的坐标系，OpenCV 投影函数需要相机坐标系下的点
+    camera_3d_point_stamped = tf2_buffer_->transform(
+      odom_point_stamped,
+      "camera_link",       // 目标帧：相机坐标系
+      tf2::durationFromSec(0.1)       // 等待变换的超时时间
+    );
 
-  cv::Mat rvec = cv::Mat::zeros(3, 1, CV_64F); // 旋转向量 (0,0,0)
-  cv::Mat tvec = cv::Mat::zeros(3, 1, CV_64F); // 平移向量 (0,0,0)
+    std::vector<cv::Point3d> object_points;
+    object_points.push_back(
+      cv::Point3d(
+        -camera_3d_point_stamped.point.y,
+        -camera_3d_point_stamped.point.z,
+        camera_3d_point_stamped.point.x));                                  //NOTE!!! 相机坐标系与OpenCV坐标系不同
 
-  cv::projectPoints(object_points, rvec, tvec, camera_matrix_, dist_coeffs_, image_points);
+    cv::Mat rvec = cv::Mat::zeros(3, 1, CV_64F); // 旋转向量 (0,0,0)
+    cv::Mat tvec = cv::Mat::zeros(3, 1, CV_64F); // 平移向量 (0,0,0)
 
-  //Use for debugging
-  geometry_msgs::msg::Point point_msg;
-  point_msg.x = image_points[0].x;
-  point_msg.y = image_points[0].y;
-  point_msg.z = 0;
-  pre_target_point_pub_->publish(point_msg);
+    cv::projectPoints(object_points, rvec, tvec, camera_matrix_, dist_coeffs_, image_points);
 
-  return cv::Point2f(static_cast<float>(image_points[0].x),static_cast<float>(image_points[0].y));
+    //Use for debugging
+    geometry_msgs::msg::Point point_msg;
+    point_msg.x = image_points[0].x;
+    point_msg.y = image_points[0].y;
+    point_msg.z = 0;
+    pre_target_point_pub_->publish(point_msg);
 
-  // return cv::Point(image_points[0].x,image_points[0].y);
-  }
-  catch (const tf2::TransformException &ex) 
-  {
+    return cv::Point2f(
+      static_cast<float>(image_points[0].x),
+      static_cast<float>(image_points[0].y));
+
+    // return cv::Point(image_points[0].x,image_points[0].y);
+  } catch (const tf2::TransformException & ex) {
     FYT_ERROR("armor_solver", "TF转换失败: {}", ex.what());
     return cv::Point2f(-1, -1);
-  } 
-  catch (const cv::Exception &ex) 
-  {
+  } catch (const cv::Exception & ex) {
     FYT_ERROR("armor_solver", "OpenCV错误: {}", ex.what());
     return cv::Point2f(-1, -1);
   }
 }
 
-void ArmorSolverNode::PreImageCallback(const sensor_msgs::msg::Image::ConstSharedPtr &image)
+void ArmorSolverNode::PreImageCallback(const sensor_msgs::msg::Image::ConstSharedPtr & image)
 {
-  try
-  {
-  // Convert to OpenCV Picture
-  cv_bridge::CvImagePtr cv_ptr;
+  try {
+    // Convert to OpenCV Picture
+    cv_bridge::CvImagePtr cv_ptr;
     try {
       cv_ptr = cv_bridge::toCvCopy(image, sensor_msgs::image_encodings::BGR8);
-    } catch (cv_bridge::Exception &e) {
+    } catch (cv_bridge::Exception & e) {
       FYT_ERROR("armor_solver", "cv_bridge异常: %s", e.what());
       return;
     }
-    
-  cv::Mat image_aim = cv_ptr->image;
-  
-  // Draw Point
-  // 安全获取点坐标
-  cv::Point2f point_to_draw;
+
+    cv::Mat image_aim = cv_ptr->image;
+
+    // Draw Point
+    // 安全获取点坐标
+    cv::Point2f point_to_draw;
     {
       std::lock_guard<std::mutex> lock(point_mutex_);
       point_to_draw = camera_plane_point_;
     }
-  // 只绘制有效点
-  if (point_to_draw.x >= 0 && point_to_draw.y >= 0)
-   {
-      cv::Point pre_aim_pixel_point(point_to_draw.x,point_to_draw.y);
+    // 只绘制有效点
+    if (point_to_draw.x >= 0 && point_to_draw.y >= 0) {
+      cv::Point pre_aim_pixel_point(point_to_draw.x, point_to_draw.y);
       // 确保点在图像范围内
       cv::Rect image_rect(0, 0, image_aim.cols, image_aim.rows);
-      cv::circle(image_aim,pre_aim_pixel_point,10, cv::Scalar(0, 255, 0), -1);
+      cv::circle(image_aim, pre_aim_pixel_point, 10, cv::Scalar(0, 255, 0), -1);
 
-  if (image_rect.contains(pre_aim_pixel_point))
-  {
-  }
-  else {
-        FYT_WARN("armor_solver", "预瞄点超出图像范围: [%f, %f]", 
-                 point_to_draw.x, point_to_draw.y);  
-        }
+      if (image_rect.contains(pre_aim_pixel_point)) {
+      } else {
+        FYT_WARN(
+          "armor_solver", "预瞄点超出图像范围: [%f, %f]",
+          point_to_draw.x, point_to_draw.y);
+      }
 
     }
     // Publish image
     auto msg = cv_bridge::CvImage(image->header, "bgr8", image_aim).toImageMsg();
     vis_predict_image_pub_.publish(msg);
     //FYT_INFO("armor_solver", "Pre-aim point: [%f, %f]", point_to_draw.x, point_to_draw.y);
-  }
-  catch (const std::exception &e) 
-  {
+  } catch (const std::exception & e) {
     FYT_ERROR("armor_solver", "图像处理异常: %s", e.what());
-  }  
+  }
 }
 //7.16---
 

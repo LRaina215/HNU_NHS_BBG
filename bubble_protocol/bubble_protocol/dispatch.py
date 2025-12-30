@@ -178,7 +178,7 @@ class RobotAPI(Node):
 
     def mode_ctrl_callback(self, msg: Int8) -> None:
         '''mode control function, send mode infomation to MCU.
-            模式控制函数，发送模式信息给MCU。
+            模式控制函数,发送模式信息给MCU。
         Parameters
         ------------
         msg: `Int8`
@@ -189,7 +189,7 @@ class RobotAPI(Node):
 
     def gimbal_callback(self, msg: GimbalCmd) -> None:
         """gimbal function, send gimbal infomation to MCU.
-            云台功能，发送云台信息给MCU。
+            云台功能,发送云台信息给MCU。
         Parameters
         ----------
         msg: `Gimbal`
@@ -197,19 +197,24 @@ class RobotAPI(Node):
         """
 
         # pitch = math.atan2(msg.position.z, math.sqrt(msg.position.x**2 + msg.position.y**2))
-        # yaw = math.atan2(msg.position.y, msg.position.x)
+        # yaw = math.atan2(msg.position.y, msg.position.x)    
+            
+        mode = 1 # 确认这里：如果 msg.yaw 是相对误差，用 1；如果是绝对角度，用 0 (且需要协议支持)
 
-        mode = 1
-        #self.get_logger().info("recived data gimbal change, position.x: {}, position.y: {}, position.z: {}".format(
-         #   msg.position.x, msg.position.y, msg.position.z))
         if msg.fire_advice == False:
             self.fire_advice = 0.0
         else:
             self.fire_advice = 1.0
 
+        # 12.30
+        # 修改点：移除 -10，并转换弧度为角度
+        # 假设 msg.yaw 和 msg.pitch 是弧度制
+        send_yaw = math.degrees(msg.yaw)
+        send_pitch = math.degrees(msg.pitch)
+
         self.robot_serial.send_data(
             "gimbal",
-            [mode, msg.yaw-10, msg.pitch, self.fire_advice, 0, 0, 0])
+            [mode, send_yaw, send_pitch, self.fire_advice, 0, 0, 0])
         # self.get_logger().info(f"sending: {msg.yaw},{msg.pitch},{self.fire_advice}")
 
     #transform odom info

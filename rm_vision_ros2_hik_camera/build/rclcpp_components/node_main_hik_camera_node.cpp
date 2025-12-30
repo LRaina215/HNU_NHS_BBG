@@ -30,7 +30,7 @@ int main(int argc, char * argv[])
   rclcpp::executors::SingleThreadedExecutor exec;
   rclcpp::NodeOptions options;
   options.arguments(args);
-  std::vector<class_loader::ClassLoader * > loaders;
+  std::vector<class_loader::ClassLoader *> loaders;
   std::vector<rclcpp_components::NodeInstanceWrapper> node_wrappers;
 
   std::string library_name = "libhik_camera.so";

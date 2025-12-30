@@ -15,9 +15,12 @@
 
 #include "rm_utils/math/trajectory_compensator.hpp"
 
-namespace fyt {
-bool TrajectoryCompensator::compensate(const Eigen::Vector3d &target_position,
-                                       double &pitch) const noexcept {
+namespace fyt
+{
+bool TrajectoryCompensator::compensate(
+  const Eigen::Vector3d & target_position,
+  double & pitch) const noexcept
+{
   double target_height = target_position(2);
   // The iterative_height is used to calculate angle in each iteration
   double iterative_height = target_height;
@@ -48,7 +51,8 @@ bool TrajectoryCompensator::compensate(const Eigen::Vector3d &target_position,
 }
 
 std::vector<std::pair<double, double>> TrajectoryCompensator::getTrajectory(
-  double distance, double angle) const noexcept {
+  double distance, double angle) const noexcept
+{
   std::vector<std::pair<double, double>> trajectory;
 
   if (distance < 0) {
@@ -61,13 +65,15 @@ std::vector<std::pair<double, double>> TrajectoryCompensator::getTrajectory(
   return trajectory;
 }
 
-double IdealCompensator::calculateTrajectory(const double x, const double angle) const noexcept {
+double IdealCompensator::calculateTrajectory(const double x, const double angle) const noexcept
+{
   double t = x / (velocity * cos(angle));
   double y = velocity * sin(angle) * t - 0.5 * gravity * t * t;
   return y;
 }
 
-double IdealCompensator::getFlyingTime(const Eigen::Vector3d &target_position) const noexcept {
+double IdealCompensator::getFlyingTime(const Eigen::Vector3d & target_position) const noexcept
+{
   double distance =
     sqrt(target_position(0) * target_position(0) + target_position(1) * target_position(1));
   double angle = atan2(target_position(2), distance);
@@ -75,15 +81,18 @@ double IdealCompensator::getFlyingTime(const Eigen::Vector3d &target_position) c
   return t;
 }
 
-double ResistanceCompensator::calculateTrajectory(const double x,
-                                                  const double angle) const noexcept {
+double ResistanceCompensator::calculateTrajectory(
+  const double x,
+  const double angle) const noexcept
+{
   double r = resistance < 1e-4 ? 1e-4 : resistance;
   double t = (exp(r * x) - 1) / (r * velocity * cos(angle));
   double y = velocity * sin(angle) * t - 0.5 * gravity * t * t;
   return y;
 }
 
-double ResistanceCompensator::getFlyingTime(const Eigen::Vector3d &target_position) const noexcept {
+double ResistanceCompensator::getFlyingTime(const Eigen::Vector3d & target_position) const noexcept
+{
   double r = resistance < 1e-4 ? 1e-4 : resistance;
   double distance =
     sqrt(target_position(0) * target_position(0) + target_position(1) * target_position(1));

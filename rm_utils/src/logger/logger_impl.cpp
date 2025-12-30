@@ -23,14 +23,17 @@
 #include "rm_utils/logger/impl/global_mutex.hpp"
 #include "rm_utils/logger/types.hpp"
 
-namespace fyt::logger {
+namespace fyt::logger
+{
 
-namespace internal {
+namespace internal
+{
 
 #define CHECK_OPTION(OPS, OPTION) ((OPS & OPTION) == OPTION)
 
 Logger::Logger(std::string name, std::string filename, LogLevel level, LogOptions ops)
-: consle_mutex_(GlobalMutex::getConsoleMutex()), name_(name), level_(level) {
+: consle_mutex_(GlobalMutex::getConsoleMutex()), name_(name), level_(level)
+{
   std::string cur_date = getLocalTime().substr(0, 10);
 
   if (filename.empty()) {
@@ -56,11 +59,12 @@ Logger::Logger(std::string name, std::string filename, LogLevel level, LogOption
   writer_ = std::make_unique<Writer>(filename);
 }
 
-void Logger::setLevel(LogLevel level) { level_ = level; }
+void Logger::setLevel(LogLevel level) {level_ = level;}
 
-void Logger::flush() { writer_->flush(); }
+void Logger::flush() {writer_->flush();}
 
-std::string Logger::getLocalTime() {
+std::string Logger::getLocalTime()
+{
   std::time_t tt = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
   // std::tm tm = *std::gmtime(&tt);  //GMT (UTC)
   std::tm tm = *std::localtime(&tt);  //Locale time-zone, usually UTC by default.

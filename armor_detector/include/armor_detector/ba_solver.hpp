@@ -40,26 +40,30 @@
 #include "armor_detector/graph_optimizer.hpp"
 #include "armor_detector/types.hpp"
 
-namespace fyt::auto_aim {
+namespace fyt::auto_aim
+{
 
 // BA algorithm based Optimizer for the armor pose estimation (Particularly for
 // the Yaw angle)
-class BaSolver {
+class BaSolver
+{
 public:
-  BaSolver(std::array<double, 9> &camera_matrix,
-           std::vector<double> &dist_coeffs);
+  BaSolver(
+    std::array<double, 9> & camera_matrix,
+    std::vector<double> & dist_coeffs);
 
   // Solve the armor pose using the BA algorithm, return the optimized rotation
-  Eigen::Matrix3d solveBa(const Armor &armor,
-                          const Eigen::Vector3d &t_camera_armor,
-                          const Eigen::Matrix3d &R_camera_armor,
-                          const Eigen::Matrix3d &R_imu_camera) noexcept;
+  Eigen::Matrix3d solveBa(
+    const Armor & armor,
+    const Eigen::Vector3d & t_camera_armor,
+    const Eigen::Matrix3d & R_camera_armor,
+    const Eigen::Matrix3d & R_imu_camera) noexcept;
 
 private:
   Eigen::Matrix3d K_;
   g2o::SparseOptimizer optimizer_;
   g2o::OptimizationAlgorithmProperty solver_property_;
-  g2o::OptimizationAlgorithmLevenberg *lm_algorithm_;
+  g2o::OptimizationAlgorithmLevenberg * lm_algorithm_;
 };
 
 } // namespace fyt::auto_aim

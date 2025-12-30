@@ -18,22 +18,26 @@
 
 #include <fmt/format.h>
 
-namespace fyt::logger {
-class LoggerNotFoundError : public std::exception {
+namespace fyt::logger
+{
+class LoggerNotFoundError : public std::exception
+{
 public:
-  explicit LoggerNotFoundError(std::string_view name) {
+  explicit LoggerNotFoundError(std::string_view name)
+  {
     msg = fmt::format("Logger {} Not Found", name);
   }
-  const char *what() const noexcept override { return msg.data(); }
+  const char * what() const noexcept override {return msg.data();}
 
 private:
   std::string_view msg;
 };
 
-class WriteError : public std::exception {
+class WriteError : public std::exception
+{
 public:
-  explicit WriteError(std::string_view name) { msg = fmt::format("Write to {} Error", name); }
-  const char *what() const noexcept override { return msg.data(); }
+  explicit WriteError(std::string_view name) {msg = fmt::format("Write to {} Error", name);}
+  const char * what() const noexcept override {return msg.data();}
 
 private:
   std::string_view msg;

@@ -22,16 +22,19 @@
 #include <rclcpp/rclcpp.hpp>
 #include <std_msgs/msg/int64.hpp>
 
-namespace fyt {
-class HeartBeatPublisher {
+namespace fyt
+{
+class HeartBeatPublisher
+{
 public:
   using SharedPtr = std::shared_ptr<HeartBeatPublisher>;
 
-  static SharedPtr create(rclcpp::Node *node);
+  static SharedPtr create(rclcpp::Node * node);
 
   ~HeartBeatPublisher();
+
 private:
-  explicit HeartBeatPublisher(rclcpp::Node *node);
+  explicit HeartBeatPublisher(rclcpp::Node * node);
 
   std_msgs::msg::Int64 message_;
   rclcpp::Publisher<std_msgs::msg::Int64>::SharedPtr publisher_;

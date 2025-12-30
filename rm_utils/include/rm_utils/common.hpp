@@ -18,15 +18,18 @@
 
 #include <string>
 
-namespace fyt {
+namespace fyt
+{
 
-enum class EnemyColor {
+enum class EnemyColor
+{
   RED = 0,
   BLUE = 1,
   WHITE = 2,
 };
 
-inline std::string enemyColorToString(EnemyColor color) {
+inline std::string enemyColorToString(EnemyColor color)
+{
   switch (color) {
     case EnemyColor::RED:
       return "RED";
@@ -39,7 +42,8 @@ inline std::string enemyColorToString(EnemyColor color) {
   }
 }
 
-enum VisionMode {
+enum VisionMode
+{
   AUTO_AIM_RED = 0,
   AUTO_AIM_BLUE = 1,
   SMALL_RUNE_RED = 2,
@@ -48,7 +52,8 @@ enum VisionMode {
   BIG_RUNE_BLUE = 5,
 };
 
-inline std::string visionModeToString(VisionMode mode) {
+inline std::string visionModeToString(VisionMode mode)
+{
   switch (mode) {
     case VisionMode::AUTO_AIM_RED:
       return "AUTO_AIM_RED";

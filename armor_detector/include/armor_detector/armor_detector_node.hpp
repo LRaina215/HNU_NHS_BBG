@@ -52,14 +52,16 @@
 #include "std_msgs/msg/int32.hpp"
 #include <rm_utils/common.hpp>
 
-namespace fyt::auto_aim {
+namespace fyt::auto_aim
+{
 
 // Armor Detector Node
 // Subscribe to the image topic, run the armor detection alogorithm and publish
 // the detected armors
-class ArmorDetectorNode : public rclcpp::Node {
+class ArmorDetectorNode : public rclcpp::Node
+{
 public:
-  ArmorDetectorNode(const rclcpp::NodeOptions &options);
+  ArmorDetectorNode(const rclcpp::NodeOptions & options);
   //Init enemy color
   EnemyColor detect_color_;
   struct colorStruct
@@ -68,7 +70,6 @@ public:
     /* data */
   };
   colorStruct enemy_color_;
-  
 
 private:
   void imageCallback(const sensor_msgs::msg::Image::ConstSharedPtr img_msg);
@@ -78,7 +79,7 @@ private:
   std::unique_ptr<Detector> initDetector(EnemyColor color);
 
   std::vector<Armor>
-  detectArmors(const sensor_msgs::msg::Image::ConstSharedPtr &img_msg);
+  detectArmors(const sensor_msgs::msg::Image::ConstSharedPtr & img_msg);
 
   void createDebugPublishers() noexcept;
   void destroyDebugPublishers() noexcept;
@@ -86,16 +87,16 @@ private:
   void publishMarkers() noexcept;
 
   void setModeCallback(
-      const std::shared_ptr<rm_interfaces::srv::SetMode::Request> request,
-      std::shared_ptr<rm_interfaces::srv::SetMode::Response> response);
+    const std::shared_ptr<rm_interfaces::srv::SetMode::Request> request,
+    std::shared_ptr<rm_interfaces::srv::SetMode::Response> response);
   void enemy_color_callback(const std_msgs::msg::Int32::SharedPtr msg);
-  void setEnemyColor(EnemyColor &detect_color, const std_msgs::msg::Int32::SharedPtr &msg);
+  void setEnemyColor(EnemyColor & detect_color, const std_msgs::msg::Int32::SharedPtr & msg);
 
   // Dynamic Parameter
   rcl_interfaces::msg::SetParametersResult
   onSetParameters(std::vector<rclcpp::Parameter> parameters);
   rclcpp::Node::OnSetParametersCallbackHandle::SharedPtr
-      on_set_parameters_callback_handle_;
+    on_set_parameters_callback_handle_;
 
   // Heartbeat
   HeartBeatPublisher::SharedPtr heartbeat_;
@@ -117,7 +118,7 @@ private:
   visualization_msgs::msg::Marker text_marker_;
   visualization_msgs::msg::MarkerArray marker_array_;
   rclcpp::Publisher<visualization_msgs::msg::MarkerArray>::SharedPtr
-      marker_pub_;
+    marker_pub_;
 
   // Camera info part
   rclcpp::Subscription<sensor_msgs::msg::CameraInfo>::SharedPtr cam_info_sub_;
@@ -148,9 +149,9 @@ private:
   std::shared_ptr<rclcpp::ParameterEventHandler> debug_param_sub_;
   std::shared_ptr<rclcpp::ParameterCallbackHandle> debug_cb_handle_;
   rclcpp::Publisher<rm_interfaces::msg::DebugLights>::SharedPtr
-      lights_data_pub_;
+    lights_data_pub_;
   rclcpp::Publisher<rm_interfaces::msg::DebugArmors>::SharedPtr
-      armors_data_pub_;
+    armors_data_pub_;
   image_transport::Publisher binary_img_pub_;
   image_transport::Publisher number_img_pub_;
   image_transport::Publisher result_img_pub_;

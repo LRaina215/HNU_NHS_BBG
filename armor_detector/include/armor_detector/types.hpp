@@ -31,7 +31,8 @@
 #include "rm_utils/assert.hpp"
 #include "rm_utils/common.hpp"
 
-namespace fyt::auto_aim {
+namespace fyt::auto_aim
+{
 
 // Armor size, Unit: m
 constexpr double SMALL_ARMOR_WIDTH = 133.0 / 1000.0; // 135
@@ -44,7 +45,8 @@ constexpr double FIFTTEN_DEGREE_RAD = 15 * CV_PI / 180;
 
 // Armor type
 enum class ArmorType { SMALL, LARGE, INVALID };
-inline std::string armorTypeToString(const ArmorType &type) {
+inline std::string armorTypeToString(const ArmorType & type)
+{
   switch (type) {
     case ArmorType::SMALL:
       return "small";
@@ -56,23 +58,25 @@ inline std::string armorTypeToString(const ArmorType &type) {
 }
 
 // Struct used to store the light bar
-struct Light : public cv::RotatedRect {
+struct Light : public cv::RotatedRect
+{
   Light() = default;
-  explicit Light(const std::vector<cv::Point> &contour)
-  : cv::RotatedRect(cv::minAreaRect(contour)), color(EnemyColor::WHITE) {
+  explicit Light(const std::vector<cv::Point> & contour)
+  : cv::RotatedRect(cv::minAreaRect(contour)), color(EnemyColor::WHITE)
+  {
     FYT_ASSERT(contour.size() > 0);
 
     center = std::accumulate(
       contour.begin(),
       contour.end(),
       cv::Point2f(0, 0),
-      [n = static_cast<float>(contour.size())](const cv::Point2f &a, const cv::Point &b) {
+      [n = static_cast<float>(contour.size())](const cv::Point2f & a, const cv::Point & b) {
         return a + cv::Point2f(b.x, b.y) / n;
       });
 
     cv::Point2f p[4];
     this->points(p);
-    std::sort(p, p + 4, [](const cv::Point2f &a, const cv::Point2f &b) { return a.y < b.y; });
+    std::sort(p, p + 4, [](const cv::Point2f & a, const cv::Point2f & b) {return a.y < b.y;});
     top = (p[0] + p[1]) / 2;
     bottom = (p[2] + p[3]) / 2;
 
@@ -97,11 +101,13 @@ struct Light : public cv::RotatedRect {
 };
 
 // Struct used to store the armor
-struct Armor {
+struct Armor
+{
   static constexpr const int N_LANDMARKS = 6;
   static constexpr const int N_LANDMARKS_2 = N_LANDMARKS * 2;
   Armor() = default;
-  Armor(const Light &l1, const Light &l2) {
+  Armor(const Light & l1, const Light & l2)
+  {
     if (l1.center.x < l2.center.x) {
       left_light = l1, right_light = l2;
     } else {
@@ -113,35 +119,38 @@ struct Armor {
 
   // Build the points in the object coordinate system, start from bottom left in
   // clockwise order
-  template <typename PointType>
-  static inline std::vector<PointType> buildObjectPoints(const double &w,
-                                                         const double &h) noexcept {
+  template<typename PointType>
+  static inline std::vector<PointType> buildObjectPoints(
+    const double & w,
+    const double & h) noexcept
+  {
     if constexpr (N_LANDMARKS == 4) {
       return {PointType(0, w / 2, -h / 2),
-              PointType(0, w / 2, h / 2),
-              PointType(0, -w / 2, h / 2),
-              PointType(0, -w / 2, -h / 2)};
+        PointType(0, w / 2, h / 2),
+        PointType(0, -w / 2, h / 2),
+        PointType(0, -w / 2, -h / 2)};
     } else {
       return {PointType(0, w / 2, -h / 2),
-              PointType(0, w / 2, 0),
-              PointType(0, w / 2, h / 2),
-              PointType(0, -w / 2, h / 2),
-              PointType(0, -w / 2, 0),
-              PointType(0, -w / 2, -h / 2)};
+        PointType(0, w / 2, 0),
+        PointType(0, w / 2, h / 2),
+        PointType(0, -w / 2, h / 2),
+        PointType(0, -w / 2, 0),
+        PointType(0, -w / 2, -h / 2)};
     }
   }
 
   // Landmarks start from bottom left in clockwise order
-  std::vector<cv::Point2f> landmarks() const {
+  std::vector<cv::Point2f> landmarks() const
+  {
     if constexpr (N_LANDMARKS == 4) {
       return {left_light.bottom, left_light.top, right_light.top, right_light.bottom};
     } else {
       return {left_light.bottom,
-              left_light.center,
-              left_light.top,
-              right_light.top,
-              right_light.center,
-              right_light.bottom};
+        left_light.center,
+        left_light.top,
+        right_light.top,
+        right_light.center,
+        right_light.bottom};
     }
   }
 

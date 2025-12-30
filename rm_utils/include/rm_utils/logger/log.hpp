@@ -19,14 +19,14 @@
 #include <rm_utils/logger/logger_pool.hpp>
 #include <rm_utils/logger/types.hpp>
 
-#define FYT_REGISTER_LOGGER(name, path, level)                           \
-  do {                                                                   \
-    fyt::logger::LoggerPool::registerLogger(                             \
+#define FYT_REGISTER_LOGGER(name, path, level) \
+  do { \
+    fyt::logger::LoggerPool::registerLogger( \
       name, path, fyt::logger::LogLevel::level, DATE_DIR | DATE_SUFFIX); \
   } while (0)
 
-#define FYT_LOG(name, level, ...)                                     \
-  do {                                                                \
+#define FYT_LOG(name, level, ...) \
+  do { \
     fyt::logger::LoggerPool::getLogger(name).log(level, __VA_ARGS__); \
   } while (0)
 

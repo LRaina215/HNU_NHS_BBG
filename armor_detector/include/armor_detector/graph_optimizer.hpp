@@ -36,34 +36,38 @@
 // project
 #include "armor_detector/types.hpp"
 
-namespace fyt::auto_aim {
+namespace fyt::auto_aim
+{
 // Vertex of graph optimization algorithm for the yaw angle
-class VertexYaw : public g2o::BaseVertex<1, double> {
+class VertexYaw : public g2o::BaseVertex<1, double>
+{
 public:
   EIGEN_MAKE_ALIGNED_OPERATOR_NEW;
 
   VertexYaw() = default;
-  virtual void setToOriginImpl() override { _estimate = 0; }
-  virtual void oplusImpl(const double *update) override;
+  virtual void setToOriginImpl() override {_estimate = 0;}
+  virtual void oplusImpl(const double * update) override;
 
-  virtual bool read(std::istream &in) override { return true; }
-  virtual bool write(std::ostream &out) const override { return true; }
+  virtual bool read(std::istream & in) override {return true;}
+  virtual bool write(std::ostream & out) const override {return true;}
 };
 
 // Edge of graph optimization algorithm for reporjection error calculation using
 // yaw angle and observation
 class EdgeProjection : public g2o::BaseBinaryEdge<2, Eigen::Vector2d, VertexYaw,
-                                                  g2o::VertexPointXYZ> {
+    g2o::VertexPointXYZ>
+{
 public:
   EIGEN_MAKE_ALIGNED_OPERATOR_NEW;
   using InfoMatrixType = Eigen::Matrix<double, 2, 2>;
 
-  EdgeProjection(const Sophus::SO3d &R_camera_imu, const Sophus::SO3d &R_pitch,
-                 const Eigen::Vector3d &t, const Eigen::Matrix3d &K);
+  EdgeProjection(
+    const Sophus::SO3d & R_camera_imu, const Sophus::SO3d & R_pitch,
+    const Eigen::Vector3d & t, const Eigen::Matrix3d & K);
   virtual void computeError() override;
 
-  virtual bool read(std::istream &in) override { return true; }
-  virtual bool write(std::ostream &out) const override { return true; }
+  virtual bool read(std::istream & in) override {return true;}
+  virtual bool write(std::ostream & out) const override {return true;}
 
 private:
   Sophus::SO3d R_camera_imu_;

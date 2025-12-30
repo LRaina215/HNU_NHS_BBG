@@ -35,22 +35,25 @@
 #include "rm_utils/math/extended_kalman_filter.hpp"
 #include "armor_solver/motion_model.hpp"
 
-namespace fyt::auto_aim {
+namespace fyt::auto_aim
+{
 
 enum class ArmorsNum { NORMAL_4 = 4, BALANCE_2 = 2, OUTPOST_3 = 3 };
 
-class Tracker {
+class Tracker
+{
 public:
   Tracker(double max_match_distance, double max_match_yaw);
 
   using Armors = rm_interfaces::msg::Armors;
   using Armor = rm_interfaces::msg::Armor;
 
-  void init(const Armors::SharedPtr &armors_msg) noexcept;
+  void init(const Armors::SharedPtr & armors_msg) noexcept;
 
-  void update(const Armors::SharedPtr &armors_msg) noexcept;
+  void update(const Armors::SharedPtr & armors_msg) noexcept;
 
-  enum State {
+  enum State
+  {
     LOST,
     DETECTING,
     TRACKING,
@@ -75,13 +78,13 @@ public:
   double d_zc;
 
 private:
-  void initEKF(const Armor &a) noexcept;
+  void initEKF(const Armor & a) noexcept;
 
-  void handleArmorJump(const Armor &a) noexcept;
+  void handleArmorJump(const Armor & a) noexcept;
 
-  double orientationToYaw(const geometry_msgs::msg::Quaternion &q) noexcept;
+  double orientationToYaw(const geometry_msgs::msg::Quaternion & q) noexcept;
 
-  static Eigen::Vector3d getArmorPositionFromState(const Eigen::VectorXd &x) noexcept;
+  static Eigen::Vector3d getArmorPositionFromState(const Eigen::VectorXd & x) noexcept;
 
   double max_match_distance_;
   double max_match_yaw_diff_;

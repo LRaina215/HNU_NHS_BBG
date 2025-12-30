@@ -24,8 +24,10 @@
 #include "rcpputils/get_env.hpp"
 #include "rcpputils/filesystem_helper.hpp"
 
-namespace fyt::utils {
-std::filesystem::path URLResolver::getResolvedPath(const std::string &url) {
+namespace fyt::utils
+{
+std::filesystem::path URLResolver::getResolvedPath(const std::string & url)
+{
   const std::string resolved_url = resolveUrl(url);
   UrlType url_type = parseUrl(url);
 
@@ -33,25 +35,26 @@ std::filesystem::path URLResolver::getResolvedPath(const std::string &url) {
 
   switch (url_type) {
     case UrlType::EMPTY: {
-      break;
-    }
+        break;
+      }
     case UrlType::FILE: {
-      res = resolved_url.substr(7);
-      break;
-    }
+        res = resolved_url.substr(7);
+        break;
+      }
     case UrlType::PACKAGE: {
-      res = getPackageFileName(resolved_url);
-      break;
-    }
+        res = getPackageFileName(resolved_url);
+        break;
+      }
     default: {
-      break;
-    }
+        break;
+      }
   }
 
   return std::filesystem::path(res);
 }
 
-std::string URLResolver::resolveUrl(const std::string &url) {
+std::string URLResolver::resolveUrl(const std::string & url)
+{
   std::string resolved;
   size_t rest = 0;
 
@@ -97,18 +100,20 @@ std::string URLResolver::resolveUrl(const std::string &url) {
   return resolved;
 }
 
-URLResolver::UrlType URLResolver::parseUrl(const std::string &url) {
+URLResolver::UrlType URLResolver::parseUrl(const std::string & url)
+{
   if (url == "") {
     return UrlType::EMPTY;
   }
 
   // Easy C++14 replacement for boost::iequals from :
   // https://stackoverflow.com/a/4119881
-  auto iequals = [](const std::string &a, const std::string &b) {
-    return std::equal(a.begin(), a.end(), b.begin(), b.end(), [](char a, char b) {
-      return tolower(a) == tolower(b);
-    });
-  };
+  auto iequals = [](const std::string & a, const std::string & b) {
+      return std::equal(
+        a.begin(), a.end(), b.begin(), b.end(), [](char a, char b) {
+          return tolower(a) == tolower(b);
+        });
+    };
 
   if (iequals(url.substr(0, 8), "file:///")) {
     return UrlType::FILE;
@@ -124,7 +129,8 @@ URLResolver::UrlType URLResolver::parseUrl(const std::string &url) {
   return UrlType::INVALID;
 }
 
-std::string URLResolver::getPackageFileName(const std::string &url) {
+std::string URLResolver::getPackageFileName(const std::string & url)
+{
   // Scan URL from after "package://" until next '/' and extract
   // package name.  The parseURL() already checked that it's present.
   size_t prefix_len = std::string("package://").length();

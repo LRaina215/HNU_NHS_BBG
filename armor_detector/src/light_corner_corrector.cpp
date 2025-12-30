@@ -17,9 +17,11 @@
 
 #include <numeric>
 
-namespace fyt::auto_aim {
+namespace fyt::auto_aim
+{
 
-void LightCornerCorrector::correctCorners(Armor &armor, const cv::Mat &gray_img) {
+void LightCornerCorrector::correctCorners(Armor & armor, const cv::Mat & gray_img)
+{
   // If the width of the light is too small, the correction is not performed
   constexpr int PASS_OPTIMIZE_WIDTH = 3;
 
@@ -52,7 +54,8 @@ void LightCornerCorrector::correctCorners(Armor &armor, const cv::Mat &gray_img)
   }
 }
 
-SymmetryAxis LightCornerCorrector::findSymmetryAxis(const cv::Mat &gray_img, const Light &light) {
+SymmetryAxis LightCornerCorrector::findSymmetryAxis(const cv::Mat & gray_img, const Light & light)
+{
   constexpr float MAX_BRIGHTNESS = 25;
   constexpr float SCALE = 0.07;
 
@@ -80,7 +83,7 @@ SymmetryAxis LightCornerCorrector::findSymmetryAxis(const cv::Mat &gray_img, con
   // Calculate the centroid
   cv::Moments moments = cv::moments(roi, false);
   cv::Point2f centroid = cv::Point2f(moments.m10 / moments.m00, moments.m01 / moments.m00) +
-                         cv::Point2f(light_box.x, light_box.y);
+    cv::Point2f(light_box.x, light_box.y);
 
   // Initialize the PointCloud
   std::vector<cv::Point2f> points;
@@ -110,20 +113,22 @@ SymmetryAxis LightCornerCorrector::findSymmetryAxis(const cv::Mat &gray_img, con
   return SymmetryAxis{.centroid = centroid, .direction = axis, .mean_val = mean_val};
 }
 
-cv::Point2f LightCornerCorrector::findCorner(const cv::Mat &gray_img,
-                                             const Light &light,
-                                             const SymmetryAxis &axis,
-                                             std::string order) {
+cv::Point2f LightCornerCorrector::findCorner(
+  const cv::Mat & gray_img,
+  const Light & light,
+  const SymmetryAxis & axis,
+  std::string order)
+{
   constexpr float START = 0.8 / 2;
   constexpr float END = 1.2 / 2;
 
-  auto inImage = [&gray_img](const cv::Point &point) -> bool {
-    return point.x >= 0 && point.x < gray_img.cols && point.y >= 0 && point.y < gray_img.rows;
-  };
+  auto inImage = [&gray_img](const cv::Point & point) -> bool {
+      return point.x >= 0 && point.x < gray_img.cols && point.y >= 0 && point.y < gray_img.rows;
+    };
 
   auto distance = [](float x0, float y0, float x1, float y1) -> float {
-    return std::sqrt((x0 - x1) * (x0 - x1) + (y0 - y1) * (y0 - y1));
-  };
+      return std::sqrt((x0 - x1) * (x0 - x1) + (y0 - y1) * (y0 - y1));
+    };
 
   int oper = order == "top" ? 1 : -1;
   float L = light.length;
@@ -145,7 +150,8 @@ cv::Point2f LightCornerCorrector::findCorner(const cv::Mat &gray_img,
     bool has_corner = false;
     // Search along the symmetry axis to find the corner that has the maximum brightness difference
     for (float x = x0 + dx, y = y0 + dy; distance(x, y, x0, y0) < L * (END - START);
-         x += dx, y += dy) {
+      x += dx, y += dy)
+    {
       cv::Point2f cur = cv::Point2f(x, y);
       if (!inImage(cv::Point(cur))) {
         break;

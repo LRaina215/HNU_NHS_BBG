@@ -14,4 +14,3 @@
 // limitations under the License.
 
 #include "rm_utils/math/utils.hpp"
-

@@ -36,11 +36,11 @@ TEST(ArmorDetectorNodeTest, NodeStartupTest) {
   Detector::LightParams l_params = {
     .min_ratio = 0.08, .max_ratio = 0.4, .max_angle = 40.0, .color_diff_thresh = 25};
   Detector::ArmorParams a_params = {.min_light_ratio = 0.6,
-                                    .min_small_center_distance = 0.8,
-                                    .max_small_center_distance = 3.2,
-                                    .min_large_center_distance = 3.2,
-                                    .max_large_center_distance = 5.0,
-                                    .max_angle = 35.0};
+    .min_small_center_distance = 0.8,
+    .max_small_center_distance = 3.2,
+    .min_large_center_distance = 3.2,
+    .max_large_center_distance = 5.0,
+    .max_angle = 35.0};
 
   auto detector = std::make_unique<Detector>(binary_thres, EnemyColor::RED, l_params, a_params);
 
@@ -62,9 +62,10 @@ TEST(ArmorDetectorNodeTest, NodeStartupTest) {
   // Detect
   std::vector<Armor> armors = detector->detect(test_image);
 
-  std::sort(armors.begin(), armors.end(), [](const Armor &a, const Armor &b) {
-    return a.number < b.number;
-  });
+  std::sort(
+    armors.begin(), armors.end(), [](const Armor & a, const Armor & b) {
+      return a.number < b.number;
+    });
 
   EXPECT_EQ(armors.size(), static_cast<size_t>(6));
   EXPECT_EQ(armors[0].number, "2");

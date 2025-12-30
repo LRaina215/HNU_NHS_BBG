@@ -34,9 +34,11 @@
 #include "rm_utils/math/trajectory_compensator.hpp"
 #include "rm_utils/math/manual_compensator.hpp"
 
-namespace fyt::auto_aim {
+namespace fyt::auto_aim
+{
 // Solver class used to solve the gimbal command from tracked target
-class Solver {
+class Solver
+{
 public:
   explicit Solver(std::weak_ptr<rclcpp::Node> node);
   // explicit Solver(std::string trajectory_compensator_type, float max_tracking_v_yaw);
@@ -44,45 +46,48 @@ public:
 
   // Solve the gimbal command from tracked target
   // Throw: tf2::TransformException if the transform from "odom" to "gimbal_link" is not available
-  rm_interfaces::msg::GimbalCmd solve(const rm_interfaces::msg::Target &target_msg,
-                                      const rclcpp::Time &current_time,
-                                      std::shared_ptr<tf2_ros::Buffer> tf2_buffer_);
+  rm_interfaces::msg::GimbalCmd solve(
+    const rm_interfaces::msg::Target & target_msg,
+    const rclcpp::Time & current_time,
+    std::shared_ptr<tf2_ros::Buffer> tf2_buffer_);
 
   enum State { TRACKING_ARMOR = 0, TRACKING_CENTER = 1 } state;
 
-  std::vector<std::pair<double, double>> getTrajectory() const noexcept; 
+  std::vector<std::pair<double, double>> getTrajectory() const noexcept;
   geometry_msgs::msg::Point getPredictedPosition() const noexcept;
-
-
 
 private:
   // Get the armor positions from the target robot
-  std::vector<Eigen::Vector3d> getArmorPositions(const Eigen::Vector3d &target_center,
-                                                 const double yaw,
-                                                 const double r1,
-                                                 const double r2,
-                                                 const double d_zc,
-                                                 const double d_za,
-                                                 const size_t armors_num) const noexcept;
+  std::vector<Eigen::Vector3d> getArmorPositions(
+    const Eigen::Vector3d & target_center,
+    const double yaw,
+    const double r1,
+    const double r2,
+    const double d_zc,
+    const double d_za,
+    const size_t armors_num) const noexcept;
 
   // Select the best armor to shoot
   // Return: selected idx in {0, 1, ..., armors_num - 1}
-  int selectBestArmor(const std::vector<Eigen::Vector3d> &armor_positions,
-                      const Eigen::Vector3d &target_center,
-                      const double target_yaw,
-                      const double target_v_yaw,
-                      const size_t armors_num) const noexcept;
+  int selectBestArmor(
+    const std::vector<Eigen::Vector3d> & armor_positions,
+    const Eigen::Vector3d & target_center,
+    const double target_yaw,
+    const double target_v_yaw,
+    const size_t armors_num) const noexcept;
 
-  void calcYawAndPitch(const Eigen::Vector3d &p,
-                       const std::array<double, 3> rpy,
-                       double &yaw,
-                       double &pitch) const noexcept;
+  void calcYawAndPitch(
+    const Eigen::Vector3d & p,
+    const std::array<double, 3> rpy,
+    double & yaw,
+    double & pitch) const noexcept;
 
-  bool isOnTarget(const double cur_yaw,
-                  const double cur_pitch,
-                  const double target_yaw,
-                  const double target_pitch,
-                  const double distance) const noexcept;
+  bool isOnTarget(
+    const double cur_yaw,
+    const double cur_pitch,
+    const double target_yaw,
+    const double target_pitch,
+    const double distance) const noexcept;
 
   std::unique_ptr<TrajectoryCompensator> trajectory_compensator_;
   std::unique_ptr<ManualCompensator> manual_compensator_;

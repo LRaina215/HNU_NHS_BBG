@@ -19,18 +19,22 @@
 #include <mutex>
 #include <unordered_map>
 
-namespace fyt::logger {
+namespace fyt::logger
+{
 
 static std::mutex g_mutex_;
 
-class GlobalMutex {
+class GlobalMutex
+{
 public:
-  inline static std::mutex &getConsoleMutex() {
+  inline static std::mutex & getConsoleMutex()
+  {
     static std::mutex s_mutex;
     return s_mutex;
   }
 
-  inline static std::mutex &getFileMutex(const std::string &filename) {
+  inline static std::mutex & getFileMutex(const std::string & filename)
+  {
     static std::unordered_map<std::string, std::mutex> file_mutex_map;
     std::lock_guard<std::mutex> lock(g_mutex_);
     return file_mutex_map[filename];

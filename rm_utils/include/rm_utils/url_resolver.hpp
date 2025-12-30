@@ -22,25 +22,28 @@
 #include <filesystem>
 #include <string>
 
-namespace fyt::utils {
-class URLResolver {
+namespace fyt::utils
+{
+class URLResolver
+{
 public:
-  static std::filesystem::path getResolvedPath(const std::string &url);
+  static std::filesystem::path getResolvedPath(const std::string & url);
 
 private:
-  static std::string resolveUrl(const std::string &url);
+  static std::string resolveUrl(const std::string & url);
 
   URLResolver() = delete;
 
-  enum class UrlType {
+  enum class UrlType
+  {
     EMPTY = 0,  // empty string
     FILE,       // file
     PACKAGE,    // package
     INVALID,    // anything >= is invalid
   };
-  static UrlType parseUrl(const std::string &url);
+  static UrlType parseUrl(const std::string & url);
 
-  static std::string getPackageFileName(const std::string &url);
+  static std::string getPackageFileName(const std::string & url);
 };
 }  // namespace fyt::utils
 

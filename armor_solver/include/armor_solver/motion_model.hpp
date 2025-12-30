@@ -20,9 +20,11 @@
 // project
 #include "rm_utils/math/extended_kalman_filter.hpp"
 
-namespace fyt::auto_aim {
+namespace fyt::auto_aim
+{
 
-enum class MotionModel {
+enum class MotionModel
+{
   CONSTANT_VELOCITY = 0,  // Constant velocity
   CONSTANT_ROTATION = 1,  // Constant rotation velocity
   CONSTANT_VEL_ROT = 2    // Constant velocity and rotation velocity
@@ -31,12 +33,14 @@ enum class MotionModel {
 // X_N: state dimension, Z_N: measurement dimension
 constexpr int X_N = 10, Z_N = 4;
 
-struct Predict {
+struct Predict
+{
   explicit Predict(double dt, MotionModel model = MotionModel::CONSTANT_VEL_ROT)
   : dt(dt), model(model) {}
 
-  template <typename T>
-  void operator()(const T x0[X_N], T x1[X_N]) {
+  template<typename T>
+  void operator()(const T x0[X_N], T x1[X_N])
+  {
     for (int i = 0; i < X_N; i++) {
       x1[i] = x0[i];
     }
@@ -68,9 +72,11 @@ struct Predict {
   MotionModel model;
 };
 
-struct Measure {
-  template <typename T>
-  void operator()(const T x[Z_N], T z[Z_N]) {
+struct Measure
+{
+  template<typename T>
+  void operator()(const T x[Z_N], T z[Z_N])
+  {
     z[0] = x[0] - ceres::cos(x[6]) * x[8];
     z[1] = x[2] - ceres::sin(x[6]) * x[8];
     z[2] = x[4] + x[9];

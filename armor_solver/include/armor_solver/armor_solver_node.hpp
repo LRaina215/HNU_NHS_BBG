@@ -52,30 +52,34 @@
 #include <cv_bridge/cv_bridge.h>  // 用于 ROS 图像和 OpenCV 图像的转换
 #include <opencv2/opencv.hpp>     // OpenCV 核心功能
 
-namespace fyt::auto_aim {
+namespace fyt::auto_aim
+{
 using tf2_filter = tf2_ros::MessageFilter<rm_interfaces::msg::Armors>;
-class ArmorSolverNode : public rclcpp::Node {
+class ArmorSolverNode : public rclcpp::Node
+{
 public:
-  explicit ArmorSolverNode(const rclcpp::NodeOptions &options);
+  explicit ArmorSolverNode(const rclcpp::NodeOptions & options);
 
 private:
   void armorsCallback(const rm_interfaces::msg::Armors::SharedPtr armors_ptr);
 
   void initMarkers() noexcept;
 
-  void publishMarkers(const rm_interfaces::msg::Target &target_msg,
-                      const rm_interfaces::msg::GimbalCmd &gimbal_cmd) noexcept;
+  void publishMarkers(
+    const rm_interfaces::msg::Target & target_msg,
+    const rm_interfaces::msg::GimbalCmd & gimbal_cmd) noexcept;
 
 
-  void setModeCallback(const std::shared_ptr<rm_interfaces::srv::SetMode::Request> request,
-                       std::shared_ptr<rm_interfaces::srv::SetMode::Response> response);
-  void processImage(const cv::Mat &image, const std_msgs::msg::Header &header);
+  void setModeCallback(
+    const std::shared_ptr<rm_interfaces::srv::SetMode::Request> request,
+    std::shared_ptr<rm_interfaces::srv::SetMode::Response> response);
+  void processImage(const cv::Mat & image, const std_msgs::msg::Header & header);
 
-  cv::Point2f project3DTo2D(const Eigen::Vector3d& point3d);
+  cv::Point2f project3DTo2D(const Eigen::Vector3d & point3d);
 
-  cv::Point2f PointConvert (geometry_msgs::msg::Point odom_pre_point);
+  cv::Point2f PointConvert(geometry_msgs::msg::Point odom_pre_point);
 
-  void PreImageCallback(const sensor_msgs::msg::Image::ConstSharedPtr &image);
+  void PreImageCallback(const sensor_msgs::msg::Image::ConstSharedPtr & image);
 
 
   bool debug_mode_;
@@ -118,7 +122,7 @@ private:
   rclcpp::Publisher<rm_interfaces::msg::GimbalCmd>::SharedPtr gimbal_pub_;
   rclcpp::TimerBase::SharedPtr pub_timer_;
   void timerCallback();
-  
+
   // Enable/Disable Armor Solver
   bool enable_;
   rclcpp::Service<rm_interfaces::srv::SetMode>::SharedPtr set_mode_srv_;

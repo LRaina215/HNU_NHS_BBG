@@ -21,9 +21,11 @@
 // project
 #include "armor_detector/types.hpp"
 
-namespace fyt::auto_aim {
+namespace fyt::auto_aim
+{
 
-struct SymmetryAxis {
+struct SymmetryAxis
+{
   cv::Point2f centroid;
   cv::Point2f direction;
   float mean_val; // Mean brightness
@@ -32,22 +34,24 @@ struct SymmetryAxis {
 // This class is used to improve the precision of the corner points of the light bar.
 // First, the PCA algorithm is used to find the symmetry axis of the light bar,
 // and then along the symmetry axis to find the corner points of the light bar based on the gradient of brightness.
-class LightCornerCorrector {
+class LightCornerCorrector
+{
 public:
   explicit LightCornerCorrector() noexcept {}
 
   // Correct the corners of the armor's lights
-  void correctCorners(Armor &armor, const cv::Mat &gray_img);
+  void correctCorners(Armor & armor, const cv::Mat & gray_img);
 
 private:
   // Find the symmetry axis of the light
-  SymmetryAxis findSymmetryAxis(const cv::Mat &gray_img, const Light &light);
+  SymmetryAxis findSymmetryAxis(const cv::Mat & gray_img, const Light & light);
 
   // Find the corner of the light
-  cv::Point2f findCorner(const cv::Mat &gray_img,
-                         const Light &light,
-                         const SymmetryAxis &axis,
-                         std::string order);
+  cv::Point2f findCorner(
+    const cv::Mat & gray_img,
+    const Light & light,
+    const SymmetryAxis & axis,
+    std::string order);
 };
 
 }  // namespace fyt::auto_aim

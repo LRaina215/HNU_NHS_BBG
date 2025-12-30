@@ -31,16 +31,20 @@
 #include "rm_utils/logger/impl/writer.hpp"
 #include "rm_utils/logger/types.hpp"
 
-namespace fyt::logger {
+namespace fyt::logger
+{
 
-namespace internal {
-class Logger {
+namespace internal
+{
+class Logger
+{
 public:
   Logger(std::string name, std::string path, LogLevel level, LogOptions ops);
 
-  template <typename... Args>
-  void log(LogLevel level, const std::string &format, Args... args) {
-    std::string log_info = fmt::format(format, args...);
+  template<typename ... Args>
+  void log(LogLevel level, const std::string & format, Args... args)
+  {
+    std::string log_info = fmt::format(format, args ...);
     std::string level_prefix = fmt::format("[{}] ", LogNameTable[static_cast<std::uint8_t>(level)]);
     std::string name_prefix = fmt::format("[{}] ", name_);
     std::string log_time = fmt::format("[{}] ", getLocalTime());
@@ -56,35 +60,41 @@ public:
     fmt::print(fg(LogFmtColorTable[static_cast<std::uint8_t>(level)]), "{}\n", message);
   }
 
-  template <typename... Args>
-  void debug(const std::string &format, Args... args) {
-    log(LogLevel::DEBUG, format, args...);
+  template<typename ... Args>
+  void debug(const std::string & format, Args... args)
+  {
+    log(LogLevel::DEBUG, format, args ...);
   }
 
-  template <typename... Args>
-  void info(const std::string &format, Args... args) {
-    log(LogLevel::INFO, format, args...);
+  template<typename ... Args>
+  void info(const std::string & format, Args... args)
+  {
+    log(LogLevel::INFO, format, args ...);
   }
 
-  template <typename... Args>
-  void warn(const std::string &format, Args... args) {
-    log(LogLevel::WARN, format, args...);
+  template<typename ... Args>
+  void warn(const std::string & format, Args... args)
+  {
+    log(LogLevel::WARN, format, args ...);
   }
 
-  template <typename... Args>
-  void error(const std::string &format, Args... args) {
-    log(LogLevel::ERROR, format, args...);
+  template<typename ... Args>
+  void error(const std::string & format, Args... args)
+  {
+    log(LogLevel::ERROR, format, args ...);
   }
 
-  template <typename... Args>
-  void fatal(const std::string &format, Args... args) {
-    log(LogLevel::FATAL, format, args...);
+  template<typename ... Args>
+  void fatal(const std::string & format, Args... args)
+  {
+    log(LogLevel::FATAL, format, args ...);
   }
 
-  template <typename... Args>
-  void print(const std::string &format, Args... args) {
+  template<typename ... Args>
+  void print(const std::string & format, Args... args)
+  {
     std::lock_guard<std::mutex> lock(consle_mutex_);
-    fmt::print(format, args...);
+    fmt::print(format, args ...);
   }
 
   void setLevel(LogLevel level);
@@ -94,7 +104,7 @@ public:
 private:
   std::string getLocalTime();
 
-  std::mutex &consle_mutex_;
+  std::mutex & consle_mutex_;
   std::string name_;
   LogLevel level_;
   std::unique_ptr<Writer> writer_;
@@ -102,4 +112,4 @@ private:
 }  // namespace internal
 
 }  // namespace fyt::logger
-#endif  // RM_UTILS_LOGGER_LOGGER_IMPL_HPP_ 
+#endif  // RM_UTILS_LOGGER_LOGGER_IMPL_HPP_

@@ -23,21 +23,23 @@
 
 #include "rm_utils/logger/impl/logger_impl.hpp"
 
-namespace fyt::logger {
-class LoggerPool {
+namespace fyt::logger
+{
+class LoggerPool
+{
 public:
-  static internal::Logger &getLogger(const std::string &name);
+  static internal::Logger & getLogger(const std::string & name);
 
-  static void registerLogger(const std::string &name,
-                             const std::string &path,
-                             LogLevel level,
-                             LogOptions = DEFAULT_OPTIONS);
+  static void registerLogger(const std::string & name,
+    const std::string & path,
+    LogLevel level,
+    LogOptions = DEFAULT_OPTIONS);
 
 private:
   LoggerPool() = default;
   ~LoggerPool() = default;
   LoggerPool(const LoggerPool &) = delete;
-  LoggerPool &operator=(const LoggerPool &) = delete;
+  LoggerPool & operator=(const LoggerPool &) = delete;
   LoggerPool(LoggerPool &&) = delete;
 
   static std::mutex l_mutex_;

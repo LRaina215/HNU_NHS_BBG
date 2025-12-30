@@ -30,25 +30,28 @@
 // project
 #include "armor_detector/types.hpp"
 
-namespace fyt::auto_aim {
+namespace fyt::auto_aim
+{
 // Class used to classify the number of the armor, based on the MLP model
-class NumberClassifier {
+class NumberClassifier
+{
 public:
-  NumberClassifier(const std::string &model_path,
-                   const std::string &label_path,
-                   const double threshold,
-                   const std::vector<std::string> &ignore_classes = {});
+  NumberClassifier(
+    const std::string & model_path,
+    const std::string & label_path,
+    const double threshold,
+    const std::vector<std::string> & ignore_classes = {});
 
   // Extract the roi image of number from the src
-  cv::Mat extractNumber(const cv::Mat &src, const Armor &armor) const noexcept;
+  cv::Mat extractNumber(const cv::Mat & src, const Armor & armor) const noexcept;
 
   // Classify the number of the armor
-  void classify(const cv::Mat &src, Armor &armor) noexcept;
+  void classify(const cv::Mat & src, Armor & armor) noexcept;
   // LJH:11.16 添加为GPU并行准备的批处理
   void classify_batch(std::vector<Armor> & armors) noexcept;
-  
+
   // Erase the ignore classes
-  void eraseIgnoreClasses(std::vector<Armor> &armors) noexcept;
+  void eraseIgnoreClasses(std::vector<Armor> & armors) noexcept;
 
   double threshold;
 

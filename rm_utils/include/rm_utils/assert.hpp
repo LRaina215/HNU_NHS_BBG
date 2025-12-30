@@ -19,24 +19,24 @@
 #include <iostream>
 #include <sstream>
 
-#define FYT_ASSERT(condition)                            \
-  do {                                                   \
-    if (!(condition)) {                                  \
-      std::ostringstream oss;                            \
+#define FYT_ASSERT(condition) \
+  do { \
+    if (!(condition)) { \
+      std::ostringstream oss; \
       oss << "Assertion failed: (" << #condition << ")"; \
-      std::cerr << oss.str() << std::endl;               \
-      std::abort();                                      \
-    }                                                    \
+      std::cerr << oss.str() << std::endl; \
+      std::abort(); \
+    } \
   } while (0)
 
-#define FYT_ASSERT_MSG(condition, msg)                           \
-  do {                                                           \
-    if (!(condition)) {                                          \
-      std::ostringstream oss;                                    \
+#define FYT_ASSERT_MSG(condition, msg) \
+  do { \
+    if (!(condition)) { \
+      std::ostringstream oss; \
       oss << "Assertion failed: (" << #condition << ") " << msg; \
-      std::cerr << oss.str() << std::endl;                       \
-      std::abort();                                              \
-    }                                                            \
+      std::cerr << oss.str() << std::endl; \
+      std::abort(); \
+    } \
   } while (0)
 
 #endif

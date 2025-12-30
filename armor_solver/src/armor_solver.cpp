@@ -24,12 +24,15 @@
 #include "rm_utils/logger/log.hpp"
 #include "rm_utils/math/utils.hpp"
 
-const double MANUAL_Z_CONST = std::tan((1.0/45.0) * M_PI); // 约 0.06992
+const double MANUAL_Z_CONST = std::tan((1.0 / 45.0) * M_PI); // 约 0.06992
 
-namespace fyt::auto_aim {
-Solver::Solver(std::weak_ptr<rclcpp::Node> n) : node_(n) {
+namespace fyt::auto_aim
+{
+Solver::Solver(std::weak_ptr<rclcpp::Node> n)
+: node_(n)
+{
   auto node = node_.lock();
-  
+
   shooting_range_w_ = node->declare_parameter("solver.shooting_range_width", 0.135);
   shooting_range_h_ = node->declare_parameter("solver.shooting_range_height", 0.405);
   max_tracking_v_yaw_ = node->declare_parameter("solver.max_tracking_v_yaw", 6.0);
@@ -48,7 +51,7 @@ Solver::Solver(std::weak_ptr<rclcpp::Node> n) : node_(n) {
 
   manual_compensator_ = std::make_unique<ManualCompensator>();
   auto angle_offset = node->declare_parameter("solver.angle_offset", std::vector<std::string>{});
-  if(!manual_compensator_->updateMapFlow(angle_offset)) {
+  if (!manual_compensator_->updateMapFlow(angle_offset)) {
     FYT_WARN("armor_solver", "Manual compensator update failed!");
   }
 
@@ -59,9 +62,11 @@ Solver::Solver(std::weak_ptr<rclcpp::Node> n) : node_(n) {
   node.reset();
 }
 
-rm_interfaces::msg::GimbalCmd Solver::solve(const rm_interfaces::msg::Target &target,
-                                         const rclcpp::Time &current_time,
-                                         std::shared_ptr<tf2_ros::Buffer> tf2_buffer_) {
+rm_interfaces::msg::GimbalCmd Solver::solve(
+  const rm_interfaces::msg::Target & target,
+  const rclcpp::Time & current_time,
+  std::shared_ptr<tf2_ros::Buffer> tf2_buffer_)
+{
   // --- [第 1 步: 获取参数和云台当前状态] ---
   try {
     auto node = node_.lock();
@@ -71,7 +76,7 @@ rm_interfaces::msg::GimbalCmd Solver::solve(const rm_interfaces::msg::Target &ta
     side_angle_ = node->get_parameter("solver.side_angle").as_double();
     min_switching_v_yaw_ = node->get_parameter("solver.min_switching_v_yaw").as_double();
     node.reset();
-  } catch (const std::runtime_error &e) {
+  } catch (const std::runtime_error & e) {
     FYT_ERROR("armor_solver", "{}", e.what());
   }
 
@@ -80,11 +85,11 @@ rm_interfaces::msg::GimbalCmd Solver::solve(const rm_interfaces::msg::Target &ta
   try {
     gimbal_tf =
       tf2_buffer_->lookupTransform(target.header.frame_id, "gimbal_link", tf2::TimePointZero);
-  } catch (tf2::TransformException &ex) {
+  } catch (tf2::TransformException & ex) {
     FYT_ERROR("armor_solver", "{}", ex.what());
     throw ex;
   }
-  
+
   // --- [第 2 步: 关键修正 - 提取云台在 odom 中的位置] ---
   auto gimbal_translation = gimbal_tf.transform.translation;
   Eigen::Vector3d gimbal_pos_odom(
@@ -102,7 +107,7 @@ rm_interfaces::msg::GimbalCmd Solver::solve(const rm_interfaces::msg::Target &ta
 
 
   // --- [第 3 步: 迭代求解 1 - 主迭代循环] ---
-  
+
   // a. 获取 EKF 状态 (在 odom 坐标系)
   Eigen::Vector3d base_center_pos(target.position.x, target.position.y, target.position.z);
   Eigen::Vector3d base_center_vel(target.velocity.x, target.velocity.y, target.velocity.z);
@@ -118,7 +123,7 @@ rm_interfaces::msg::GimbalCmd Solver::solve(const rm_interfaces::msg::Target &ta
   double flying_time_guess = 0.0;
   Eigen::Vector3d chosen_armor_position; // 我们要求的最终目标点 (odom 系)
   Eigen::Vector3d predicted_center_odom; // 迭代后的中心点 (odom 系)
-  
+
   for (int i = 0; i < num_iterations; ++i) {
     double total_dt = base_dt + flying_time_guess;
 
@@ -129,13 +134,13 @@ rm_interfaces::msg::GimbalCmd Solver::solve(const rm_interfaces::msg::Target &ta
     Eigen::Vector3d relative_center_vec = predicted_center_odom - gimbal_pos_odom;
 
     std::vector<Eigen::Vector3d> armor_positions_odom = getArmorPositions(
-        predicted_center_odom, predicted_yaw_odom, target.radius_1, target.radius_2, 
-        target.d_zc, target.d_za, target.armors_num);
-        
+      predicted_center_odom, predicted_yaw_odom, target.radius_1, target.radius_2,
+      target.d_zc, target.d_za, target.armors_num);
+
     int idx = selectBestArmor(
-        armor_positions_odom, relative_center_vec, predicted_yaw_odom,
-        target.v_yaw, target.armors_num);
-        
+      armor_positions_odom, relative_center_vec, predicted_yaw_odom,
+      target.v_yaw, target.armors_num);
+
     chosen_armor_position = armor_positions_odom.at(idx);
 
     // 计算从【云台】到【未来目标】的向量
@@ -143,13 +148,13 @@ rm_interfaces::msg::GimbalCmd Solver::solve(const rm_interfaces::msg::Target &ta
 
     // 检查到【云台】的距离
     if (target_vec.norm() < 0.1) {
-       throw std::runtime_error("No valid armor to shoot (in iteration)");
+      throw std::runtime_error("No valid armor to shoot (in iteration)");
     }
 
     // [核心] 用这个向量计算新的、更准的飞行时间
     flying_time_guess = trajectory_compensator_->getFlyingTime(target_vec);
   }
-  
+
   // --- [第 4 步: 计算 Yaw/Pitch] ---
   Eigen::Vector3d target_vec_odom = chosen_armor_position - gimbal_pos_odom;
   double yaw, pitch;
@@ -160,7 +165,7 @@ rm_interfaces::msg::GimbalCmd Solver::solve(const rm_interfaces::msg::Target &ta
   predicted_position_.x = chosen_armor_position.x();
   predicted_position_.y = chosen_armor_position.y();
   predicted_position_.z = chosen_armor_position.z();
-  
+
   // --- [第 5 步: 填充指令和状态机] ---
   rm_interfaces::msg::GimbalCmd gimbal_cmd;
   gimbal_cmd.header = target.header;
@@ -169,108 +174,113 @@ rm_interfaces::msg::GimbalCmd Solver::solve(const rm_interfaces::msg::Target &ta
 
   switch (state) {
     case TRACKING_ARMOR: {
-      if (std::abs(target.v_yaw) > max_tracking_v_yaw_) {
-        overflow_count_++;
-      } else {
-        overflow_count_ = 0;
-      }
+        if (std::abs(target.v_yaw) > max_tracking_v_yaw_) {
+          overflow_count_++;
+        } else {
+          overflow_count_ = 0;
+        }
 
-      if (overflow_count_ > transfer_thresh_) {
-        state = TRACKING_CENTER;
-      }
+        if (overflow_count_ > transfer_thresh_) {
+          state = TRACKING_CENTER;
+        }
 
-      // --- [第 6 步: 你的 `controller_delay_` 逻辑 (非迭代)] ---
-      //
-      // 遵从你的要求，这里不使用迭代，
-      // 而是使用“单次预测”逻辑，但应用了坐标系修正
-      //
-      if (controller_delay_ != 0) {
-        
-        // a. 使用主迭代的 flying_time_guess 作为“最好的猜测”
-        double total_dt_delayed = base_dt + controller_delay_ + flying_time_guess;
+        // --- [第 6 步: 你的 `controller_delay_` 逻辑 (非迭代)] ---
+        //
+        // 遵从你的要求，这里不使用迭代，
+        // 而是使用“单次预测”逻辑，但应用了坐标系修正
+        //
+        if (controller_delay_ != 0) {
 
-        // b. 执行【一次】预测
-        Eigen::Vector3d predicted_center_delayed = base_center_pos + total_dt_delayed * base_center_vel;
-        double predicted_yaw_delayed = base_center_yaw + total_dt_delayed * base_center_v_yaw;
+          // a. 使用主迭代的 flying_time_guess 作为“最好的猜测”
+          double total_dt_delayed = base_dt + controller_delay_ + flying_time_guess;
 
-        // c. [修正] 传递相对向量给 selectBestArmor
-        Eigen::Vector3d relative_center_delayed = predicted_center_delayed - gimbal_pos_odom;
+          // b. 执行【一次】预测
+          Eigen::Vector3d predicted_center_delayed = base_center_pos + total_dt_delayed *
+            base_center_vel;
+          double predicted_yaw_delayed = base_center_yaw + total_dt_delayed * base_center_v_yaw;
 
-        std::vector<Eigen::Vector3d> armor_positions_delayed = getArmorPositions(
-            predicted_center_delayed, predicted_yaw_delayed, target.radius_1, target.radius_2, 
+          // c. [修正] 传递相对向量给 selectBestArmor
+          Eigen::Vector3d relative_center_delayed = predicted_center_delayed - gimbal_pos_odom;
+
+          std::vector<Eigen::Vector3d> armor_positions_delayed = getArmorPositions(
+            predicted_center_delayed, predicted_yaw_delayed, target.radius_1, target.radius_2,
             target.d_zc, target.d_za, target.armors_num);
-        
-        int idx_delayed = selectBestArmor(
-            armor_positions_delayed, relative_center_delayed, predicted_yaw_delayed, 
+
+          int idx_delayed = selectBestArmor(
+            armor_positions_delayed, relative_center_delayed, predicted_yaw_delayed,
             target.v_yaw, target.armors_num);
-            
-        Eigen::Vector3d chosen_armor_pos_delayed = armor_positions_delayed.at(idx_delayed);
 
-        // d. [覆盖] 覆盖 yaw, pitch, distance
-        Eigen::Vector3d delayed_target_vec = chosen_armor_pos_delayed - gimbal_pos_odom;
-        gimbal_cmd.distance = delayed_target_vec.norm(); // 覆盖
-        calcYawAndPitch(delayed_target_vec, rpy_, yaw, pitch); // 覆盖 yaw 和 pitch
-        
-        // e. [覆盖] 覆盖调试用的预测点
-        predicted_position_.x = chosen_armor_pos_delayed.x();
-        predicted_position_.y = chosen_armor_pos_delayed.y();
-        predicted_position_.z = chosen_armor_pos_delayed.z();
-        
-        // f. [覆盖] 覆盖最终补偿要用的 `chosen_armor_position`
-        chosen_armor_position = chosen_armor_pos_delayed;
+          Eigen::Vector3d chosen_armor_pos_delayed = armor_positions_delayed.at(idx_delayed);
+
+          // d. [覆盖] 覆盖 yaw, pitch, distance
+          Eigen::Vector3d delayed_target_vec = chosen_armor_pos_delayed - gimbal_pos_odom;
+          gimbal_cmd.distance = delayed_target_vec.norm(); // 覆盖
+          calcYawAndPitch(delayed_target_vec, rpy_, yaw, pitch); // 覆盖 yaw 和 pitch
+
+          // e. [覆盖] 覆盖调试用的预测点
+          predicted_position_.x = chosen_armor_pos_delayed.x();
+          predicted_position_.y = chosen_armor_pos_delayed.y();
+          predicted_position_.z = chosen_armor_pos_delayed.z();
+
+          // f. [覆盖] 覆盖最终补偿要用的 `chosen_armor_position`
+          chosen_armor_position = chosen_armor_pos_delayed;
+        }
+        break;
       }
-      break;
-    }
     case TRACKING_CENTER: {
-      if (std::abs(target.v_yaw) < max_tracking_v_yaw_) {
-         overflow_count_++;
-      } else {
-        overflow_count_ = 0;
-      }
+        if (std::abs(target.v_yaw) < max_tracking_v_yaw_) {
+          overflow_count_++;
+        } else {
+          overflow_count_ = 0;
+        }
 
-      if (overflow_count_ > transfer_thresh_) {
-        state = TRACKING_ARMOR;
-        overflow_count_ = 0;
+        if (overflow_count_ > transfer_thresh_) {
+          state = TRACKING_ARMOR;
+          overflow_count_ = 0;
+        }
+        gimbal_cmd.fire_advice = true;
+
+        // [修正] 瞄准中心时，也必须使用相对向量
+        Eigen::Vector3d center_vec_odom = predicted_center_odom - gimbal_pos_odom;
+        calcYawAndPitch(center_vec_odom, rpy_, yaw, pitch);
+        break;
       }
-      gimbal_cmd.fire_advice = true;
-      
-      // [修正] 瞄准中心时，也必须使用相对向量
-      Eigen::Vector3d center_vec_odom = predicted_center_odom - gimbal_pos_odom;
-      calcYawAndPitch(center_vec_odom, rpy_, yaw, pitch);
-      break;
-    }
   }
 
   // --- [第 7 步: 最终补偿和发送] ---
   // [修正] `angleHardCorrect` 也应该使用相对距离
   double final_target_dist_xy = (chosen_armor_position - gimbal_pos_odom).head(2).norm();
   double final_target_dist_z = (chosen_armor_position - gimbal_pos_odom).z();
-  
-  auto angle_offset = manual_compensator_->angleHardCorrect(final_target_dist_xy, final_target_dist_z);
+
+  auto angle_offset = manual_compensator_->angleHardCorrect(
+    final_target_dist_xy,
+    final_target_dist_z);
   double pitch_offset = angle_offset[0] * M_PI / 180;
   double yaw_offset = angle_offset[1] * M_PI / 180;
   double cmd_pitch = pitch + pitch_offset;
   double cmd_yaw = angles::normalize_angle(yaw + yaw_offset);
-  // 0820 (已修正)  
+  // 0820 (已修正) 
   predicted_position_.y += -std::tan(yaw_offset) * predicted_position_.x;
   predicted_position_.z -= (std::tan(pitch_offset) + MANUAL_Z_CONST) * final_target_dist_xy;
-  
+
   gimbal_cmd.yaw = cmd_yaw * 180 / M_PI;
   gimbal_cmd.pitch = cmd_pitch * 180 / M_PI - 4.0;
   gimbal_cmd.yaw_diff = (cmd_yaw - rpy_[2]) * 180 / M_PI;
   gimbal_cmd.pitch_diff = (cmd_pitch - rpy_[1]) * 180 / M_PI;
-  
- if (gimbal_cmd.fire_advice) {
-  FYT_DEBUG("armor_solver", "You Need Fire!");
- }
- return gimbal_cmd;
+
+  if (gimbal_cmd.fire_advice) {
+    FYT_DEBUG("armor_solver", "You Need Fire!");
+  }
+  return gimbal_cmd;
 }
 
-bool Solver::isOnTarget(const double cur_yaw,
-                        const double cur_pitch,
-                        const double target_yaw,
-                        const double target_pitch,
-                        const double distance) const noexcept {
+bool Solver::isOnTarget(
+  const double cur_yaw,
+  const double cur_pitch,
+  const double target_yaw,
+  const double target_pitch,
+  const double distance) const noexcept
+{
   // Judge whether to shoot
   double shooting_range_yaw = std::abs(atan2(shooting_range_w_ / 2, distance));
   double shooting_range_pitch = std::abs(atan2(shooting_range_h_ / 2, distance));
@@ -279,20 +289,23 @@ bool Solver::isOnTarget(const double cur_yaw,
   shooting_range_yaw = std::max(shooting_range_yaw, 1.0 * M_PI / 180);
   shooting_range_pitch = std::max(shooting_range_pitch, 1.0 * M_PI / 180);
   if (std::abs(cur_yaw - target_yaw) < shooting_range_yaw &&
-      std::abs(cur_pitch - target_pitch) < shooting_range_pitch) {
+    std::abs(cur_pitch - target_pitch) < shooting_range_pitch)
+  {
     return true;
   }
 
   return false;
 }
 
-std::vector<Eigen::Vector3d> Solver::getArmorPositions(const Eigen::Vector3d &target_center,
-                                                       const double target_yaw,
-                                                       const double r1,
-                                                       const double r2,
-                                                       const double d_zc,
-                                                       const double d_za,
-                                                       const size_t armors_num) const noexcept {
+std::vector<Eigen::Vector3d> Solver::getArmorPositions(
+  const Eigen::Vector3d & target_center,
+  const double target_yaw,
+  const double r1,
+  const double r2,
+  const double d_zc,
+  const double d_za,
+  const size_t armors_num) const noexcept
+{
   auto armor_positions = std::vector<Eigen::Vector3d>(armors_num, Eigen::Vector3d::Zero());
   // Calculate the position of each armor
   bool is_current_pair = true;
@@ -313,11 +326,13 @@ std::vector<Eigen::Vector3d> Solver::getArmorPositions(const Eigen::Vector3d &ta
   return armor_positions;
 }
 
-int Solver::selectBestArmor(const std::vector<Eigen::Vector3d> &armor_positions,
-                            const Eigen::Vector3d &target_center,
-                            const double target_yaw,
-                            const double target_v_yaw,
-                            const size_t armors_num) const noexcept {
+int Solver::selectBestArmor(
+  const std::vector<Eigen::Vector3d> & armor_positions,
+  const Eigen::Vector3d & target_center,
+  const double target_yaw,
+  const double target_v_yaw,
+  const size_t armors_num) const noexcept
+{
   // Angle between the car's center and the X-axis
   double alpha = std::atan2(target_center.y(), target_center.x());
   // Angle between the front of observed armor and the X-axis
@@ -326,10 +341,10 @@ int Solver::selectBestArmor(const std::vector<Eigen::Vector3d> &armor_positions,
   // clang-format off
   Eigen::Matrix2d R_odom2center;
   Eigen::Matrix2d R_odom2armor;
-  R_odom2center << std::cos(alpha), std::sin(alpha), 
-                  -std::sin(alpha), std::cos(alpha);
-  R_odom2armor << std::cos(beta), std::sin(beta), 
-                 -std::sin(beta), std::cos(beta);
+  R_odom2center << std::cos(alpha), std::sin(alpha),
+    -std::sin(alpha), std::cos(alpha);
+  R_odom2armor << std::cos(beta), std::sin(beta),
+    -std::sin(beta), std::cos(beta);
   // clang-format on
   Eigen::Matrix2d R_center2armor = R_odom2center.transpose() * R_odom2armor;
 
@@ -354,10 +369,12 @@ int Solver::selectBestArmor(const std::vector<Eigen::Vector3d> &armor_positions,
   return selected_id;
 }
 
-void Solver::calcYawAndPitch(const Eigen::Vector3d &p,
-                             const std::array<double, 3> rpy,
-                             double &yaw,
-                             double &pitch) const noexcept {
+void Solver::calcYawAndPitch(
+  const Eigen::Vector3d & p,
+  const std::array<double, 3> rpy,
+  double & yaw,
+  double & pitch) const noexcept
+{
   // Calculate yaw and pitch
   yaw = atan2(p.y(), p.x());
   pitch = atan2(p.z(), p.head(2).norm());
@@ -367,10 +384,11 @@ void Solver::calcYawAndPitch(const Eigen::Vector3d &p,
   }
 }
 
-std::vector<std::pair<double, double>> Solver::getTrajectory() const noexcept {
+std::vector<std::pair<double, double>> Solver::getTrajectory() const noexcept
+{
   auto trajectory = trajectory_compensator_->getTrajectory(15, rpy_[1]);
   // Rotate
-  for (auto &p : trajectory) {
+  for (auto & p : trajectory) {
     double x = p.first;
     double y = p.second;
     p.first = x * cos(rpy_[1]) + y * sin(rpy_[1]);
@@ -379,7 +397,8 @@ std::vector<std::pair<double, double>> Solver::getTrajectory() const noexcept {
   return trajectory;
 }
 
-geometry_msgs::msg::Point fyt::auto_aim::Solver::getPredictedPosition() const noexcept {
+geometry_msgs::msg::Point fyt::auto_aim::Solver::getPredictedPosition() const noexcept
+{
   return predicted_position_;
 }
 

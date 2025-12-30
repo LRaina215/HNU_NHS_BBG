@@ -20,20 +20,23 @@
 #include <memory>
 #include <tuple>
 
-namespace fyt {
+namespace fyt
+{
 
-class TrajectoryCompensator {
+class TrajectoryCompensator
+{
 public:
   TrajectoryCompensator() = default;
   virtual ~TrajectoryCompensator() = default;
 
   // Compensate the trajectory of the bullet, return the pitch increment
-  bool compensate(const Eigen::Vector3d &target_position, double &pitch) const noexcept;
+  bool compensate(const Eigen::Vector3d & target_position, double & pitch) const noexcept;
 
-  virtual double getFlyingTime(const Eigen::Vector3d &target_position) const noexcept = 0;
+  virtual double getFlyingTime(const Eigen::Vector3d & target_position) const noexcept = 0;
 
-  std::vector<std::pair<double, double>> getTrajectory(double distance,
-                                                       double angle) const noexcept;
+  std::vector<std::pair<double, double>> getTrajectory(
+    double distance,
+    double angle) const noexcept;
 
   double velocity = 15.0;
   int iteration_times = 20;
@@ -46,27 +49,31 @@ protected:
 };
 
 // IdealCompensator does not consider the air resistance
-class IdealCompensator : public TrajectoryCompensator {
+class IdealCompensator : public TrajectoryCompensator
+{
 public:
-  double getFlyingTime(const Eigen::Vector3d &target_position) const noexcept override;
+  double getFlyingTime(const Eigen::Vector3d & target_position) const noexcept override;
 
 protected:
   double calculateTrajectory(const double x, const double angle) const noexcept override;
 };
 
 // ResistanceCompensator considers the air resistance
-class ResistanceCompensator : public TrajectoryCompensator {
+class ResistanceCompensator : public TrajectoryCompensator
+{
 public:
-  double getFlyingTime(const Eigen::Vector3d &target_position) const noexcept override;
+  double getFlyingTime(const Eigen::Vector3d & target_position) const noexcept override;
 
 protected:
   double calculateTrajectory(const double x, const double angle) const noexcept override;
 };
 
 // Factory class for trajectory compensator
-class CompensatorFactory {
+class CompensatorFactory
+{
 public:
-  static std::unique_ptr<TrajectoryCompensator> createCompensator(const std::string &type) {
+  static std::unique_ptr<TrajectoryCompensator> createCompensator(const std::string & type)
+  {
     if (type == "ideal") {
       return std::make_unique<IdealCompensator>();
     } else if (type == "resistance") {
