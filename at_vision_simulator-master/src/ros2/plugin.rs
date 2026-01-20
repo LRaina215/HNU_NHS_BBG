@@ -136,6 +136,8 @@ fn capture_rune(
     odom_pose_pub: ResMut<TopicPublisher<OdomPoseTopic>>,
     camera_pose_pub: ResMut<TopicPublisher<CameraPoseTopic>>,
 ) {
+
+    // println!("capture_rune is running");
     let cam_transform = camera.into_inner();
     let stamp = Clock::to_builtin_time(&res_unwrap!(clock).get_now().unwrap());
     let mut transform_stamped = vec![];
