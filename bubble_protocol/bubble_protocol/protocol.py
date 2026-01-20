@@ -63,7 +63,8 @@ D_ADDR = {
     "air": 0x07,
     "radar": 0x08,
     "grather": 0x09,
-    "standard": 0x10
+    "standard": 0x10,
+    "sentry" : 0x02, # 统一sentry_up与sentry_down发一个sentry（标志位0x02）
 }
 
 # referee systemrobot id defination

@@ -1,4 +1,4 @@
-## DHZZB_Version 1.0
+## DHZZB_Version 哨兵自瞄2.0
 
 **自瞄代码修改日志**
 
@@ -61,10 +61,6 @@
 
 
 
-**代码仓库:** git@github.com:LRaina215/HNU_NHS_BBG.git
-
-
-
 #### 6. 代码重构：移除硬编码内参，适配 ROS 2 标准 CameraInfo (2025-12-21) 
 
 - **问题 (Hardcoded Intrinsics)：**  之前的版本中，相机内参矩阵 ($K$) 和畸变系数 ($D$) 被硬编码在 `armor_detector` 的源码中。这导致每当调整相机焦距、更换镜头或修改分辨率时，都必须手动修改 C++ 代码并重新编译，极不灵活且容易出错。 
@@ -97,6 +93,23 @@
   **保留了 GPU Batching**：仅将这部分可以安全并行的、计算密集的推理任务交给 GPU 批量处理。 
 
   **结论：** "串行预处理 + 并行推理" 的组合在保证程序绝对稳定的前提下，依然维持了极高的识别帧率。
+
+
+
+#### 9.自收发优化： 解决通信层中IMU数据的自收发问题
+
+- 问题：Hardware.py中存在发布IMU数据的发布者，而Dispatch.py中直接创建了订阅者订阅该IMU数据，导致自瞄延迟升高。
+
+- 解决：Dispatch.py中注释订阅函数，需要使用IMU数据时直接跨py文件读取。
+
+
+
+#### 10.通信整合：整合自瞄和导航下发数据包
+
+- 目的：只使用一个NUC与C板通信。
+- 方案：整合sentry_up与sentry_down的launch文件为一个sentry_launch，并合并sentry_up与sentry_down为一个sentry。同一个数据包同时下发底盘、云台、开火数据。
+
+
 
 
 

@@ -10,13 +10,15 @@ from launch.launch_context import LaunchContext
 
 from launch_ros.actions import Node
 
+# 1020 删除所有sentry_up + sentry_down 统一改为 sentry
+
 args_list = [
     DeclareLaunchArgument(
         'robot_type',
-        default_value='sentry_up', # 选择模式
+        default_value='sentry', # 选择模式
         description='Robot name',
         choices=[
-            "sentry_up", "sentry_down", "infantry"
+            "sentry", "infantry"
         ]),
 
     DeclareLaunchArgument(

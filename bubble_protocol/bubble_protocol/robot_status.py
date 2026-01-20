@@ -202,26 +202,51 @@ class RobotStatus():
                 sensor_msgs.msg.JointState, '/joint_states', 10)
 
             self.realtime_callback["gimbal"] = gimbal_callback
-        elif self.name == "sentry_up":
+        
+        # # 1020 合并自瞄与导航发送数据
+        # elif self.name == "sentry_up":
+        #     self.joint_pub = self.node.create_publisher(
+        #         sensor_msgs.msg.JointState, '/joint_states', 10)
+        #     self.barrel_pub = self.node.create_publisher(
+        #         rmctrl_msgs.msg.Shooter, '/status/barrel', 10)
+
+        #     self.realtime_callback["gimbal"] = gimbal_callback
+        #     self.realtime_callback["barrel"] = shooter_callback
+        # elif self.name == "sentry_down":
+        #     self.odom_pub = self.node.create_publisher(
+        #         nav_msgs.msg.Odometry, '/odom', 10)
+        #     self.chassis_imu_pub = self.node.create_publisher(
+        #         sensor_msgs.msg.Imu, '/imu', 10)
+        #     self.odom_br = tf2_ros.TransformBroadcaster(self.node)
+        #     # self.chassis_pub = self.node.create_publisher(
+        #     #    rmctrl_msgs.msg.Chassis, '/status/chassis', 10)
+        #     # self.chassis_odom_imu_pub = self.node.create_publisher(
+        #     #     rmctrl_msgs.msg.Odom, '/status/chassis_odom_imu', 10)
+
+        #     # self.realtime_callback["chassis_ctrl"] = chassis_callback
+        #     self.realtime_callback["chassis_imu"] = chassis_imu_callback
+        #     self.realtime_callback["chassis_odom"] = chassis_odom_callback
+
+        elif self.name == "sentry":
             self.joint_pub = self.node.create_publisher(
                 sensor_msgs.msg.JointState, '/joint_states', 10)
             self.barrel_pub = self.node.create_publisher(
                 rmctrl_msgs.msg.Shooter, '/status/barrel', 10)
-
-            self.realtime_callback["gimbal"] = gimbal_callback
-            self.realtime_callback["barrel"] = shooter_callback
-        elif self.name == "sentry_down":
             self.odom_pub = self.node.create_publisher(
                 nav_msgs.msg.Odometry, '/odom', 10)
             self.chassis_imu_pub = self.node.create_publisher(
                 sensor_msgs.msg.Imu, '/imu', 10)
             self.odom_br = tf2_ros.TransformBroadcaster(self.node)
+            
             # self.chassis_pub = self.node.create_publisher(
             #    rmctrl_msgs.msg.Chassis, '/status/chassis', 10)
             # self.chassis_odom_imu_pub = self.node.create_publisher(
             #     rmctrl_msgs.msg.Odom, '/status/chassis_odom_imu', 10)
 
             # self.realtime_callback["chassis_ctrl"] = chassis_callback
+
+            self.realtime_callback["gimbal"] = gimbal_callback
+            self.realtime_callback["barrel"] = shooter_callback
             self.realtime_callback["chassis_imu"] = chassis_imu_callback
             self.realtime_callback["chassis_odom"] = chassis_odom_callback
 

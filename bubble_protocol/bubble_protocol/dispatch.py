@@ -36,7 +36,7 @@ import tf2_ros
 from tf2_ros import TransformBroadcaster
 from rclpy.time import Time
 
-
+\
 
 class RobotAPI(Node):
     """Generate a new BCP core.
@@ -82,7 +82,7 @@ class RobotAPI(Node):
         serial_opened = False
         while not serial_opened:
             try:
-                self.robot_serial = RobotSerial(name, port=self.serial_port)
+                self.robot_serial = RobotSerial(self.name, port=self.serial_port)
                 self.get_logger().info(f'Serial Port {self.serial_port} has been initialized...')
                 serial_opened = True
             except Exception as e:
@@ -141,32 +141,64 @@ class RobotAPI(Node):
         '''
         # heartbeat data initalized
         self.heartbeat_time = 0
+    
+        # 0120_LJH 合并自瞄导航数据
+        # # subscriber api 订阅模式控制信息
+        # if self.name == "infantry" or self.name == "sentry_up":
+        #     # self.gimbal_sub = self.create_subscription(
+        #     #     Target, '/processor/target', self.gimbal_callback, qos.qos_profile_sensor_data)
+        #     # self.gimbal_sub = self.create_subscription(
+        #     #     Target, '/processor/target', self.gimbal_callback, 10)
+            
+        #     #set the compatible QoS quality
+        #     qos_profile = QoSProfile(
+        #         reliability=QoSReliabilityPolicy.RELIABLE,
+        #         durability=QoSDurabilityPolicy.VOLATILE,
+        #         depth=20
+        #     )
+            
+        #     # 訂閱純視覺(無IMU)得到的雲台轉動角度信息
+        #     self.gimbal_sub = self.create_subscription(
+        #         GimbalCmd, 'armor_solver/cmd_gimbal', self.gimbal_callback, qos_profile)
+        #     # 訂閱純視覺下的開火狀態信息
+        #     self.barrel_sub = self.create_subscription(
+        #         Shooter, '/core/shooter_api', self.barrel_callback, 10)
+        #     self.imu_tf_sub = self.create_subscription(SerialReceiveData, 'serial/receive', self.getImu_callback, 10)
+        #     # print("Starting subscriber!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
 
-        # subscriber api 订阅模式控制信息
-        if self.name == "infantry" or self.name == "sentry_up":
-            # self.gimbal_sub = self.create_subscription(
-            #     Target, '/processor/target', self.gimbal_callback, qos.qos_profile_sensor_data)
-            # self.gimbal_sub = self.create_subscription(
-            #     Target, '/processor/target', self.gimbal_callback, 10)
-            
-            #set the compatible QoS quality
-            qos_profile = QoSProfile(
-                reliability=QoSReliabilityPolicy.RELIABLE,
-                durability=QoSDurabilityPolicy.VOLATILE,
-                depth=20
-            )
-            
-            # 訂閱純視覺(無IMU)得到的雲台轉動角度信息
-            self.gimbal_sub = self.create_subscription(
-                GimbalCmd, 'armor_solver/cmd_gimbal', self.gimbal_callback, qos_profile)
-            # 訂閱純視覺下的開火狀態信息
-            self.barrel_sub = self.create_subscription(
-                Shooter, '/core/shooter_api', self.barrel_callback, 10)
-            self.imu_tf_sub = self.create_subscription(SerialReceiveData, 'serial/receive', self.getImu_callback, 10)
-            # print("Starting subscriber!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
-        elif self.name == "sentry_down":
-            self.chassis_sub = self.create_subscription(
-                Twist, '/cmd_vel', self.ex_chassis_callback, 10)
+        # elif self.name == "sentry_down":
+        #     self.chassis_sub = self.create_subscription(
+        #         Twist, '/cmd_vel', self.ex_chassis_callback, 10)
+
+        # self.gimbal_sub = self.create_subscription(
+        #     Target, '/processor/target', self.gimbal_callback, qos.qos_profile_sensor_data)
+        # self.gimbal_sub = self.create_subscription(
+        #     Target, '/processor/target', self.gimbal_callback, 10)
+        
+        #set the compatible QoS quality
+        qos_profile = QoSProfile(
+            reliability=QoSReliabilityPolicy.RELIABLE,
+            durability=QoSDurabilityPolicy.VOLATILE,
+            depth=20
+        )
+        
+        # 訂閱純視覺(無IMU)得到的雲台轉動角度信息
+        self.gimbal_sub = self.create_subscription(
+            GimbalCmd, 'armor_solver/cmd_gimbal', self.gimbal_callback, qos_profile)
+        
+        # 訂閱純視覺下的開火狀態信息
+        self.barrel_sub = self.create_subscription(
+            Shooter, '/core/shooter_api', self.barrel_callback, 10)
+        
+        # 0120 优化自收发，直接读取另一个类中的值
+        # 订阅IMU上发信息
+        # self.imu_tf_sub = self.create_subscription(SerialReceiveData, 'serial/receive', self.getImu_callback, 10)
+        # print("Starting subscriber!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+
+        # 订阅导航下发给底盘的数据
+        self.chassis_sub = self.create_subscription(
+            Twist, '/cmd_vel', self.ex_chassis_callback, 10)
+
 
     def heartbeat(self):
         '''heartbeat function, send heartbeat frames periodically.
@@ -217,53 +249,54 @@ class RobotAPI(Node):
             [mode, send_yaw, send_pitch, self.fire_advice, 0, 0, 0])
         # self.get_logger().info(f"sending: {msg.yaw},{msg.pitch},{self.fire_advice}")
 
-    #transform odom info
-    def getImu_callback(self, msg: SerialReceiveData) -> None:
-        self.get_yaw = msg.yaw
-        self.get_pitch = msg.pitch
-        self.get_roll = msg.roll
+    # 0120 优化IMU数据自收发
+    # transform odom info
+    # def getImu_callback(self, msg: SerialReceiveData) -> None:
+    #     self.get_yaw = msg.yaw
+    #     self.get_pitch = msg.pitch
+    #     self.get_roll = msg.roll
 
-        # # 判断是否需要重启串口
-        # current_time = time.time()
-        # current_yaw = self.get_yaw
-        # current_pitch = self.get_pitch
+    #     # # 判断是否需要重启串口
+    #     # current_time = time.time()
+    #     # current_yaw = self.get_yaw
+    #     # current_pitch = self.get_pitch
 
-        # if current_yaw == self.last_yaw and current_pitch == self.last_pitch:
-        #     time_diff = current_time - self.last_timestamp
-        #     if time_diff >= 1.0:
-        #         self.get_logger().warn("IMU data unchanged for 1s. Restarting serial port...")
-        #         # try:
-        #         #     # 使用系统命令安全重启串口（需配置免密 sudo）
-        #         #     subprocess.run(
-        #         #         ["sudo", "sh", "-c", "echo 0 > /sys/bus/usb/devices/usb3/3-1/authorized"],  # 示例：禁用设备
-        #         #         check=True
-        #         #     )
-        #         #     time.sleep(2)  # 等待设备重新枚举
-        #         #     subprocess.run(
-        #         #         ["sudo", "sh", "-c", "echo 1 > /sys/bus/usb/devices/usb3/3-1/authorized"],  # 示例：启用设备
-        #         #         check=True
-        #         #     )
-        #         #     time.sleep(2)
-        #         #     # 重新初始化串口（无需手动 open，依赖硬件自动连接）
-        #         #     self.robot_serial.init_device(
-        #         #         port="/dev/ttyrobomaster",
-        #         #         baudrate=self.robot_serial.baudrate,
-        #         #         timeout_T=0
-        #         #     )
+    #     # if current_yaw == self.last_yaw and current_pitch == self.last_pitch:
+    #     #     time_diff = current_time - self.last_timestamp
+    #     #     if time_diff >= 1.0:
+    #     #         self.get_logger().warn("IMU data unchanged for 1s. Restarting serial port...")
+    #     #         # try:
+    #     #         #     # 使用系统命令安全重启串口（需配置免密 sudo）
+    #     #         #     subprocess.run(
+    #     #         #         ["sudo", "sh", "-c", "echo 0 > /sys/bus/usb/devices/usb3/3-1/authorized"],  # 示例：禁用设备
+    #     #         #         check=True
+    #     #         #     )
+    #     #         #     time.sleep(2)  # 等待设备重新枚举
+    #     #         #     subprocess.run(
+    #     #         #         ["sudo", "sh", "-c", "echo 1 > /sys/bus/usb/devices/usb3/3-1/authorized"],  # 示例：启用设备
+    #     #         #         check=True
+    #     #         #     )
+    #     #         #     time.sleep(2)
+    #     #         #     # 重新初始化串口（无需手动 open，依赖硬件自动连接）
+    #     #         #     self.robot_serial.init_device(
+    #     #         #         port="/dev/ttyrobomaster",
+    #     #         #         baudrate=self.robot_serial.baudrate,
+    #     #         #         timeout_T=0
+    #     #         #     )
                     
-        #         #     self.last_timestamp = time.time()
-        #         #     self.get_logger().info("Serial port restarted via hardware reset.")
+    #     #         #     self.last_timestamp = time.time()
+    #     #         #     self.get_logger().info("Serial port restarted via hardware reset.")
                     
-        #         # except subprocess.CalledProcessError as e:
-        #         #     self.get_logger().error(f"Hardware reset failed: {e}")
-        #         # except Exception as e:
-        #         #     self.get_logger().error(f"Serial init error: {e}")
-        # else:
-        #     # 更新最新数据和时间戳
-        #     self.last_yaw = current_yaw
-        #     self.last_pitch = current_pitch
-        #     self.last_timestamp = current_time
-        # #print(f"received pub info {self.get_yaw}")
+    #     #         # except subprocess.CalledProcessError as e:
+    #     #         #     self.get_logger().error(f"Hardware reset failed: {e}")
+    #     #         # except Exception as e:
+    #     #         #     self.get_logger().error(f"Serial init error: {e}")
+    #     # else:
+    #     #     # 更新最新数据和时间戳
+    #     #     self.last_yaw = current_yaw
+    #     #     self.last_pitch = current_pitch
+    #     #     self.last_timestamp = current_time
+    #     # #print(f"received pub info {self.get_yaw}")
 
     def broadcast_transform(self):
         def euler_to_quaternion(roll, pitch, yaw):
@@ -272,10 +305,15 @@ class RobotAPI(Node):
             qy = math.cos(roll / 2) * math.sin(pitch / 2) * math.cos(yaw / 2) + math.sin(roll / 2) * math.cos(pitch / 2) * math.sin(yaw / 2)
             qz = math.cos(roll / 2) * math.cos(pitch / 2) * math.sin(yaw / 2) - math.sin(roll / 2) * math.sin(pitch / 2) * math.cos(yaw / 2)
             return Quaternion(x=qx, y=qy, z=qz, w=qw)
-        # 将角度转换为弧度
-        roll_rad = self.get_roll * pi / 180.0
-        pitch_rad = -self.get_pitch * pi / 180.0
-        yaw_rad = self.get_yaw * pi / 180.0
+        
+        # 0120 优化自收发
+        # # 将角度转换为弧度
+        # roll_rad = self.get_roll * pi / 180.0
+        # pitch_rad = -self.get_pitch * pi / 180.0
+        # yaw_rad = self.get_yaw * pi / 180.0
+        roll_rad = self.robot_serial.imu_roll * pi / 180.0
+        pitch_rad = -self.robot_serial.imu_pitch * pi / 180.0
+        yaw_rad = self.robot_serial.imu_yaw * pi / 180.0
 
         # 使用自定义的函数生成四元数
         q = euler_to_quaternion(roll_rad, pitch_rad, yaw_rad)
@@ -336,9 +374,7 @@ class RobotAPI(Node):
             robot name, name option reference 
             `The Chinese-English comparison table <https://birdiebot.github.io/bubble_documentation/guide/%E6%9C%AF%E8%AF%AD%E4%B8%AD%E8%8B%B1%E6%96%87%E5%AF%B9%E7%85%A7%E8%A1%A8.html>`__ .
         """
-        if self.name == "sentry_up":
-            pass
-        elif self.name == "sentry_down":
+        if self.name == "sentry":
             pass
         elif self.name == "infantry":
             pass
@@ -351,7 +387,7 @@ class RobotAPI(Node):
         msg: `Chassis`
             A chassis message is received
         """
-        print("recived data chassis")
+        # print("recived data chassis")
         self.robot_serial.send_data("chassis_ctrl", [msg.linear.x, msg.linear.y, msg.linear.z,
                                                      msg.angular.x, msg.angular.y, msg.angular.z])
 
