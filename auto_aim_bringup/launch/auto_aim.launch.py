@@ -27,7 +27,7 @@ def generate_launch_description():
         output='screen',
         name='armor_detector',
         parameters=[
-            '/home/lraina/shaobing/src/auto_aim_bringup/config/node_params/armor_detector_params.yaml'
+            '/home/lraina/shaobing_back/src/auto_aim_bringup/config/node_params/armor_detector_params.yaml'
         ]
     )
 

@@ -7,7 +7,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # ==================== 新增部分 ====================
 # 定义一个选项，默认名为 ENABLE_GPU_BATCHING，默认值为 ON (开启)
-option(ENABLE_GPU_BATCHING "Enable GPU batching for number classification" ON)
+option(ENABLE_GPU_BATCHING "Enable GPU batching for number classification" OFF)
 
 if(ENABLE_GPU_BATCHING)
     message(STATUS "GPU Batching Enabled!")

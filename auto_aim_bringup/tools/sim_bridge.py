@@ -4,99 +4,125 @@ from rclpy.node import Node
 from geometry_msgs.msg import Twist
 from rm_interfaces.msg import GimbalCmd 
 import math
+import time
+
+class PIDController:
+    """一个通用的PID类，方便管理"""
+    def __init__(self, kp, ki, kd, max_out, max_i):
+        self.kp = kp
+        self.ki = ki
+        self.kd = kd
+        self.max_out = max_out  # 最大输出速度 (rad/s)
+        self.max_i = max_i      # 积分限幅
+        
+        self.prev_err = 0.0
+        self.integral = 0.0
+
+    def update(self, error, dt):
+        if dt <= 0.0001: return 0.0 # 防止除零
+
+        # P项
+        p_out = self.kp * error
+
+        # I项 (带积分分离/抗饱和)
+        self.integral += error * dt
+        # 限制积分项大小，防止超调
+        if self.integral > self.max_i: self.integral = self.max_i
+        elif self.integral < -self.max_i: self.integral = -self.max_i
+        i_out = self.ki * self.integral
+
+        # D项 (计算微分)
+        derivative = (error - self.prev_err) / dt
+        d_out = self.kd * derivative
+
+        self.prev_err = error
+        
+        # 总输出
+        output = p_out + i_out + d_out
+
+        # 输出限幅
+        if output > self.max_out: output = self.max_out
+        elif output < -self.max_out: output = -self.max_out
+        
+        return output
+
+    def reset(self):
+        self.prev_err = 0.0
+        self.integral = 0.0
 
 class SimBridge(Node):
     def __init__(self):
         super().__init__('sim_bridge_node')
         
-        # 1. 订阅与发布
+        # 1. 通信
         self.sub = self.create_subscription(
             GimbalCmd, '/armor_solver/cmd_gimbal', self.callback, 10)
         self.pub = self.create_publisher(
             Twist, '/cmd_gimbal', 10)
         
-        # ==========================================
-        # 🛠️ [校准区域] (保留了你的参数)
-        # ==========================================
+        # 2. 手动补偿 (Offset)
         self.MANUAL_PITCH_OFFSET = 0
         self.MANUAL_YAW_OFFSET = 0
+
         # ==========================================
-
-        # --- [PD 参数] (保留了你的参数) ---
-        self.kp_yaw = 5.0    
-        self.kd_yaw = 0.2    
+        # 🛠️ [PID 参数调整区] 
+        # 模拟器环境推荐参数：
+        # Yaw:  Kp=8.0 (响应快), Ki=0.0 (无重力不需), Kd=0.1 (轻微阻尼)
+        # Pitch: Kp=6.0, Ki=0.5 (抗重力), Kd=0.1
+        # ==========================================
         
-        self.kp_pitch = 4.0  # 你修改后的值
-        self.kd_pitch = 0.2
+        # 创建两个独立的 PID 控制器
+        # 参数顺序: (kp, ki, kd, max_speed_rad_s, max_integral)
+        self.pid_yaw = PIDController(8.0, 0.0, 0.1, max_out=10.0, max_i=1.0) 
+        self.pid_pitch = PIDController(6.0, 0.5, 0.1, max_out=5.0, max_i=0.5)
 
-        # --- [状态变量] ---
-        self.last_yaw_err = 0.0
-        self.last_pitch_err = 0.0
-        
-        # [新增] 目标记忆与看门狗
+        # 状态变量
         self.target_yaw_rad = 0.0
         self.target_pitch_rad = 0.0
-        self.last_msg_time = self.get_clock().now() # 上次收到消息的时间
+        
+        self.last_msg_time = self.get_clock().now()
+        self.last_loop_time = self.get_clock().now() # 用于计算真实 dt
 
-        # 创建高频控制定时器 (100Hz)
-        # 将控制逻辑从 callback 移到了这里，以实现超时归零
+        # 100Hz 循环
         self.create_timer(0.01, self.control_loop)
 
     def callback(self, msg):
-        # 1. 收到消息，刷新“看门狗”时间
         self.last_msg_time = self.get_clock().now()
-
-        # 2. 更新目标值 (叠加手动补偿)
-        # 注意：这里我们只更新“目标”，不直接发指令。指令由 control_loop 统一发。
+        
+        # 转换目标
         target_yaw_deg = msg.yaw_diff + self.MANUAL_YAW_OFFSET
         target_pitch_deg = msg.pitch_diff + self.MANUAL_PITCH_OFFSET
 
-        # 转弧度存储
         self.target_yaw_rad = math.radians(target_yaw_deg)
         self.target_pitch_rad = math.radians(target_pitch_deg)
 
     def control_loop(self):
-        # 1. 检查超时 (看门狗逻辑)
-        # 如果超过 0.5 秒没收到新指令，说明自瞄丢了或者模拟器刚重启
-        current_time = self.get_clock().now()
-        time_since_last_msg = (current_time - self.last_msg_time).nanoseconds / 1e9
-
-        if time_since_last_msg > 0.5:
-            # === 超时归零逻辑 ===
+        now = self.get_clock().now()
+        
+        # 1. 计算真实的 dt (秒)
+        dt = (now - self.last_loop_time).nanoseconds / 1e9
+        self.last_loop_time = now
+        
+        # 2. 看门狗检查 (0.5s 超时)
+        time_since_msg = (now - self.last_msg_time).nanoseconds / 1e9
+        if time_since_msg > 0.5:
             self.target_yaw_rad = 0.0
             self.target_pitch_rad = 0.0
-            # 清除微分历史，防止“刹车”过猛
-            self.last_yaw_err = 0.0
-            self.last_pitch_err = 0.0
-            
-            # (可选) 如果你想完全断电而不是回正，可以用下面这就话代替：
-            # self.pub.publish(Twist()) 
+            self.pid_yaw.reset()   # 清除积分和历史
+            self.pid_pitch.reset()
+            # 可选：超时直接停机
+            # self.pub.publish(Twist())
             # return
 
-        # --- 2. PD 控制逻辑 ---
-        
-        dt = 0.01 # 定时器周期固定为 0.01s
+        # 3. 计算 PID 输出
+        # 在这里，"误差" 就是 target_rad (因为我们想让 diff 变为 0)
+        vel_z = self.pid_yaw.update(self.target_yaw_rad, dt)
+        vel_y = self.pid_pitch.update(self.target_pitch_rad, dt)
 
-        # 这里的 error 本身就是目标值 
-        # (因为模拟器是增量式/速度式控制，且目标已经是 diff)
-        yaw_err = self.target_yaw_rad
-        pitch_err = self.target_pitch_rad
-
-        # 计算微分 (D项)
-        d_yaw = (yaw_err - self.last_yaw_err) / dt
-        d_pitch = (pitch_err - self.last_pitch_err) / dt
-
+        # 4. 发布
         twist = Twist()
-        direction = 1.0 
-        
-        # PD 公式
-        twist.angular.z = direction * (self.kp_yaw * yaw_err + self.kd_yaw * d_yaw)
-        twist.angular.y = direction * (self.kp_pitch * pitch_err + self.kd_pitch * d_pitch)
-        
-        # 更新历史
-        self.last_yaw_err = yaw_err
-        self.last_pitch_err = pitch_err
-        
+        twist.angular.z = vel_z
+        twist.angular.y = vel_y
         self.pub.publish(twist)
 
 def main(args=None):

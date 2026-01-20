@@ -94,6 +94,7 @@ private:
 
   std::array<double, 3> rpy_;
 
+
   double prediction_delay_;
   double controller_delay_;
 
